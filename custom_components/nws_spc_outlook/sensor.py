@@ -20,17 +20,19 @@ _LOGGER = logging.getLogger(__name__)
 SCAN_INTERVAL = timedelta(minutes=30)
 DAYS_WITH_DETAILED_OUTLOOKS = 3
 
-PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
-    vol.Required(CONF_LATITUDE): cv.latitude,
-    vol.Required(CONF_LONGITUDE): cv.longitude,
-})
+PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend(
+    {
+        vol.Required(CONF_LATITUDE): cv.latitude,
+        vol.Required(CONF_LONGITUDE): cv.longitude,
+    }
+)
 
 
 async def async_setup_platform(
     hass: HomeAssistant,
     config: dict[str, Any],
     add_entities: Callable[[list[SensorEntity]], None],
-    _discovery_info: Any=None
+    _discovery_info: Any = None,
 ) -> None:
     """Set up the NWS SPC Outlook sensor platform."""
     latitude = config[CONF_LATITUDE]
@@ -66,7 +68,7 @@ class NWSSPCOutlookSensor(Entity):
         return {
             "hail_probability": self._coordinator.data.get(f"hail_day{self._day}"),
             "wind_probability": self._coordinator.data.get(f"wind_day{self._day}"),
-            "tornado_probability": self._coordinator.data.get(f"torn_day{self._day}")
+            "tornado_probability": self._coordinator.data.get(f"torn_day{self._day}"),
         }
 
     async def async_update(self) -> None:
@@ -124,8 +126,8 @@ async def getspcoutlook(latitude: float, longitude: float) -> dict[str, str]:
                         for feature in data["features"]:
                             polygon = shape(feature["geometry"])
                             if polygon.contains(location):
-                                output[
-                                    f"{risk_type}_day{day}"
-                                ] = feature["properties"]["LABEL2"]
+                                output[f"{risk_type}_day{day}"] = feature["properties"][
+                                    "LABEL2"
+                                ]
 
     return output
