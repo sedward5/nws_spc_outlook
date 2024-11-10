@@ -6,7 +6,9 @@ import voluptuous as vol
 from homeassistant.components.sensor import PLATFORM_SCHEMA
 from homeassistant.const import CONF_LATITUDE, CONF_LONGITUDE
 from homeassistant.helpers.entity import Entity
-from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
+from homeassistant.helpers.update_coordinator import (
+    DataUpdateCoordinator, UpdateFailed
+)
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -66,16 +68,34 @@ class NWSSPCOutlookDataCoordinator(DataUpdateCoordinator):
     """Fetches data from the NWS API."""
 
     def __init__(self, hass, latitude, longitude):
-        super().__init__(hass, _LOGGER, name="NWS SPC Outlook", update_interval=SCAN_INTERVAL)
+        super().__init__(
+            hass, _LOGGER, name="NWS SPC Outlook",
+            update_interval=SCAN_INTERVAL
+        )
         self.latitude = latitude
         self.longitude = longitude
 
     def fetch_outlook_data(self):
         # TODO: Replace with real NWS API fetching code.
         return {
-            1: {"overall_probability": "15%", "hail_probability": "10%", "wind_probability": "15%", "tornado_probability": "5%"},
-            2: {"overall_probability": "5%", "hail_probability": "5%", "wind_probability": "5%", "tornado_probability": "2%"},
-            3: {"overall_probability": "1%", "hail_probability": "1%", "wind_probability": "1%", "tornado_probability": "1%"}
+            1: {
+                "overall_probability": "15%",
+                "hail_probability": "10%",
+                "wind_probability": "15%",
+                "tornado_probability": "5%"
+            },
+            2: {
+                "overall_probability": "5%",
+                "hail_probability": "5%",
+                "wind_probability": "5%",
+                "tornado_probability": "2%"
+            },
+            3: {
+                "overall_probability": "1%",
+                "hail_probability": "1%",
+                "wind_probability": "1%",
+                "tornado_probability": "1%"
+            }
         }
 
     async def _async_update_data(self):
