@@ -1,5 +1,9 @@
+"""Sensor for NWS SPC Outlook severe weather data integration in Home Assistant."""
+
 import logging
 from datetime import timedelta
+from typing import Dict, Any
+
 import aiohttp
 from shapely.geometry import shape, Point
 from homeassistant.components.sensor import PLATFORM_SCHEMA
@@ -20,7 +24,9 @@ PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
 })
 
 
-async def async_setup_platform(hass, config, add_entities, discovery_info=None):
+async def async_setup_platform(
+    hass, config: Dict[str, Any], add_entities, discovery_info=None
+) -> None:
     """Set up the NWS SPC Outlook sensor platform."""
     latitude = config[CONF_LATITUDE]
     longitude = config[CONF_LONGITUDE]
@@ -34,23 +40,23 @@ async def async_setup_platform(hass, config, add_entities, discovery_info=None):
 class NWSSPCOutlookSensor(Entity):
     """Representation of an SPC Outlook sensor for each day."""
 
-    def __init__(self, coordinator, day):
+    def __init__(self, coordinator: "NWSSPCOutlookDataCoordinator", day: int) -> None:
         """Initialize the sensor."""
         self._coordinator = coordinator
         self._day = day
 
     @property
-    def name(self):
+    def name(self) -> str:
         """Return the name of the sensor."""
         return f"SPC Outlook Day {self._day}"
 
     @property
-    def state(self):
+    def state(self) -> str:
         """Return the state of the sensor."""
         return self._coordinator.data.get(f"cat_day{self._day}")
 
     @property
-    def extra_state_attributes(self):
+    def extra_state_attributes(self) -> Dict[str, str]:
         """Return the additional attributes of the sensor."""
         return {
             "hail_probability": self._coordinator.data.get(f"hail_day{self._day}"),
@@ -58,7 +64,7 @@ class NWSSPCOutlookSensor(Entity):
             "tornado_probability": self._coordinator.data.get(f"torn_day{self._day}")
         }
 
-    async def async_update(self):
+    async def async_update(self) -> None:
         """Update sensor using coordinator."""
         await self._coordinator.async_request_refresh()
 
@@ -66,21 +72,21 @@ class NWSSPCOutlookSensor(Entity):
 class NWSSPCOutlookDataCoordinator(DataUpdateCoordinator):
     """Fetches data from the NWS API."""
 
-    def __init__(self, hass, latitude, longitude):
-        """Initialize."""
+    def __init__(self, hass, latitude: float, longitude: float) -> None:
+        """Initialize the data coordinator."""
         super().__init__(hass, _LOGGER, name="NWS SPC Outlook", update_interval=SCAN_INTERVAL)
         self.latitude = latitude
         self.longitude = longitude
 
-    async def _async_update_data(self):
+    async def _async_update_data(self) -> Dict[str, str]:
         """Fetch data from the SPC API."""
         try:
             return await getspcoutlook(self.latitude, self.longitude)
         except Exception as error:
-            raise UpdateFailed(f"Error fetching data: {error}") from error
+            raise UpdateFailed("Error fetching data") from error
 
 
-async def getspcoutlook(latitude, longitude) -> dict:
+async def getspcoutlook(latitude: float, longitude: float) -> Dict[str, str]:
     """Query SPC for the latest severe weather outlooks."""
     output = {}
     location = Point(longitude, latitude)
@@ -99,7 +105,10 @@ async def getspcoutlook(latitude, longitude) -> dict:
 
             if result and day <= DAYS_WITH_DETAILED_OUTLOOKS:
                 for risk_type in ["torn", "hail", "wind"]:
-                    risk_url = f"https://www.spc.noaa.gov/products/outlook/day{day}otlk_{risk_type}.lyr.geojson"
+                    risk_url = (
+                        f"https://www.spc.noaa.gov/products/outlook/day{day}"
+                        f"otlk_{risk_type}.lyr.geojson"
+                    )
                     async with session.get(risk_url, timeout=10) as resp:
                         data = await resp.json()
                         for feature in data["features"]:
