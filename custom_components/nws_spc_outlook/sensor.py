@@ -2,16 +2,16 @@
 
 import logging
 from datetime import timedelta
-from typing import Dict, Any
+from typing import Any
 
 import aiohttp
-from shapely.geometry import shape, Point
+import homeassistant.helpers.config_validation as cv
+import voluptuous as vol
 from homeassistant.components.sensor import PLATFORM_SCHEMA
 from homeassistant.const import CONF_LATITUDE, CONF_LONGITUDE
 from homeassistant.helpers.entity import Entity
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
-import homeassistant.helpers.config_validation as cv
-import voluptuous as vol
+from shapely.geometry import Point, shape
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -25,7 +25,7 @@ PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
 
 
 async def async_setup_platform(
-    hass, config: Dict[str, Any], add_entities, discovery_info=None
+    hass, config: dict[str, Any], add_entities, discovery_info=None
 ) -> None:
     """Set up the NWS SPC Outlook sensor platform."""
     latitude = config[CONF_LATITUDE]
@@ -56,7 +56,7 @@ class NWSSPCOutlookSensor(Entity):
         return self._coordinator.data.get(f"cat_day{self._day}")
 
     @property
-    def extra_state_attributes(self) -> Dict[str, str]:
+    def extra_state_attributes(self) -> dict[str, str]:
         """Return the additional attributes of the sensor."""
         return {
             "hail_probability": self._coordinator.data.get(f"hail_day{self._day}"),
@@ -78,7 +78,7 @@ class NWSSPCOutlookDataCoordinator(DataUpdateCoordinator):
         self.latitude = latitude
         self.longitude = longitude
 
-    async def _async_update_data(self) -> Dict[str, str]:
+    async def _async_update_data(self) -> dict[str, str]:
         """Fetch data from the SPC API."""
         try:
             return await getspcoutlook(self.latitude, self.longitude)
@@ -86,7 +86,7 @@ class NWSSPCOutlookDataCoordinator(DataUpdateCoordinator):
             raise UpdateFailed("Error fetching data") from error
 
 
-async def getspcoutlook(latitude: float, longitude: float) -> Dict[str, str]:
+async def getspcoutlook(latitude: float, longitude: float) -> dict[str, str]:
     """Query SPC for the latest severe weather outlooks."""
     output = {}
     location = Point(longitude, latitude)

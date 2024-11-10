@@ -1,12 +1,13 @@
+from unittest.mock import AsyncMock, patch
+
 import pytest
-from homeassistant.const import CONF_LATITUDE, CONF_LONGITUDE
 from homeassistant.helpers.update_coordinator import UpdateFailed
+
 from custom_components.nws_spc.sensor import (
-    NWSSPCOutlookSensor,
     NWSSPCOutlookDataCoordinator,
+    NWSSPCOutlookSensor,
     getspcoutlook,
 )
-from unittest.mock import patch, AsyncMock
 
 LATITUDE = 42.0
 LONGITUDE = -83.0
