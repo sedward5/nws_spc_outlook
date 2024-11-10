@@ -1,0 +1,16 @@
+{
+	"image": "mcr.microsoft.com/devcontainers/universal:2",
+	"features": {
+		"ghcr.io/jsburckhardt/devcontainer-features/ruff:1": {}
+	},
+    "postCreateCommand": "pip3 install --user -r requirements.txt",
+    "customizations": {
+        // Configure properties specific to VS Code.
+        "vscode": {
+            // Add the IDs of extensions you want installed when the container is created.
+            "extensions": [
+                "streetsidesoftware.code-spell-checker"
+            ]
+            }
+    }
+}
