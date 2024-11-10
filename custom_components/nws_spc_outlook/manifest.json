@@ -6,5 +6,5 @@
   "requirements": ["requests>=2.25.1"],
   "dependencies": [],
   "codeowners": ["@sedward5"],
-  "iot_class": "Cloud Polling"
+  "iot_class": "cloud_polling"
 }
