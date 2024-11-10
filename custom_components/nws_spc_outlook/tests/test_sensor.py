@@ -1,3 +1,4 @@
+"""Unit tests for sensor.py."""
 import pytest
 
 from custom_components.nws_spc_outlook.sensor import (
