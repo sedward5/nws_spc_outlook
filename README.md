@@ -4,7 +4,10 @@
 ![Maintenance](https://img.shields.io/maintenance/yes/2024?style=for-the-badge)
 ![GitHub License](https://img.shields.io/github/license/sedward5/nws_spc_outlook?style=for-the-badge)
 ![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/sedward5/nws_spc_outlook/total?style=for-the-badge)
-![Black Code Style](https://img.shields.io/badge/code%20style-black-000000.svg)
+![Black Code Style](https://img.shields.io/badge/code%20style-black-000000.svg?style=for-the-badge)
 [![Buy me a coffee](https://img.shields.io/badge/buy_me_a_coffee-FFDD00?style=for-the-badge&logo=buy-me-a-coffee&logoColor=black)](https://buymeacoffee.com/sedward5)
 
 A home assistant integration to poll weather outlook information from the NWS Storm Prediction Center
+
+#  Disclamer
+This project and its author are in no way affialted with the National Weather Service. This addon should not be used as your sole source of information for severe weather preparedness. Stay informed, have a plan, be prepared.
