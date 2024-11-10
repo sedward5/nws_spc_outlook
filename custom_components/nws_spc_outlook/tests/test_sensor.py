@@ -44,7 +44,9 @@ async def coordinator(hass) -> NWSSPCOutlookDataCoordinator:
     return coordinator
 
 @pytest.mark.asyncio
-async def test_coordinator_fetch_data(coordinator: NWSSPCOutlookDataCoordinator) -> None:
+async def test_coordinator_fetch_data(
+    coordinator: NWSSPCOutlookDataCoordinator
+) -> None:
     """Test data fetching in the coordinator."""
     assert coordinator.data["cat_day1"] == "Slight"
     assert coordinator.data["hail_day1"] == "5%"
@@ -98,9 +100,8 @@ async def test_update_failed(coordinator: NWSSPCOutlookDataCoordinator) -> None:
     with patch(
         "custom_components.nws_spc_outlook.sensor.getspcoutlook",
         side_effect=Exception("API error")
-    ):
-        with pytest.raises(UpdateFailed):
-            await coordinator.async_request_refresh()
+    ), pytest.raises(UpdateFailed):
+        await coordinator.async_request_refresh()
 
 @pytest.mark.asyncio
 async def test_getspcoutlook() -> None:
@@ -110,7 +111,11 @@ async def test_getspcoutlook() -> None:
         mock_resp.json.return_value = {
             "features": [
                 {
-                    "geometry": {"type": "Polygon", "coordinates": [[[-83.1, 42.1], [-83.1, 41.9], [-82.9, 41.9], [-82.9, 42.1], [-83.1, 42.1]]]},
+                    "geometry": {
+                        "type": "Polygon",
+                        "coordinates": [[[-83.1, 42.1], [-83.1, 41.9],
+                                         [-82.9, 41.9], [-82.9, 42.1], [-83.1, 42.1]]]
+                    },
                     "properties": {"LABEL2": "Slight"}
                 }
             ]
