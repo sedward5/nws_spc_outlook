@@ -1,0 +1,10 @@
+{
+  "name": "NWS SPC Outlook",
+  "description": "Shows severe weather outlooks from the National Weather Service SPC.",
+  "domain": "nws_spc_outlook",
+  "documentation": "https://github.com/sedward5/nws_spc_outlook",
+  "requirements": [],
+  "codeowners": ["@sedward5"],
+  "version": "1.0.0",
+  "iot_class": "Cloud Polling"
+}
