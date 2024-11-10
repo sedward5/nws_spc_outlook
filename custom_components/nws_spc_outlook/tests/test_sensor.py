@@ -1,5 +1,10 @@
 import pytest
-from custom_components.nws_spc_outlook.sensor import NWSSPCOutlookSensor, NWSSPCOutlookDataCoordinator
+
+from custom_components.nws_spc_outlook.sensor import (
+    NWSSPCOutlookDataCoordinator,
+    NWSSPCOutlookSensor,
+)
+
 
 @pytest.fixture
 def coordinator(hass):
