@@ -1,5 +1,6 @@
 """Tests for the NWS SPC Outlook sensor integration."""
 
+from typing import Any
 from unittest.mock import AsyncMock, patch
 
 import pytest
@@ -33,7 +34,7 @@ DAY3_DATA = {
 }
 
 @pytest.fixture
-async def coordinator(hass) -> NWSSPCOutlookDataCoordinator:
+async def coordinator(hass: Any) -> NWSSPCOutlookDataCoordinator:
     """Fixture for setting up NWSSPCOutlookDataCoordinator."""
     with patch(
         "custom_components.nws_spc_outlook.sensor.getspcoutlook",
