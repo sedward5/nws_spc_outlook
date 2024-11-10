@@ -18,6 +18,7 @@ PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
     vol.Required(CONF_LONGITUDE): cv.longitude,
 })
 
+
 def setup_platform(hass, config, add_entities, discovery_info=None):
     """Set up the NWS SPC Outlook sensor platform."""
     latitude = config[CONF_LATITUDE]
@@ -25,6 +26,7 @@ def setup_platform(hass, config, add_entities, discovery_info=None):
 
     coordinator = NWSSPCOutlookDataCoordinator(hass, latitude, longitude)
     add_entities([NWSSPCOutlookSensor(coordinator, day) for day in [1, 2, 3]])
+
 
 class NWSSPCOutlookSensor(Entity):
     """Representation of an SPC Outlook sensor for each day."""
@@ -58,6 +60,7 @@ class NWSSPCOutlookSensor(Entity):
                 "wind_probability": data.get("wind_probability"),
                 "tornado_probability": data.get("tornado_probability"),
             }
+
 
 class NWSSPCOutlookDataCoordinator(DataUpdateCoordinator):
     """Fetches data from the NWS API."""
