@@ -1,0 +1,10 @@
+{
+  "domain": "nws_spc_outlook",
+  "name": "NWS SPC Outlook",
+  "version": "1.0.0",
+  "documentation": "https://github.com/sedward5/nws_spc_outlook",
+  "requirements": ["requests>=2.25.1"],
+  "dependencies": [],
+  "codeowners": ["@sedward5"],
+  "iot_class": "Cloud Polling"
+}
