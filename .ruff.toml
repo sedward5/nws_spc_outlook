@@ -17,7 +17,7 @@ ignore = [
 ]
 
 [lint.per-file-ignores]
-"tests/*.py" = ["S101"]
+"custom_components/nws_spc_outlook/tests/*.py" = ["S101"]
     
 [lint.flake8-pytest-style]
 fixture-parentheses = false
