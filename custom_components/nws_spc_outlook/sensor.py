@@ -8,8 +8,9 @@ from typing import Any
 import aiohttp
 import homeassistant.helpers.config_validation as cv
 import voluptuous as vol
-from homeassistant.components.sensor import PLATFORM_SCHEMA
+from homeassistant.components.sensor import PLATFORM_SCHEMA, SensorEntity
 from homeassistant.const import CONF_LATITUDE, CONF_LONGITUDE
+from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity import Entity
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
 from shapely.geometry import Point, shape
@@ -87,10 +88,9 @@ class NWSSPCOutlookDataCoordinator(DataUpdateCoordinator):
     async def _async_update_data(self) -> dict[str, str]:
         """Fetch data from the SPC API."""
         try:
-            data = await self.hass.async_add_executor_job(
+            return await self.hass.async_add_executor_job(
                 getspcoutlook, self.latitude, self.longitude
             )
-            return data
         except Exception as exc:
             error_message = "Error fetching SPC outlook data"
             raise UpdateFailed(error_message) from exc
