@@ -1,6 +1,7 @@
 """Sensor for NWS SPC Outlook severe weather data integration in Home Assistant."""
 
 import logging
+from collections.abc import Callable
 from datetime import timedelta
 from typing import Any
 
@@ -25,7 +26,10 @@ PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
 
 
 async def async_setup_platform(
-    hass, config: dict[str, Any], add_entities, discovery_info=None
+    hass: HomeAssistant,
+    config: dict[str, Any],
+    add_entities: Callable[[list[SensorEntity]], None],
+    _discovery_info: Any=None
 ) -> None:
     """Set up the NWS SPC Outlook sensor platform."""
     latitude = config[CONF_LATITUDE]
@@ -72,18 +76,24 @@ class NWSSPCOutlookSensor(Entity):
 class NWSSPCOutlookDataCoordinator(DataUpdateCoordinator):
     """Fetches data from the NWS API."""
 
-    def __init__(self, hass, latitude: float, longitude: float) -> None:
+    def __init__(self, hass: HomeAssistant, latitude: float, longitude: float) -> None:
         """Initialize the data coordinator."""
-        super().__init__(hass, _LOGGER, name="NWS SPC Outlook", update_interval=SCAN_INTERVAL)
+        super().__init__(
+            hass, _LOGGER, name="NWS SPC Outlook", update_interval=SCAN_INTERVAL
+        )
         self.latitude = latitude
         self.longitude = longitude
 
     async def _async_update_data(self) -> dict[str, str]:
         """Fetch data from the SPC API."""
         try:
-            return await getspcoutlook(self.latitude, self.longitude)
-        except Exception as error:
-            raise UpdateFailed("Error fetching data") from error
+            data = await self.hass.async_add_executor_job(
+                getspcoutlook, self.latitude, self.longitude
+            )
+            return data
+        except Exception as exc:
+            error_message = "Error fetching SPC outlook data"
+            raise UpdateFailed(error_message) from exc
 
 
 async def getspcoutlook(latitude: float, longitude: float) -> dict[str, str]:
@@ -114,6 +124,8 @@ async def getspcoutlook(latitude: float, longitude: float) -> dict[str, str]:
                         for feature in data["features"]:
                             polygon = shape(feature["geometry"])
                             if polygon.contains(location):
-                                output[f"{risk_type}_day{day}"] = feature["properties"]["LABEL2"]
+                                output[
+                                    f"{risk_type}_day{day}"
+                                ] = feature["properties"]["LABEL2"]
 
     return output
