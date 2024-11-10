@@ -1,3 +1,4 @@
+"""The NWS SPC Outlook Sensor."""
 import logging
 from datetime import timedelta
 
@@ -21,7 +22,7 @@ PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
 })
 
 
-def setup_platform(hass, config, add_entities, discovery_info=None):
+def setup_platform(hass, config, add_entities, discovery_info=None) -> None:
     """Set up the NWS SPC Outlook sensor platform."""
     latitude = config[CONF_LATITUDE]
     longitude = config[CONF_LONGITUDE]
@@ -33,7 +34,7 @@ def setup_platform(hass, config, add_entities, discovery_info=None):
 class NWSSPCOutlookSensor(Entity):
     """Representation of an SPC Outlook sensor for each day."""
 
-    def __init__(self, coordinator, day):
+    def __init__(self, coordinator, day) -> None:
         """Initialize the sensor."""
         self._coordinator = coordinator
         self._day = day
@@ -41,7 +42,8 @@ class NWSSPCOutlookSensor(Entity):
         self._attributes = {}
 
     @property
-    def name(self):
+    def name(self) -> str:
+        """Return a str with the sensor name."""
         return f"SPC Outlook Day {self._day}"
 
     @property
@@ -52,7 +54,7 @@ class NWSSPCOutlookSensor(Entity):
     def extra_state_attributes(self):
         return self._attributes
 
-    def update(self):
+    def update(self) -> None:
         self._coordinator.update()
         data = self._coordinator.data.get(self._day)
         if data:
@@ -67,7 +69,7 @@ class NWSSPCOutlookSensor(Entity):
 class NWSSPCOutlookDataCoordinator(DataUpdateCoordinator):
     """Fetches data from the NWS API."""
 
-    def __init__(self, hass, latitude, longitude):
+    def __init__(self, hass, latitude, longitude) -> None:
         super().__init__(
             hass, _LOGGER, name="NWS SPC Outlook",
             update_interval=SCAN_INTERVAL
@@ -75,7 +77,8 @@ class NWSSPCOutlookDataCoordinator(DataUpdateCoordinator):
         self.latitude = latitude
         self.longitude = longitude
 
-    def fetch_outlook_data(self):
+    def fetch_outlook_data(self) -> dict:
+        """Query latest outlook and format into dict."""
         # TODO: Replace with real NWS API fetching code.
         return {
             1: {
