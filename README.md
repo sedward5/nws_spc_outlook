@@ -9,5 +9,5 @@
 
 A home assistant integration to poll weather outlook information from the NWS Storm Prediction Center
 
-#  Disclamer
+# ⚖️ Disclamer
 This project and its author are in no way affialted with the National Weather Service. This addon should not be used as your sole source of information for severe weather preparedness. Stay informed, have a plan, be prepared.
