@@ -1,7 +1,9 @@
 {
     "name": "sedward5/nws_spc_outlook",
-    "image": "mcr.microsoft.com/devcontainers/python:3.12",
-    "postCreateCommand": "python3 -m pip install --requirement requirements.txt",
+    "build": {
+        "dockerfile": "Dockerfile"
+    },
+    "postCreateCommand": "ppip install -r requirements.txt",
     "forwardPorts": [
         8123
     ],
