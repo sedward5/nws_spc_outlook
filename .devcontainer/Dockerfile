@@ -13,8 +13,8 @@ RUN apt-get update && apt-get install -y \
 ENV CRYPTOGRAPHY_DONT_BUILD_RUST=1
 
 # Ensure pip and Home Assistant dependencies are up-to-date
-RUN pip install --upgrade pip wheel setuptools \
-    && pip install homeassistant
+RUN pip3 install --upgrade pip wheel setuptools \
+    && pip3 install homeassistant
 
 # Switch to non-root user (vscode) for Codespaces
 USER vscode
