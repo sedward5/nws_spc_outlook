@@ -1,5 +1,6 @@
 # Use an Ubuntu-based image as the base
-FROM mcr.microsoft.com/devcontainers/python:3.12
+FROM ghcr.io/home-assistant/devcontainer:addons
+
 
 # Install OS-level dependencies for Home Assistant
 RUN apt-get update && apt-get install -y \
