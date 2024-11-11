@@ -6,7 +6,7 @@ RUN apt-get update && apt-get install -y \
     libpcap-dev \
     libjpeg-dev \
     zlib1g-dev \
-    libturbojpeg \
+    libjpeg-turbo8 \
     && rm -rf /var/lib/apt/lists/*
 
 # Set environment variables to avoid potential errors with cryptography
