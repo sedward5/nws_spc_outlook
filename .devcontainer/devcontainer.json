@@ -1,43 +1,36 @@
 {
-    "name": "sedward5/nws_spc_outlook",
-    "build": {
-        "dockerfile": ".devcontainer/Dockerfile"
-    },
-    "postCreateCommand": "ppip install -r requirements.txt",
-    "forwardPorts": [
-        8123
-    ],
-    "portsAttributes": {
-        "8123": {
-            "label": "Home Assistant",
-            "onAutoForward": "notify"
+  "build": {
+    "dockerfile": "Dockerfile"
+  },
+  "appPort": ["7123:8123", "7357:4357"],
+  "postStartCommand": "bash devcontainer_bootstrap",
+  "runArgs": ["--privileged"],
+  "containerEnv": {
+    "GIT_EDITOR": "code --wait",
+    "WORKSPACE_DIRECTORY": "${containerWorkspaceFolder}"
+  },
+  "mounts": ["type=volume,target=/var/lib/docker"],
+  "customizations": {
+    "settings": {
+      "terminal.integrated.profiles.linux": {
+        "zsh": {
+          "path": "/usr/bin/zsh"
         }
+      },
+      "terminal.integrated.defaultProfile.linux": "zsh",
+      "editor.formatOnPaste": false,
+      "editor.formatOnType": false,
+      "editor.formatOnSave": true
     },
-    "customizations": {
-        "vscode": {
-            "extensions": [
-                "charliermarsh.ruff",
-                "github.vscode-pull-request-github",
-                "ms-python.python",
-                "ms-python.vscode-pylance",
-                "ryanluker.vscode-coverage-gutters"
-            ],
-            "settings": {
-                "files.eol": "\n",
-                "editor.tabSize": 4,
-                "editor.formatOnPaste": true,
-                "editor.formatOnSave": true,
-                "editor.formatOnType": false,
-                "files.trimTrailingWhitespace": true,
-                "python.analysis.typeCheckingMode": "basic",
-                "python.analysis.autoImportCompletions": true,
-                "python.defaultInterpreterPath": "/usr/local/bin/python",
-                "[python]": {
-                    "editor.defaultFormatter": "charliermarsh.ruff"
-                }
-            }
-        }
-    },
-    "remoteUser": "vscode",
-    "features": {}
+    "vscode": {
+      "extensions": [
+        "timonwong.shellcheck",
+        "exiasr.hadolint",
+        "esbenp.prettier-vscode",
+        "ffloimair.asterisk-config",
+        "ms-azuretools.vscode-docker",
+        "foxundermoon.shell-format"
+      ]
+    }
+  }
 }
