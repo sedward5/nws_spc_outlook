@@ -1,8 +1,9 @@
 {
+  "name": "Home Assistant Dev",
   "build": {
     "dockerfile": "Dockerfile"
   },
-  "appPort": ["7123:8123", "7357:4357"],
+  "forwardPorts": [8123, 4357],  // Use `forwardPorts` instead of `appPort`
   "postStartCommand": "bash devcontainer_bootstrap",
   "runArgs": ["--privileged"],
   "containerEnv": {
@@ -11,17 +12,6 @@
   },
   "mounts": ["type=volume,target=/var/lib/docker"],
   "customizations": {
-    "settings": {
-      "terminal.integrated.profiles.linux": {
-        "zsh": {
-          "path": "/usr/bin/zsh"
-        }
-      },
-      "terminal.integrated.defaultProfile.linux": "zsh",
-      "editor.formatOnPaste": false,
-      "editor.formatOnType": false,
-      "editor.formatOnSave": true
-    },
     "vscode": {
       "extensions": [
         "timonwong.shellcheck",
@@ -30,7 +20,18 @@
         "ffloimair.asterisk-config",
         "ms-azuretools.vscode-docker",
         "foxundermoon.shell-format"
-      ]
+      ],
+      "settings": {
+        "terminal.integrated.profiles.linux": {
+          "zsh": {
+            "path": "/usr/bin/zsh"
+          }
+        },
+        "terminal.integrated.defaultProfile.linux": "zsh",
+        "editor.formatOnPaste": false,
+        "editor.formatOnType": false,
+        "editor.formatOnSave": true
+      }
     }
   }
 }

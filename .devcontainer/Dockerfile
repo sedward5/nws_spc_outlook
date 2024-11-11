@@ -1,23 +1,20 @@
-# Use an Ubuntu-based image as the base
+# Use the official Home Assistant dev container base image
 FROM ghcr.io/home-assistant/devcontainer:addons
 
-
-# Install OS-level dependencies for Home Assistant
+# Update and install additional OS-level dependencies for Home Assistant
 RUN apt-get update && apt-get install -y \
     libpcap-dev \
-    libffi-dev \
-    libssl-dev \
     libjpeg-dev \
     zlib1g-dev \
     libturbojpeg \
-    build-essential \
     && rm -rf /var/lib/apt/lists/*
 
-# Set environment variables to avoid potential errors
+# Set environment variables to avoid potential errors with cryptography
 ENV CRYPTOGRAPHY_DONT_BUILD_RUST=1
 
-# Install Home Assistant dependencies
-RUN pip install homeassistant
+# Ensure pip and Home Assistant dependencies are up-to-date
+RUN pip install --upgrade pip wheel setuptools \
+    && pip install homeassistant
 
-# Default to non-root user (vscode) for Codespaces
+# Switch to non-root user (vscode) for Codespaces
 USER vscode

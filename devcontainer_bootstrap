@@ -1,0 +1,24 @@
+#!/bin/bash
+# devcontainer_bootstrap
+
+echo "Starting devcontainer bootstrap script..."
+
+# Ensure dependencies are up to date
+echo "Updating Python dependencies..."
+pip install --upgrade -r requirements.txt
+
+# Run database migrations or other setup tasks, if needed
+# Example: Setup Home Assistant
+if command -v hass &> /dev/null
+then
+    echo "Starting Home Assistant setup..."
+    hass --script check_config -c .
+else
+    echo "Home Assistant command not found!"
+fi
+
+# Any other environment-specific tasks you may need
+# Example: Update node/npm, if relevant
+# npm install
+
+echo "Devcontainer bootstrap complete!"
