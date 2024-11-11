@@ -1,7 +1,7 @@
 {
     "name": "sedward5/nws_spc_outlook",
     "build": {
-        "dockerfile": "Dockerfile"
+        "dockerfile": ".devcontainer/Dockerfile"
     },
     "postCreateCommand": "ppip install -r requirements.txt",
     "forwardPorts": [
