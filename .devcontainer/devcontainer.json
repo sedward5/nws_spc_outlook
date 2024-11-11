@@ -1,5 +1,4 @@
 {
-<<<<<<< HEAD
   "build": {
     "dockerfile": "Dockerfile"
   },
@@ -16,20 +15,6 @@
       "terminal.integrated.profiles.linux": {
         "zsh": {
           "path": "/usr/bin/zsh"
-=======
-    "name": "sedward5/nws_spc_outlook",
-    "build": {
-        "dockerfile": "Dockerfile"
-    },
-    "postCreateCommand": "ppip install -r requirements.txt",
-    "forwardPorts": [
-        8123
-    ],
-    "portsAttributes": {
-        "8123": {
-            "label": "Home Assistant",
-            "onAutoForward": "notify"
->>>>>>> cda337b (dev container)
         }
       },
       "terminal.integrated.defaultProfile.linux": "zsh",
