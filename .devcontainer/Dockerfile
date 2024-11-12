@@ -26,3 +26,6 @@ RUN pip install --upgrade pip wheel setuptools \
 
 # Switch to non-root user (vscode) for Codespaces
 USER vscode
+ENV VIRTUAL_ENV="/home/vscode/.local/ha-venv"
+RUN uv venv $VIRTUAL_ENV
+ENV PATH="$VIRTUAL_ENV/bin:$PATH"
