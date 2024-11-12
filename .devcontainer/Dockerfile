@@ -1,5 +1,5 @@
 # Use the official Home Assistant dev container base image
-FROM ghcr.io/home-assistant/devcontainer:addons
+FROM ghcr.io/home-assistant/devcontainer:latest
 
 # Update and install OS-level dependencies, including python3-venv
 RUN apt-get update && apt-get install -y \
