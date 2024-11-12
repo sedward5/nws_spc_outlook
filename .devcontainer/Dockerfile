@@ -16,7 +16,7 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 # Create and activate a Python virtual environment
-ENV VIRTUAL_ENV=/opt/venv
+ENV VIRTUAL_ENV=/home/vscode/venv
 RUN python3 -m venv $VIRTUAL_ENV
 ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 
