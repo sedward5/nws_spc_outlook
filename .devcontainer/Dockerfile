@@ -19,6 +19,8 @@ RUN apt-get update && apt-get install -y \
 ENV VIRTUAL_ENV=/home/vscode/venv
 RUN python3 -m venv $VIRTUAL_ENV
 ENV PATH="$VIRTUAL_ENV/bin:$PATH"
+RUN python3 -m venv $VIRTUAL_ENV \
+    && chown -R vscode:vscode $VIRTUAL_ENV
 
 # Upgrade pip and install Home Assistant in the virtual environment
 RUN pip install --upgrade pip wheel setuptools \
@@ -26,8 +28,3 @@ RUN pip install --upgrade pip wheel setuptools \
 
 # Switch to non-root user (vscode) for Codespaces
 USER vscode
-ENV VIRTUAL_ENV="/home/vscode/.local/ha-venv"
-RUN uv venv $VIRTUAL_ENV
-ENV PATH="$VIRTUAL_ENV/bin:$PATH"
-RUN python3 -m venv $VIRTUAL_ENV \
-    && chown -R vscode:vscode $VIRTUAL_ENV
