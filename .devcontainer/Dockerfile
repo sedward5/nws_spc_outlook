@@ -3,6 +3,7 @@ FROM ghcr.io/home-assistant/devcontainer:addons
 
 # Update and install additional OS-level dependencies for Home Assistant
 RUN apt-get update && apt-get install -y \
+    python3-pip \
     libpcap-dev \
     libjpeg-dev \
     zlib1g-dev \
