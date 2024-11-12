@@ -29,3 +29,5 @@ USER vscode
 ENV VIRTUAL_ENV="/home/vscode/.local/ha-venv"
 RUN uv venv $VIRTUAL_ENV
 ENV PATH="$VIRTUAL_ENV/bin:$PATH"
+RUN python3 -m venv $VIRTUAL_ENV \
+    && chown -R vscode:vscode $VIRTUAL_ENV
