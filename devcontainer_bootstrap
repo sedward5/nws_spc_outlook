@@ -9,10 +9,9 @@ pip install --upgrade -r requirements.txt
 
 # Run database migrations or other setup tasks, if needed
 # Example: Setup Home Assistant
-if command -v hass &> /dev/null
-then
+if command -v hass &>/dev/null; then
     echo "Starting Home Assistant setup..."
-    hass --script check_config -c .
+    hass --script check_config -c ./config/
 else
     echo "Home Assistant command not found!"
 fi

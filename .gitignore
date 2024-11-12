@@ -172,3 +172,4 @@ config/.storage/*
 config/blueprints/*
 .ruff_cache
 config/deps/*
+config/custom_components/*
