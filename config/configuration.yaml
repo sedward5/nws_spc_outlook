@@ -10,7 +10,3 @@ logger:
   default: info
   logs:
     custom_components.integration_blueprint: debug
-
-nws_spc_outlook:
-  latitude: 42.0 # Replace with your desired latitude
-  longitude: -83.0
