@@ -1,13 +1,18 @@
-# Use the official Home Assistant dev container base image
-FROM ghcr.io/home-assistant/devcontainer:latest
+# Start from a Python 3.12 dev container base
+FROM mcr.microsoft.com/devcontainers/python:3.12
 
-# Update and install OS-level dependencies, including python3-venv
+# Set environment variables for non-interactive installation
+ENV DEBIAN_FRONTEND=noninteractive \
+    DEVCONTAINER=1
+
+#  Install Home Assistant-specific dependencies
 RUN apt-get update && apt-get install -y \
-    python3-venv \
     libpcap-dev \
+    libffi-dev \
+    libssl-dev \
     libjpeg-dev \
     zlib1g-dev \
-    libjpeg62-turbo-dev \
+    build-essential \
     && rm -rf /var/lib/apt/lists/*
 
 # Create and activate a Python virtual environment
