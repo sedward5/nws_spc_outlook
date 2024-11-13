@@ -11,7 +11,7 @@ from .const import DOMAIN  # Assuming you have DOMAIN defined as "nws_spc_outloo
 
 
 @config_entries.HANDLERS.register(DOMAIN)
-class NWSOutlookConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
+class NWS_SPC_OutlookConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
     """Handle a config flow for NWS SPC Outlook."""
 
     VERSION = 1
@@ -50,10 +50,10 @@ class NWSOutlookConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
     @callback
     def async_get_options_flow(config_entry):
         """Define the options flow for this component."""
-        return NWSOutlookOptionsFlow(config_entry)
+        return NWS_SPC_OutlookOptionsFlow(config_entry)
 
 
-class NWSOutlookOptionsFlow(config_entries.OptionsFlow):
+class NWS_SPC_OutlookOptionsFlow(config_entries.OptionsFlow):
     """Handle options flow for NWS SPC Outlook."""
 
     def __init__(self, config_entry):
