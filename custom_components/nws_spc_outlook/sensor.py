@@ -34,6 +34,7 @@ async def async_setup_platform(
     _discovery_info: Any = None,
 ) -> None:
     """Set up the NWS SPC Outlook sensor platform."""
+    _LOGGER.debug("Setting up the NWS SPC Outlook sensor platform")
     latitude = config[CONF_LATITUDE]
     longitude = config[CONF_LONGITUDE]
 
