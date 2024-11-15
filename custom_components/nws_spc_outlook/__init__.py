@@ -1,6 +1,7 @@
 """Initialize the NWS SPC Outlook integration."""
-from .const import DOMAIN
 import logging
+
+from .const import DOMAIN
 
 _LOGGER = logging.getLogger(__name__)
 

@@ -1,11 +1,11 @@
 """Config flow for NWS SPC Outlook integration."""
-from typing import Any, Dict
-import voluptuous as vol
+from typing import Any
 
+import homeassistant.helpers.config_validation as cv
+import voluptuous as vol
 from homeassistant import config_entries
 from homeassistant.const import CONF_LATITUDE, CONF_LONGITUDE
 from homeassistant.core import callback
-import homeassistant.helpers.config_validation as cv
 
 from .const import DOMAIN  # Assuming you have DOMAIN defined as "nws_spc_outlook"
 
@@ -16,7 +16,7 @@ class NWS_SPC_OutlookConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
 
     VERSION = 1
 
-    async def async_step_user(self, user_input: Dict[str, Any] | None = None):
+    async def async_step_user(self, user_input: dict[str, Any] | None = None):
         """Handle the initial step."""
         errors = {}
 

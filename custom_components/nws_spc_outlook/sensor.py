@@ -3,7 +3,7 @@
 import logging
 from collections.abc import Callable
 from datetime import timedelta
-from typing import Any, Dict
+from typing import Any
 
 import aiohttp
 import homeassistant.helpers.config_validation as cv
@@ -88,7 +88,7 @@ class NWSSPCOutlookDataCoordinator(DataUpdateCoordinator):
         self.latitude = latitude
         self.longitude = longitude
         # Initialize default data to ensure entities always have data
-        self.data: Dict[str, str] = {
+        self.data: dict[str, str] = {
             f"cat_day{day}": "No Severe Weather" for day in range(1, 4)}
         self.data.update({f"{risk}_day{day}": "No Data" for day in range(
             1, 4) for risk in ["hail", "wind", "torn"]})
