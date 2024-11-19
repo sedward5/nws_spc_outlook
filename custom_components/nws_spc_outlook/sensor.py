@@ -41,8 +41,9 @@ async def async_setup_platform(
     coordinator = NWSSPCOutlookDataCoordinator(hass, latitude, longitude)
     await coordinator.async_config_entry_first_refresh()
 
-    add_entities([NWSSPCOutlookSensor(coordinator, day)
-                 for day in range(1, 4)])
+    sensors = [NWSSPCOutlookSensor(coordinator, day) for day in range(1, 4)]
+    _LOGGER.debug(f"Sensors created: {sensors}")
+    add_entities(sensors)
 
 
 class NWSSPCOutlookSensor(SensorEntity):
@@ -95,6 +96,7 @@ class NWSSPCOutlookDataCoordinator(DataUpdateCoordinator):
 
     async def _async_update_data(self) -> dict[str, str]:
         """Fetch data from the SPC API."""
+        _LOGGER.debug("Attempting data update in NWSSPCOutlookDataCoordinator")
         try:
             return await self.hass.async_add_executor_job(
                 getspcoutlook, self.latitude, self.longitude

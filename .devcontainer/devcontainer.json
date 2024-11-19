@@ -17,7 +17,6 @@
         "timonwong.shellcheck",
         "exiasr.hadolint",
         "esbenp.prettier-vscode",
-        "ffloimair.asterisk-config",
         "ms-azuretools.vscode-docker",
         "foxundermoon.shell-format"
       ],
