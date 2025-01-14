@@ -16,7 +16,7 @@ class NWS_SPC_OutlookConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
 
     VERSION = 1
 
-    async def async_step_user(self, user_input: dict[str, Any] | None = None):
+    async def async_step_user(self, user_input: dict[str, Any] | None = None) -> Any:
         """Handle the initial step."""
         errors = {}
 
@@ -48,7 +48,7 @@ class NWS_SPC_OutlookConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
 
     @staticmethod
     @callback
-    def async_get_options_flow(config_entry):
+    def async_get_options_flow(config_entry: config_entries.ConfigEntry) -> config_entries.OptionsFlow:
         """Define the options flow for this component."""
         return NWS_SPC_OutlookOptionsFlow(config_entry)
 
@@ -56,15 +56,15 @@ class NWS_SPC_OutlookConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
 class NWS_SPC_OutlookOptionsFlow(config_entries.OptionsFlow):
     """Handle options flow for NWS SPC Outlook."""
 
-    def __init__(self, config_entry):
+    def __init__(self, config_entry: config_entries.ConfigEntry) -> None:
         """Initialize NWSOutlookOptionsFlow."""
         self.config_entry = config_entry
 
-    async def async_step_init(self, user_input=None):
+    async def async_step_init(self, user_input: dict[str, Any] | None = None) -> Any:
         """Manage the options."""
         return await self.async_step_user()
 
-    async def async_step_user(self, user_input=None):
+    async def async_step_user(self, user_input: dict[str, Any] | None = None) -> Any:
         """Handle the options step."""
         errors = {}
 
