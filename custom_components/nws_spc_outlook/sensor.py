@@ -1,4 +1,4 @@
-"""Sensor for fetching and displaying NWS SPC Outlook severe weather data in Home Assistant."""
+"""Sensor for fetching and displaying NWS SPC Outlook data."""
 import logging
 from collections.abc import Callable
 from datetime import timedelta
