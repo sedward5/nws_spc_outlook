@@ -12,15 +12,20 @@ _LOGGER = logging.getLogger(__name__)
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Set up NWS SPC Outlook from a config entry."""
-    session = async_get_clientsession(hass)
+    
+    # Ensure DOMAIN is initialized in hass.data
+    hass.data.setdefault(DOMAIN, {})
 
-    # Ensure DOMAIN exists in hass.data and is mutable
-    if DOMAIN not in hass.data:
-        hass.data[DOMAIN] = {}
+    # Store session-related data per entry
+    session = aiohttp.ClientSession()  # Example session creation if needed
+    hass.data[DOMAIN][entry.entry_id] = {
+        "latitude": entry.data[CONF_LATITUDE],
+        "longitude": entry.data[CONF_LONGITUDE],
+        "session": session,  # Store session if your integration needs one
+    }
 
-    hass.data[DOMAIN]["session"] = session
-
-    # Additional setup steps here...
+    # If your integration has platforms (like sensors), load them
+    hass.config_entries.async_setup_platforms(entry, ["sensor"])
 
     return True
 
