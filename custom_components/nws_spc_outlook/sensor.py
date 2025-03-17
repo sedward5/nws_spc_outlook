@@ -1,3 +1,4 @@
+"""Sensor for fetching and displaying NWS SPC Outlook severe weather data in Home Assistant."""
 import logging
 from collections.abc import Callable
 from datetime import timedelta
@@ -59,7 +60,7 @@ class NWSSPCOutlookSensor(SensorEntity):
 
     @property
     def state(self) -> str:
-        """Return state of sensor, default to 'No Severe Weather' if no data is avail."""
+        """Return state of sensor, default to 'No Severe Weather' if no data."""
         return self._coordinator.data.get(f"cat_day{self._day}", "No Severe Weather")
 
     @property
@@ -86,7 +87,7 @@ class NWSSPCOutlookDataCoordinator(DataUpdateCoordinator):
     """Fetches data from the NWS API."""
 
     def __init__(self, hass: HomeAssistant, latitude: float, longitude: float) -> None:
-        """Initialize the data coordinator with placeholders to ensure entities are visible."""
+        """Init data coordinator w/placeholders to ensure entities are visible."""
         super().__init__(
             hass, _LOGGER, name="NWS SPC Outlook", update_interval=SCAN_INTERVAL
         )
