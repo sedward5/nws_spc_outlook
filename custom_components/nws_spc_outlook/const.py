@@ -1,4 +1,4 @@
-"""Consts for NWS SPC Outlook"""
+"""Consts for NWS SPC Outlook."""
 # const.py
 DOMAIN = "nws_spc_outlook"
 
