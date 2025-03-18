@@ -25,7 +25,6 @@ PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend(
     }
 )
 
-
 async def async_setup_platform(
     hass: HomeAssistant,
     config: dict[str, Any],
@@ -42,8 +41,7 @@ async def async_setup_platform(
 
     sensors = [NWSSPCOutlookSensor(coordinator, day) for day in range(1, 4)]
     _LOGGER.debug("Sensors created: %s", sensors)
-    add_entities(sensors)
-
+    add_entities(sensors, True)
 
 class NWSSPCOutlookSensor(SensorEntity):
     """Representation of an SPC Outlook sensor for each day."""
@@ -65,39 +63,41 @@ class NWSSPCOutlookSensor(SensorEntity):
 
     @property
     def extra_state_attributes(self) -> dict[str, str]:
-        """Return addnl attrs with default vals for hail/wind/tornado prob."""
+        """Return additional attributes with default values for hail/wind/tornado probabilities."""
         return {
-            "hail_probability": self._coordinator.data.get(
-                f"hail_day{self._day}", "No Data"
-            ),
-            "wind_probability": self._coordinator.data.get(
-                f"wind_day{self._day}", "No Data"
-            ),
-            "tornado_probability": self._coordinator.data.get(
-                f"torn_day{self._day}", "No Data"
-            ),
+            "hail_probability":
+                self._coordinator.data.get(f"hail_day{self._day}", "No Data"),
+            "wind_probability":
+                self._coordinator.data.get(f"wind_day{self._day}", "No Data"),
+            "tornado_probability":
+                self._coordinator.data.get(f"torn_day{self._day}", "No Data"),
         }
 
     async def async_update(self) -> None:
         """Update sensor using coordinator."""
         await self._coordinator.async_request_refresh()
 
-
 class NWSSPCOutlookDataCoordinator(DataUpdateCoordinator):
     """Fetches data from the NWS API."""
 
     def __init__(self, hass: HomeAssistant, latitude: float, longitude: float) -> None:
-        """Init data coordinator w/placeholders to ensure entities are visible."""
+        """Initialize data coordinator w/placeholders to ensure entity visiblity."""
         super().__init__(
-            hass, _LOGGER, name="NWS SPC Outlook", update_interval=SCAN_INTERVAL
+            hass,
+            _LOGGER,
+            name="NWS SPC Outlook",
+            update_interval=SCAN_INTERVAL
         )
         self.latitude = latitude
         self.longitude = longitude
         # Initialize default data to ensure entities always have data
         self.data: dict[str, str] = {
-            f"cat_day{day}": "No Severe Weather" for day in range(1, 4)}
-        self.data.update({f"{risk}_day{day}": "No Data" for day in range(
-            1, 4) for risk in ["hail", "wind", "torn"]})
+            f"cat_day{day}": "No Severe Weather" for day in range(1, 4)
+        }
+        self.data.update({
+            f"{risk}_day{day}":
+                "No Data" for day in range(1, 4) for risk in ["hail", "wind", "torn"]
+        })
 
     async def _async_update_data(self) -> dict[str, str]:
         """Fetch data from the SPC API."""
@@ -107,9 +107,8 @@ class NWSSPCOutlookDataCoordinator(DataUpdateCoordinator):
                 getspcoutlook, self.latitude, self.longitude
             )
         except Exception as exc:
-            error_message = "Error fetching SPC outlook data"
-            raise UpdateFailed(error_message) from exc
-
+            _LOGGER.error("Error fetching SPC outlook data: %s", exc)
+            raise UpdateFailed("Error fetching SPC outlook data") from exc
 
 async def getspcoutlook(latitude: float, longitude: float) -> dict[str, str]:
     """Query SPC for the latest severe weather outlooks."""
@@ -121,26 +120,29 @@ async def getspcoutlook(latitude: float, longitude: float) -> dict[str, str]:
             url = f"https://www.spc.noaa.gov/products/outlook/day{day}otlk_cat.lyr.geojson"
             result = False
             async with session.get(url, timeout=10) as resp:
+                if resp.status != 200:
+                    _LOGGER.error("Failed to fetch SPC outlook data for Day %s", day)
+                    continue
                 data = await resp.json()
-                for feature in data["features"]:
+                for feature in data.get("features", []):
                     polygon = shape(feature["geometry"])
                     if polygon.contains(location):
-                        output[f"cat_day{day}"] = feature["properties"]["LABEL2"]
+                        output[f"cat_day{day}"] = feature["properties"].get("LABEL2", "Unknown")
                         result = True
 
             if result and day <= DAYS_WITH_DETAILED_OUTLOOKS:
                 for risk_type in ["torn", "hail", "wind"]:
-                    risk_url = (
-                        f"https://www.spc.noaa.gov/products/outlook/day{day}"
-                        f"otlk_{risk_type}.lyr.geojson"
-                    )
+                    risk_url = f"https://www.spc.noaa.gov/products/outlook/day{day}otlk_{risk_type}.lyr.geojson"
                     async with session.get(risk_url, timeout=10) as resp:
+                        if resp.status != 200:
+                            _LOGGER.error("Failed to fetch %s data for Day %s", risk_type, day)
+                            continue
                         data = await resp.json()
-                        for feature in data["features"]:
+                        for feature in data.get("features", []):
                             polygon = shape(feature["geometry"])
                             if polygon.contains(location):
-                                output[f"{risk_type}_day{day}"] = feature["properties"][
-                                    "LABEL2"
-                                ]
+                                output[
+                                    f"{risk_type}_day{day}"
+                                ] = feature["properties"].get("LABEL2", "Unknown")
 
     return output
