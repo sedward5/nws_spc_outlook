@@ -3,6 +3,10 @@
 import logging
 
 from homeassistant.config_entries import ConfigEntry
+from homeassistant.const import (
+    CONF_LATITUDE,
+    CONF_LONGITUDE,
+)
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 
@@ -10,8 +14,12 @@ from .const import DOMAIN
 
 _LOGGER = logging.getLogger(__name__)
 
+
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Set up NWS SPC Outlook from a config entry."""
+    # Ensure DOMAIN key exists and is mutable
+    if DOMAIN not in hass.data:
+        hass.data[DOMAIN] = {}
     # Ensure DOMAIN is initialized in hass.data
     hass.data.setdefault(DOMAIN, {})
 
@@ -28,11 +36,16 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
     return True
 
+
 async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Unload NWS SPC Outlook config entry."""
-    _LOGGER.debug("Unloading NWS SPC Outlook integration entry")
+    _LOGGER.debug("Unloading NWS SPC Outlook integration entry %s", entry.entry_id)
 
-    if DOMAIN in hass.data:
-        del hass.data[DOMAIN]
+    if DOMAIN in hass.data and entry.entry_id in hass.data[DOMAIN]:
+        del hass.data[DOMAIN][entry.entry_id]
+
+        # If no more entries exist, clean up DOMAIN key
+        if not hass.data[DOMAIN]:
+            del hass.data[DOMAIN]
 
     return True
