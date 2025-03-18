@@ -4,10 +4,9 @@ from typing import Any
 import voluptuous as vol
 import homeassistant.helpers.config_validation as cv
 from homeassistant import config_entries
-from homeassistant.const import CONF_LATITUDE, CONF_LONGITUDE
 from homeassistant.core import callback
 
-from .const import DOMAIN
+from .const import DOMAIN, CONF_LATITUDE, CONF_LONGITUDE
 
 
 class NWS_SPC_OutlookConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
