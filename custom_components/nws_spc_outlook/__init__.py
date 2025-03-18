@@ -3,14 +3,10 @@
 import logging
 
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.const import (
-    CONF_LATITUDE,
-    CONF_LONGITUDE,
-)
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 
-from .const import DOMAIN
+from .const import DOMAIN, CONF_LATITUDE, CONF_LONGITUDE
 
 _LOGGER = logging.getLogger(__name__)
 
