@@ -53,7 +53,19 @@ async def async_setup_entry(
     async_add_entities: AddEntitiesCallback
 ) -> None:
     """Set up SPC Outlook sensors dynamically."""
-    coordinator = hass.data["nws_spc_outlook"][entry.entry_id]
+
+    if "nws_spc_outlook" not in hass.data:
+        hass.data["nws_spc_outlook"] = {}
+
+    if entry.entry_id not in hass.data["nws_spc_outlook"]:
+        # Ensure we are storing the actual coordinator, not a dict
+        coordinator = NWSSPCOutlookDataCoordinator(hass, entry.data[CONF_LATITUDE], entry.data[CONF_LONGITUDE])
+        await coordinator.async_config_entry_first_refresh()
+        hass.data["nws_spc_outlook"][entry.entry_id] = coordinator  # Store the actual coordinator
+
+    coordinator = hass.data["nws_spc_outlook"][entry.entry_id]  # Retrieve the coordinator
+
+    _LOGGER.debug("Type of stored coordinator after fix: %s", type(coordinator))
 
     sensors = [NWSSPCOutlookSensor(coordinator, day) for day in range(1, 4)]
     async_add_entities(sensors, True)
