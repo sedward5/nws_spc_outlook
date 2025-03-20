@@ -10,6 +10,7 @@ from homeassistant.components.sensor import PLATFORM_SCHEMA, SensorEntity
 from homeassistant.const import CONF_LATITUDE, CONF_LONGITUDE
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers import config_validation as cv
+from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.update_coordinator import CoordinatorEntity, DataUpdateCoordinator, UpdateFailed
 from shapely.geometry import Point, shape
 
@@ -44,6 +45,17 @@ async def async_setup_platform(
     _LOGGER.debug("Entities being added: %s", sensors)
     _LOGGER.debug("Hass data for DOMAIN: %s", hass.data.get(DOMAIN))
     add_entities(sensors, True)
+    
+async def async_setup_entry(
+    hass: HomeAssistant,
+    entry: ConfigEntry,
+    async_add_entities: AddEntitiesCallback
+) -> None:
+    """Set up SPC Outlook sensors dynamically."""
+    coordinator = hass.data["nws_spc_outlook"][entry.entry_id]
+
+    sensors = [NWSSPCOutlookSensor(coordinator, day) for day in range(1, 4)]
+    async_add_entities(sensors, True)
 
 class NWSSPCOutlookSensor(CoordinatorEntity, SensorEntity):
     """Representation of an SPC Outlook sensor for each day."""
