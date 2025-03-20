@@ -40,7 +40,9 @@ async def async_setup_platform(
     await coordinator.async_config_entry_first_refresh()
 
     sensors = [NWSSPCOutlookSensor(coordinator, day) for day in range(1, 4)]
-    _LOGGER.debug("Sensors created: %s", sensors)
+    _LOGGER.debug("async_setup_platform called with config: %s", config)
+    _LOGGER.debug("Entities being added: %s", sensors)
+    _LOGGER.debug("Hass data for DOMAIN: %s", hass.data.get(DOMAIN))
     add_entities(sensors, True)
 
 class NWSSPCOutlookSensor(CoordinatorEntity, SensorEntity):
