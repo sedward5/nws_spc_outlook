@@ -10,7 +10,7 @@ from homeassistant.components.sensor import PLATFORM_SCHEMA, SensorEntity
 from homeassistant.const import CONF_LATITUDE, CONF_LONGITUDE
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers import config_validation as cv
-from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
+from homeassistant.helpers.update_coordinator import CoordinatorEntity, DataUpdateCoordinator, UpdateFailed
 from shapely.geometry import Point, shape
 
 _LOGGER = logging.getLogger(__name__)
@@ -43,13 +43,14 @@ async def async_setup_platform(
     _LOGGER.debug("Sensors created: %s", sensors)
     add_entities(sensors, True)
 
-class NWSSPCOutlookSensor(SensorEntity):
+class NWSSPCOutlookSensor(CoordinatorEntity, SensorEntity):
     """Representation of an SPC Outlook sensor for each day."""
 
     def __init__(self, coordinator: "NWSSPCOutlookDataCoordinator", day: int) -> None:
         """Initialize the sensor."""
-        self._coordinator = coordinator
+        super().__init__(coordinator)  # Register entity with the update coordinator
         self._day = day
+        self._attr_name = f"SPC Outlook Day {self._day}"  # Use HA’s built-in attribute
 
     @property
     def name(self) -> str:
@@ -59,23 +60,19 @@ class NWSSPCOutlookSensor(SensorEntity):
     @property
     def state(self) -> str:
         """Return state of sensor, default to 'No Severe Weather' if no data."""
-        return self._coordinator.data.get(f"cat_day{self._day}", "No Severe Weather")
+        return self.coordinator.data.get(f"cat_day{self._day}", "No Severe Weather")
 
     @property
     def extra_state_attributes(self) -> dict[str, str]:
         """Return additional attributes with default values for hail/wind/tornado probabilities."""
         return {
-            "hail_probability":
-                self._coordinator.data.get(f"hail_day{self._day}", "No Data"),
-            "wind_probability":
-                self._coordinator.data.get(f"wind_day{self._day}", "No Data"),
-            "tornado_probability":
-                self._coordinator.data.get(f"torn_day{self._day}", "No Data"),
+            "hail_probability": 
+                self.coordinator.data.get(f"hail_day{self._day}", "No Data"),
+            "wind_probability": 
+                self.coordinator.data.get(f"wind_day{self._day}", "No Data"),
+            "tornado_probability": 
+                self.coordinator.data.get(f"torn_day{self._day}", "No Data"),
         }
-
-    async def async_update(self) -> None:
-        """Update sensor using coordinator."""
-        await self._coordinator.async_request_refresh()
 
 class NWSSPCOutlookDataCoordinator(DataUpdateCoordinator):
     """Fetches data from the NWS API."""
