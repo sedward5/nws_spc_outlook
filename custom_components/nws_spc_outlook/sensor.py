@@ -61,6 +61,7 @@ async def async_setup_entry(
         # Ensure we are storing the actual coordinator, not a dict
         coordinator = NWSSPCOutlookDataCoordinator(hass, entry.data[CONF_LATITUDE], entry.data[CONF_LONGITUDE])
         await coordinator.async_config_entry_first_refresh()
+        _LOGGER.debug("Assigning coordinator to hass.data: %s", type(coordinator))
         hass.data["nws_spc_outlook"][entry.entry_id] = coordinator  # Store the actual coordinator
 
     coordinator = hass.data["nws_spc_outlook"][entry.entry_id]  # Retrieve the coordinator
