@@ -9,6 +9,7 @@
   "documentation": "https://github.com/sedward5/nws_spc_outlook",
   "iot_class": "cloud_polling",
   "issue_tracker": "https://github.com/sedwars5/nws_spc_outlookp/issues",
+  "loggers": ["custom_components.nws_spc_outlook"],
   "requirements": ["shapely"],
   "version": "0.1.0"
 }
