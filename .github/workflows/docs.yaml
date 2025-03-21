@@ -21,7 +21,7 @@ jobs:
         run: pip install pdoc
 
       - name: Generate documentation for custom component
-        run: pdoc --markdown custom_components/nws_spc_outlook > API_DOCS.md
+        run: pdoc -d markdown custom_components/nws_spc_outlook > API_DOCS.md
 
       - name: Commit updated docs
         run: |
