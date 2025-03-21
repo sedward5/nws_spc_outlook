@@ -17,14 +17,19 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     if DOMAIN not in hass.data:
         hass.data[DOMAIN] = {}
 
-    # Initialize and store the actual coordinator instead of a dictionary
     session = async_get_clientsession(hass)
-    coordinator = NWSSPCOutlookDataCoordinator(hass, entry.data[CONF_LATITUDE], entry.data[CONF_LONGITUDE])
+    coordinator = NWSSPCOutlookDataCoordinator(
+        hass, entry.data[CONF_LATITUDE], entry.data[CONF_LONGITUDE]
+    )
+
     await coordinator.async_config_entry_first_refresh()
-    hass.data[DOMAIN][entry.entry_id] = coordinator  # Store coordinator, not a dict
+    hass.data[DOMAIN][entry.entry_id] = coordinator
 
     # Forward setup to platform(s)
     await hass.config_entries.async_forward_entry_setups(entry, ["sensor"])
+
+    # Ensure cleanup on unload
+    entry.async_on_unload(lambda: async_unload_entry(hass, entry))
 
     return True
 
@@ -33,11 +38,16 @@ async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Unload NWS SPC Outlook config entry."""
     _LOGGER.debug("Unloading NWS SPC Outlook integration entry %s", entry.entry_id)
 
-    if DOMAIN in hass.data and entry.entry_id in hass.data[DOMAIN]:
-        del hass.data[DOMAIN][entry.entry_id]
+    if DOMAIN not in hass.data or entry.entry_id not in hass.data[DOMAIN]:
+        return False
 
-        # If no more entries exist, clean up DOMAIN key
-        if not hass.data[DOMAIN]:
-            del hass.data[DOMAIN]
+    coordinator = hass.data[DOMAIN].pop(entry.entry_id, None)
 
-    return True
+    if coordinator and hasattr(coordinator, "async_unload"):
+        await coordinator.async_unload()
+
+    # Remove DOMAIN key if no entries remain
+    if not hass.data[DOMAIN]:
+        hass.data.pop(DOMAIN)
+
+    return await hass.config_entries.async_unload_platforms(entry, ["sensor"])
