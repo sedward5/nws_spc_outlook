@@ -13,21 +13,16 @@ _LOGGER = logging.getLogger(__name__)
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Set up NWS SPC Outlook from a config entry."""
-    # Ensure DOMAIN key exists and is mutable
     if DOMAIN not in hass.data:
         hass.data[DOMAIN] = {}
-    # Ensure DOMAIN is initialized in hass.data
-    hass.data.setdefault(DOMAIN, {})
 
-    # Store session-related data per entry
+    # Initialize and store the actual coordinator instead of a dictionary
     session = async_get_clientsession(hass)
-    hass.data[DOMAIN][entry.entry_id] = {
-        "latitude": entry.data[CONF_LATITUDE],
-        "longitude": entry.data[CONF_LONGITUDE],
-        "session": session,  # Store session if your integration needs one
-    }
+    coordinator = NWSSPCOutlookDataCoordinator(hass, entry.data[CONF_LATITUDE], entry.data[CONF_LONGITUDE])
+    await coordinator.async_config_entry_first_refresh()
+    hass.data[DOMAIN][entry.entry_id] = coordinator  # Store coordinator, not a dict
 
-    # If your integration has platforms (like sensors), load them
+    # Forward setup to platform(s)
     await hass.config_entries.async_forward_entry_setups(entry, ["sensor"])
 
     return True
