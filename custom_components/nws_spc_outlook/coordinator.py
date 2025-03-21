@@ -1,62 +1,68 @@
-"""Sensor for displaying NWS SPC Outlook data."""
+"""Coordinator for fetching and managing NWS SPC Outlook data."""
 import logging
+from datetime import timedelta
 from typing import Any
 
-from homeassistant.components.sensor import SensorEntity
-from homeassistant.config_entries import ConfigEntry
-from homeassistant.const import CONF_LATITUDE, CONF_LONGITUDE
+import aiohttp
 from homeassistant.core import HomeAssistant
-from homeassistant.helpers.entity_platform import AddEntitiesCallback
-from homeassistant.helpers.update_coordinator import CoordinatorEntity
-
-from .coordinator import NWSSPCOutlookDataCoordinator
+from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
+from shapely.geometry import Point, shape
 
 _LOGGER = logging.getLogger(__name__)
 
-async def async_setup_entry(
-    hass: HomeAssistant,
-    entry: ConfigEntry,
-    async_add_entities: AddEntitiesCallback
-) -> None:
-    """Set up SPC Outlook sensors dynamically."""
-    if "nws_spc_outlook" not in hass.data:
-        hass.data["nws_spc_outlook"] = {}
+SCAN_INTERVAL = timedelta(minutes=30)
+DAYS_WITH_DETAILED_OUTLOOKS = 3
 
-    if entry.entry_id not in hass.data["nws_spc_outlook"]:
-        coordinator = NWSSPCOutlookDataCoordinator(
-            hass, entry.data[CONF_LATITUDE], entry.data[CONF_LONGITUDE]
+class NWSSPCOutlookDataCoordinator(DataUpdateCoordinator):
+    """Fetches and manages data from the NWS SPC API."""
+
+    def __init__(self, hass: HomeAssistant, latitude: float, longitude: float) -> None:
+        """Initialize data coordinator with default values."""
+        super().__init__(
+            hass,
+            _LOGGER,
+            name="NWS SPC Outlook",
+            update_interval=SCAN_INTERVAL
         )
-        await coordinator.async_config_entry_first_refresh()
-        hass.data["nws_spc_outlook"][entry.entry_id] = coordinator
-
-    coordinator = hass.data["nws_spc_outlook"][entry.entry_id]
-    sensors = [NWSSPCOutlookSensor(coordinator, day) for day in range(1, 4)]
-    async_add_entities(sensors, True)
-
-class NWSSPCOutlookSensor(CoordinatorEntity, SensorEntity):
-    """Representation of an SPC Outlook sensor."""
-
-    def __init__(self, coordinator: NWSSPCOutlookDataCoordinator, day: int) -> None:
-        """Initialize the sensor."""
-        super().__init__(coordinator)
-        self._day = day
-        self._attr_name = f"SPC Outlook Day {self._day}"
-
-    @property
-    def name(self) -> str:
-        """Return the name of the sensor."""
-        return f"SPC Outlook Day {self._day}"
-
-    @property
-    def state(self) -> str:
-        """Return state of sensor."""
-        return self.coordinator.data.get(f"cat_day{self._day}", "No Severe Weather")
-
-    @property
-    def extra_state_attributes(self) -> dict[str, str]:
-        """Return additional attributes."""
-        return {
-            "hail_probability": self.coordinator.data.get(f"hail_day{self._day}", "No Data"),
-            "wind_probability": self.coordinator.data.get(f"wind_day{self._day}", "No Data"),
-            "tornado_probability": self.coordinator.data.get(f"torn_day{self._day}", "No Data"),
+        self.latitude = latitude
+        self.longitude = longitude
+        self.data: dict[str, str] = {
+            f"cat_day{day}": "No Severe Weather" for day in range(1, 4)
         }
+        self.data.update({
+            f"{risk}_day{day}": "No Data" for day in range(1, 4) for risk in ["hail", "wind", "torn"]
+        })
+
+    async def _async_update_data(self) -> dict[str, str]:
+        """Fetch and process data from the SPC API."""
+        _LOGGER.debug("Fetching SPC Outlook data...")
+        url = "https://www.spc.noaa.gov/products/outlook/day1otlk.json"  # Example URL
+        try:
+            async with aiohttp.ClientSession() as session:
+                async with session.get(url) as response:
+                    if response.status != 200:
+                        raise UpdateFailed(f"SPC API returned {response.status}")
+                    data = await response.json()
+
+            return self._process_spc_data(data)
+        except Exception as err:
+            raise UpdateFailed(f"Error fetching SPC data: {err}")
+
+    def _process_spc_data(self, data: dict[str, Any]) -> dict[str, str]:
+        """Process raw SPC data into structured format."""
+        processed_data = {
+            f"cat_day{day}": "No Severe Weather" for day in range(1, 4)
+        }
+        processed_data.update({
+            f"{risk}_day{day}": "No Data" for day in range(1, 4) for risk in ["hail", "wind", "torn"]
+        })
+
+        for feature in data.get("features", []):
+            properties = feature.get("properties", {})
+            category = properties.get("category", "No Severe Weather")
+            day = properties.get("day", 1)
+
+            if 1 <= day <= 3:
+                processed_data[f"cat_day{day}"] = category
+
+        return processed_data
