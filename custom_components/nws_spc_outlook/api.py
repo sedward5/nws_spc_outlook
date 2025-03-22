@@ -51,26 +51,20 @@ async def getspcoutlook(latitude: float, longitude: float, session: aiohttp.Clie
     tasks = {key: fetch_geojson(session, url) for key, url in urls.items()}
     results = await asyncio.gather(*tasks.values(), return_exceptions=True)
 
-    for (key, data), result in zip(tasks.keys(), results):
-        if isinstance(result, Exception):
-            _LOGGER.error("Failed to process %s due to %s", key, result)
+    for key, result in zip(tasks.keys(), results):
+    if isinstance(result, Exception):
+        _LOGGER.error("Failed to process %s due to %s", key, result)
+        continue
+    if not isinstance(result, dict):  # Ensure we have a valid JSON response
+        _LOGGER.error("Invalid data type for %s: %s", key, type(result))
+        continue
+    for feature in result.get("features", []):
+        geometry = feature.get("geometry")
+        if not geometry:  # Gracefully handle missing geometry
+            _LOGGER.warning("Missing geometry in %s response", key)
             continue
+        polygon = shape(geometry)
+        if polygon.contains(location):
+            output[key] = feature["properties"].get("LABEL2", "Unknown")
 
-        for feature in data.get("features", []):
-            geometry = feature.get("geometry")
-            if not geometry:  # Handle empty geometry
-                _LOGGER.warning("Skipping feature with missing geometry in %s", key)
-                continue
-
-            try:
-                polygon = shape(geometry)
-                if polygon.is_empty:
-                    _LOGGER.warning("Skipping empty geometry in %s", key)
-                    continue
-
-                if polygon.contains(location):
-                    output[key] = feature["properties"].get("LABEL2", "Unknown")
-            except Exception as e:
-                _LOGGER.error("Error processing geometry in %s: %s", key, e)
-
-    return outputi
+    return output
