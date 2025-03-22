@@ -9,5 +9,16 @@
 
 A home assistant integration to poll weather outlook information from the NWS Storm Prediction Center
 
-# ⚖️ Disclamer
+## 📁 File structure
+```
+custom_components/nws_spc_outlook/
+│── __init__.py          # Handles setup and integration lifecycle
+│── coordinator.py       # Handles data fetching and updates
+│── sensor.py            # Defines sensor entities and data presentation
+│── api.py               # Handles API requests and processing
+│── const.py             # Stores constants like URLs
+│── manifest.json        # Defines integration metadata
+```
+
+## ⚖️ Disclamer
 This project and its author are in no way affialted with the National Weather Service. This addon should not be used as your sole source of information for severe weather preparedness. Stay informed, have a plan, be prepared.
