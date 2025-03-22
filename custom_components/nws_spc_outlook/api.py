@@ -9,10 +9,24 @@ _LOGGER = logging.getLogger(__name__)
 async def fetch_geojson(session: aiohttp.ClientSession, url: str) -> dict:
     """Fetch and return JSON data from an SPC endpoint."""
     try:
-        async with session.get(url, timeout=10) as resp:
+        headers = {"Accept": "application/json"}  # Explicitly request JSON
+        async with session.get(url, headers=headers, timeout=10) as resp:
             if resp.status != 200:
                 _LOGGER.error("Failed to fetch data from %s (HTTP %s)", url, resp.status)
                 return {}
+
+            # Ensure content type is JSON
+            content_type = resp.headers.get("Content-Type", "")
+            if "application/json" not in content_type:
+                text = await resp.text()  # Read response as text for debugging
+                _LOGGER.error(
+                    "Unexpected response from %s: %s (Content-Type: %s)",
+                    url,
+                    text[:500],  # Log only the first 500 chars
+                    content_type
+                )
+                return {}
+
             return await resp.json()
     except (aiohttp.ClientError, asyncio.TimeoutError) as err:
         _LOGGER.error("Error fetching data from %s: %s", url, err)
