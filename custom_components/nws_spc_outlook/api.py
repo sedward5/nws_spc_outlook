@@ -15,22 +15,15 @@ async def fetch_geojson(session: aiohttp.ClientSession, url: str) -> dict:
                 _LOGGER.error("Failed to fetch data from %s (HTTP %s)", url, resp.status)
                 return {}
 
-            # Ensure response is JSON
-            content_type = resp.headers.get("Content-Type", "").lower()
-            if "application/json" not in content_type:
-                text = await resp.text()  # Read response as text for debugging
-                _LOGGER.error(
-                    "Unexpected response from %s: %s (Content-Type: %s)",
-                    url,
-                    text[:500],  # Log only the first 500 chars
-                    content_type
-                )
+            text = await resp.text()  # Read response as text first
+            if not text.strip():  # Handle empty response
+                _LOGGER.error("Empty response from %s", url)
                 return {}
 
             try:
-                return await resp.json()
-            except aiohttp.ContentTypeError:
-                _LOGGER.error("Invalid JSON response from %s", url)
+                return await resp.json()  # Attempt to parse JSON directly
+            except (aiohttp.ContentTypeError, ValueError):  # Handle invalid JSON
+                _LOGGER.error("Invalid JSON response from %s. Response body: %s", url, text[:500])
                 return {}
 
     except (aiohttp.ClientError, asyncio.TimeoutError) as err:
