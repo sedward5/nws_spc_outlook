@@ -7,16 +7,16 @@ from .const import BASE_URL, DAYS_WITH_DETAILED_OUTLOOKS
 _LOGGER = logging.getLogger(__name__)
 
 async def fetch_geojson(session: aiohttp.ClientSession, url: str) -> dict:
-    """Fetch and return JSON data from an SPC endpoint."""
+    """Fetch and return JSON data from an SPC endpoint, handling long responses and missing content types."""
     try:
         headers = {"Accept": "application/json"}  # Explicitly request JSON
-        async with session.get(url, headers=headers, timeout=10) as resp:
+        async with session.get(url, headers=headers, timeout=20) as resp:  # Increased timeout
             if resp.status != 200:
                 _LOGGER.error("Failed to fetch data from %s (HTTP %s)", url, resp.status)
                 return {}
 
-            # Ensure content type is JSON
-            content_type = resp.headers.get("Content-Type", "")
+            # Ensure response is JSON
+            content_type = resp.headers.get("Content-Type", "").lower()
             if "application/json" not in content_type:
                 text = await resp.text()  # Read response as text for debugging
                 _LOGGER.error(
@@ -27,7 +27,12 @@ async def fetch_geojson(session: aiohttp.ClientSession, url: str) -> dict:
                 )
                 return {}
 
-            return await resp.json()
+            try:
+                return await resp.json()
+            except aiohttp.ContentTypeError:
+                _LOGGER.error("Invalid JSON response from %s", url)
+                return {}
+
     except (aiohttp.ClientError, asyncio.TimeoutError) as err:
         _LOGGER.error("Error fetching data from %s: %s", url, err)
         return {}
@@ -37,7 +42,6 @@ async def getspcoutlook(latitude: float, longitude: float, session: aiohttp.Clie
     output = {}
     location = Point(longitude, latitude)
 
-    tasks = {}
     urls = {f"cat_day{day}": f"{BASE_URL}/day{day}otlk_cat.lyr.geojson" for day in range(1, 4)}
 
     for day in range(1, DAYS_WITH_DETAILED_OUTLOOKS + 1):
@@ -51,9 +55,22 @@ async def getspcoutlook(latitude: float, longitude: float, session: aiohttp.Clie
         if isinstance(result, Exception):
             _LOGGER.error("Failed to process %s due to %s", key, result)
             continue
-        for feature in data.get("features", []):
-            polygon = shape(feature.get("geometry", {}))
-            if polygon.contains(location):
-                output[key] = feature["properties"].get("LABEL2", "Unknown")
 
-    return output
+        for feature in data.get("features", []):
+            geometry = feature.get("geometry")
+            if not geometry:  # Handle empty geometry
+                _LOGGER.warning("Skipping feature with missing geometry in %s", key)
+                continue
+
+            try:
+                polygon = shape(geometry)
+                if polygon.is_empty:
+                    _LOGGER.warning("Skipping empty geometry in %s", key)
+                    continue
+
+                if polygon.contains(location):
+                    output[key] = feature["properties"].get("LABEL2", "Unknown")
+            except Exception as e:
+                _LOGGER.error("Error processing geometry in %s: %s", key, e)
+
+    return outputi
