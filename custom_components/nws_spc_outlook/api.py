@@ -52,19 +52,19 @@ async def getspcoutlook(latitude: float, longitude: float, session: aiohttp.Clie
     results = await asyncio.gather(*tasks.values(), return_exceptions=True)
 
     for key, result in zip(tasks.keys(), results):
-    if isinstance(result, Exception):
-        _LOGGER.error("Failed to process %s due to %s", key, result)
-        continue
-    if not isinstance(result, dict):  # Ensure we have a valid JSON response
-        _LOGGER.error("Invalid data type for %s: %s", key, type(result))
-        continue
-    for feature in result.get("features", []):
-        geometry = feature.get("geometry")
-        if not geometry:  # Gracefully handle missing geometry
-            _LOGGER.warning("Missing geometry in %s response", key)
+        if isinstance(result, Exception):
+            _LOGGER.error("Failed to process %s due to %s", key, result)
             continue
-        polygon = shape(geometry)
-        if polygon.contains(location):
-            output[key] = feature["properties"].get("LABEL2", "Unknown")
+        if not isinstance(result, dict):  # Ensure we have a valid JSON response
+            _LOGGER.error("Invalid data type for %s: %s", key, type(result))
+            continue
+        for feature in result.get("features", []):
+            geometry = feature.get("geometry")
+            if not geometry:  # Gracefully handle missing geometry
+                _LOGGER.warning("Missing geometry in %s response", key)
+                continue
+            polygon = shape(geometry)
+            if polygon.contains(location):
+                output[key] = feature["properties"].get("LABEL2", "Unknown")
 
     return output
