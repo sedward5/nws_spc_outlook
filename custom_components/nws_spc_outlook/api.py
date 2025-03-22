@@ -21,7 +21,7 @@ async def fetch_geojson(session: aiohttp.ClientSession, url: str) -> dict:
                 return {}
 
             try:
-                return await resp.json()  # Attempt to parse JSON directly
+                return await resp.json(content_type=None)  # Attempt to parse JSON directly
             except (aiohttp.ContentTypeError, ValueError):  # Handle invalid JSON
                 _LOGGER.error("Invalid JSON response from %s. Response body: %s", url, text[:500])
                 return {}
