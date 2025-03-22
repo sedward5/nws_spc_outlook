@@ -27,7 +27,7 @@ jobs:
       - run: pip install -r requirements.txt
       # ADJUST THIS: build your documentation into docs/.
       # We use a custom build script for pdoc itself, ideally you just run `pdoc -o docs/ ...` here.
-      - run: pdoc -o docs/ custom_components/nws_spc_outlook/__init__.py
+      - run: pdoc --force -o docs/ custom_components/nws_spc_outlook/__init__.py
 
 
 
