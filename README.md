@@ -31,6 +31,87 @@ custom_components/nws_spc_outlook/
 │── manifest.json        # Defines integration metadata
 ```
 
+## 🖱️ UI Example
+
+This is a possible layout utilizing these sensors. This requires mushroom cards from HACS. 
+
+```yaml
+type: vertical-stack
+cards:
+  - type: grid
+    columns: 4
+    square: false
+    cards:
+      - type: markdown
+        content: "**Risk**"
+      - type: markdown
+        content: "**Day 1**"
+      - type: markdown
+        content: "**Day 2**"
+      - type: markdown
+        content: "**Day 3**"
+  - type: grid
+    columns: 4
+    square: false
+    cards:
+      - type: custom:mushroom-template-card
+        icon: mdi:weather-lightning
+      - type: custom:mushroom-template-card
+        entity: sensor.spc_outlook_day_1_outlook_day
+        primary: "{{ states('sensor.spc_outlook_day_1') }}"
+      - type: custom:mushroom-template-card
+        entity: sensor.spc_outlook_day_2
+        primary: "{{ states('sensor.spc_outlook_day_2') }}"
+      - type: custom:mushroom-template-card
+        entity: sensor.spc_outlook_day_3
+        primary: "{{ states('sensor.spc_outlook_day_3') }}"
+  - type: grid
+    columns: 4
+    square: false
+    cards:
+      - type: custom:mushroom-template-card
+        icon: mdi:weather-windy
+      - type: custom:mushroom-template-card
+        entity: sensor.spc_outlook_day_1
+        primary: "{{ state_attr('sensor.spc_outlook_day_1', 'wind_probability') }}"
+      - type: custom:mushroom-template-card
+        entity: sensor.spc_outlook_day_2
+        primary: "{{ state_attr('sensor.spc_outlook_day_2', 'wind_probability') }}"
+      - type: custom:mushroom-template-card
+        icon: mdi:border-none-variant
+  - type: grid
+    columns: 4
+    square: false
+    cards:
+      - type: custom:mushroom-template-card
+        icon: mdi:weather-tornado
+      - type: custom:mushroom-template-card
+        entity: sensor.spc_outlook_day_1
+        primary: "{{ state_attr('sensor.spc_outlook_day_1', 'tornado_probability') }}"
+      - type: custom:mushroom-template-card
+        entity: sensor.spc_outlook_day_2
+        primary: "{{ state_attr('sensor.spc_outlook_day_2', 'tornado_probability') }}"
+      - type: custom:mushroom-template-card
+        entity: sensor.nws_outlook_day_3
+        icon: mdi:border-none-variant
+  - type: grid
+    columns: 4
+    square: false
+    cards:
+      - type: custom:mushroom-template-card
+        icon: mdi:weather-hail
+      - type: custom:mushroom-template-card
+        entity: sensor.spc_outlook_day_1
+        primary: "{{ state_attr('sensor.spc_outlook_day_1', 'hail_probability') }}"
+      - type: custom:mushroom-template-card
+        entity: sensor.spc_outlook_day_2
+        primary: "{{ state_attr('sensor.spc_outlook_day_2', 'hail_probability') }}"
+      - type: custom:mushroom-template-card
+        entity: sensor.spc_outlook_day_3
+        icon: mdi:border-none-variant
+
+```
+
 ## 💻 Contributing
 
 I'll be the first to admit I'm no developer. Feel free to submit issues and pull requests to improve this integration. See the [api guide](https://sedward5.github.io/nws_spc_outlook/nws_spc_outlook.html) to get started. 
