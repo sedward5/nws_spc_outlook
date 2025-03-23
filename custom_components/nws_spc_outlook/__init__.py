@@ -17,7 +17,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     if DOMAIN not in hass.data:
         hass.data[DOMAIN] = {}
 
-    session = async_get_clientsession(hass)
+    # session = async_get_clientsession(hass)
     coordinator = NWSSPCOutlookDataCoordinator(
         hass, entry.data[CONF_LATITUDE], entry.data[CONF_LONGITUDE]
     )
