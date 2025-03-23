@@ -1,17 +1,22 @@
-import aiohttp
+"""NWS SPC API module for fetching severe weather outlook data."""
+
 import asyncio
 import logging
+import aiohttp
 from shapely.geometry import shape, Point
 from .const import BASE_URL, DAYS_WITH_DETAILED_OUTLOOKS
 
 _LOGGER = logging.getLogger(__name__)
 
+HTTP_OK = 200  # Replace magic number
+
+
 async def fetch_geojson(session: aiohttp.ClientSession, url: str) -> dict:
     """Fetch and return JSON data from an SPC endpoint, handling long responses and missing content types."""
     try:
         headers = {"Accept": "application/json"}  # Explicitly request JSON
-        async with session.get(url, headers=headers, timeout=20) as resp:  # Increased timeout
-            if resp.status != 200:
+        async with session.get(url, headers=headers, timeout=20) as resp:
+            if resp.status != HTTP_OK:
                 _LOGGER.error("Failed to fetch data from %s (HTTP %s)", url, resp.status)
                 return {}
 
@@ -22,13 +27,14 @@ async def fetch_geojson(session: aiohttp.ClientSession, url: str) -> dict:
 
             try:
                 return await resp.json(content_type=None)  # Attempt to parse JSON directly
-            except (aiohttp.ContentTypeError, ValueError):  # Handle invalid JSON
+            except (aiohttp.ContentTypeError, ValueError):
                 _LOGGER.error("Invalid JSON response from %s. Response body: %s", url, text[:500])
                 return {}
 
-    except (aiohttp.ClientError, asyncio.TimeoutError) as err:
-        _LOGGER.error("Error fetching data from %s: %s", url, err)
+    except (aiohttp.ClientError, TimeoutError) as err:
+        _LOGGER.exception("Error fetching data from %s: %s", url, err)
         return {}
+
 
 async def getspcoutlook(latitude: float, longitude: float, session: aiohttp.ClientSession) -> dict[str, str]:
     """Query SPC for the latest severe weather outlooks."""
@@ -44,9 +50,9 @@ async def getspcoutlook(latitude: float, longitude: float, session: aiohttp.Clie
     tasks = {key: fetch_geojson(session, url) for key, url in urls.items()}
     results = await asyncio.gather(*tasks.values(), return_exceptions=True)
 
-    for key, result in zip(tasks.keys(), results):
+    for key, result in zip(tasks.keys(), results, strict=False):  # Explicitly set strict=False
         if isinstance(result, Exception):
-            _LOGGER.error("Failed to process %s due to %s", key, result)
+            _LOGGER.exception("Failed to process %s due to %s", key, result)
             continue
         if not isinstance(result, dict):  # Ensure we have a valid JSON response
             _LOGGER.error("Invalid data type for %s: %s", key, type(result))
