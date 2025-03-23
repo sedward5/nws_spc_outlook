@@ -47,10 +47,13 @@ cards:
         layout: vertical
       - type: markdown
         content: "**Day 1**"
+        layout: vertical
       - type: markdown
         content: "**Day 2**"
+        layout: vertical
       - type: markdown
         content: "**Day 3**"
+        layout: vertical
   - type: grid
     columns: 4
     square: false
