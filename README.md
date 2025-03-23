@@ -35,6 +35,8 @@ custom_components/nws_spc_outlook/
 
 This is a possible layout utilizing these sensors. This requires mushroom cards from HACS. 
 
+![Example Dashboard](spc_dashboard.jpeg)
+
 ```yaml
 type: vertical-stack
 cards:
