@@ -44,6 +44,7 @@ cards:
     cards:
       - type: markdown
         content: "**Risk**"
+        layout: vertical
       - type: markdown
         content: "**Day 1**"
       - type: markdown
@@ -57,15 +58,23 @@ cards:
       - type: custom:mushroom-template-card
         icon: mdi:weather-lightning
         icon_color: white
+        layout: vertical
+        fill_container: true
       - type: custom:mushroom-template-card
         entity: sensor.spc_outlook_day_1_outlook_day
         primary: "{{ states('sensor.spc_outlook_day_1') }}"
+        layout: vertical
+        fill_container: true
       - type: custom:mushroom-template-card
         entity: sensor.spc_outlook_day_2
         primary: "{{ states('sensor.spc_outlook_day_2') }}"
+        layout: vertical
+        fill_container: true
       - type: custom:mushroom-template-card
         entity: sensor.spc_outlook_day_3
         primary: "{{ states('sensor.spc_outlook_day_3') }}"
+        layout: vertical
+        fill_container: true
   - type: grid
     columns: 4
     square: false
@@ -73,14 +82,22 @@ cards:
       - type: custom:mushroom-template-card
         icon: mdi:weather-windy
         icon_color: cyan
+        layout: vertical
+        fill_container: true
       - type: custom:mushroom-template-card
         entity: sensor.spc_outlook_day_1
         primary: "{{ state_attr('sensor.spc_outlook_day_1', 'wind_probability') }}"
+        layout: vertical
+        fill_container: true
       - type: custom:mushroom-template-card
         entity: sensor.spc_outlook_day_2
         primary: "{{ state_attr('sensor.spc_outlook_day_2', 'wind_probability') }}"
+        layout: vertical
+        fill_container: true
       - type: custom:mushroom-template-card
         icon: mdi:border-none-variant
+        layout: vertical
+        fill_container: true
   - type: grid
     columns: 4
     square: false
@@ -88,15 +105,23 @@ cards:
       - type: custom:mushroom-template-card
         icon: mdi:weather-tornado
         icon_color: red
+        layout: vertical
+        fill_container: true
       - type: custom:mushroom-template-card
         entity: sensor.spc_outlook_day_1
         primary: "{{ state_attr('sensor.spc_outlook_day_1', 'tornado_probability') }}"
+        layout: vertical
+        fill_container: true
       - type: custom:mushroom-template-card
         entity: sensor.spc_outlook_day_2
         primary: "{{ state_attr('sensor.spc_outlook_day_2', 'tornado_probability') }}"
+        layout: vertical
+        fill_container: true
       - type: custom:mushroom-template-card
         entity: sensor.nws_outlook_day_3
         icon: mdi:border-none-variant
+        layout: vertical
+        fill_container: true
   - type: grid
     columns: 4
     square: false
@@ -104,16 +129,23 @@ cards:
       - type: custom:mushroom-template-card
         icon: mdi:weather-hail
         icon_color: blue
+        layout: vertical
+        fill_container: true
       - type: custom:mushroom-template-card
         entity: sensor.spc_outlook_day_1
         primary: "{{ state_attr('sensor.spc_outlook_day_1', 'hail_probability') }}"
+        layout: vertical
+        fill_container: true
       - type: custom:mushroom-template-card
         entity: sensor.spc_outlook_day_2
         primary: "{{ state_attr('sensor.spc_outlook_day_2', 'hail_probability') }}"
+        layout: vertical
+        fill_container: true
       - type: custom:mushroom-template-card
         entity: sensor.spc_outlook_day_3
         icon: mdi:border-none-variant
-
+        layout: vertical
+        fill_container: true
 ```
 
 ## 💻 Contributing
