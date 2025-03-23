@@ -9,6 +9,14 @@
 
 A home assistant integration to poll weather outlook information from the NWS Storm Prediction Center
 
+## 🔮 Sensors and Attributes
+```
+sensor.spc_outlook_day_1 # Returns categorical probability or "No Severe Weather"
+│── Hail Probability
+sensor.spc_outlook_day_2
+sensor.spc_outlook_day_3
+```
+
 ## 📁 File structure
 ```
 custom_components/nws_spc_outlook/
