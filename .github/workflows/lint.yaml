@@ -7,6 +7,9 @@ on:
   pull_request:
     branches:
       - "main"
+  
+permissions:
+  contents: write
 
 jobs:
   ruff:
@@ -19,14 +22,19 @@ jobs:
         - name: "Set up Python"
           uses: actions/setup-python@v5.4.0
           with:
-            python-version: "3.12"
+            python-version: "3.x"
             cache: "pip"
 
         - name: "Install requirements"
           run: python3 -m pip install -r requirements.txt
 
-        - name: "Lint"
-          run: python3 -m ruff check .
-
         - name: "Format"
-          run: python3 -m ruff format . --check
+          run: python3 -m ruff format .
+          
+        - name: "Check"
+          run: python3 -m ruff check .
+          
+        - name: "Auto Commit"
+          uses: stefanzweifel/git-auto-commit-action@v5.1.0
+          with:
+            commit_message: 'style fixes by ruff'
