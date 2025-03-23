@@ -12,7 +12,10 @@ A home assistant integration to poll weather outlook information from the NWS St
 ## 🔮 Sensors and Attributes
 ```
 sensor.spc_outlook_day_1 # Returns categorical probability or "No Severe Weather"
-│── Hail Probability
+│── hail_probability:    # x or No Data
+│── wind_probability:    # x or No Data
+│── tornado_probability:  # x or No Data
+│── friendly_name:        # SPC Outlook Day 1
 sensor.spc_outlook_day_2
 sensor.spc_outlook_day_3
 ```
