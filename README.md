@@ -56,6 +56,7 @@ cards:
     cards:
       - type: custom:mushroom-template-card
         icon: mdi:weather-lightning
+        icon_color: white
       - type: custom:mushroom-template-card
         entity: sensor.spc_outlook_day_1_outlook_day
         primary: "{{ states('sensor.spc_outlook_day_1') }}"
@@ -71,6 +72,7 @@ cards:
     cards:
       - type: custom:mushroom-template-card
         icon: mdi:weather-windy
+        icon_color: cyan
       - type: custom:mushroom-template-card
         entity: sensor.spc_outlook_day_1
         primary: "{{ state_attr('sensor.spc_outlook_day_1', 'wind_probability') }}"
@@ -85,6 +87,7 @@ cards:
     cards:
       - type: custom:mushroom-template-card
         icon: mdi:weather-tornado
+        icon_color: red
       - type: custom:mushroom-template-card
         entity: sensor.spc_outlook_day_1
         primary: "{{ state_attr('sensor.spc_outlook_day_1', 'tornado_probability') }}"
@@ -100,6 +103,7 @@ cards:
     cards:
       - type: custom:mushroom-template-card
         icon: mdi:weather-hail
+        icon_color: blue
       - type: custom:mushroom-template-card
         entity: sensor.spc_outlook_day_1
         primary: "{{ state_attr('sensor.spc_outlook_day_1', 'hail_probability') }}"
