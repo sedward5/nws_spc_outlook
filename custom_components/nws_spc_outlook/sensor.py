@@ -50,13 +50,13 @@ class NWSSPCOutlookSensor(CoordinatorEntity, SensorEntity):
     @property
     def state(self) -> str:
         """Return state of sensor."""
-        return self.coordinator.data.get(f"cat_day{self._day}", "No Severe Weather")
+        return self.coordinator.data.get(f"cat_day{self._day}", "No Risk")
 
     @property
     def extra_state_attributes(self) -> dict[str, str]:
         """Return additional attributes."""
         return {
-            "hail_probability": self.coordinator.data.get(f"hail_day{self._day}", "No Data"),
-            "wind_probability": self.coordinator.data.get(f"wind_day{self._day}", "No Data"),
-            "tornado_probability": self.coordinator.data.get(f"torn_day{self._day}", "No Data"),
+            "hail_probability": self.coordinator.data.get(f"hail_day{self._day}", "No Risk"),
+            "wind_probability": self.coordinator.data.get(f"wind_day{self._day}", "No Risk"),
+            "tornado_probability": self.coordinator.data.get(f"torn_day{self._day}", "No Risk"),
         }
