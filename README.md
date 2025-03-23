@@ -31,5 +31,9 @@ custom_components/nws_spc_outlook/
 │── manifest.json        # Defines integration metadata
 ```
 
+## 💻 Contributing
+
+I'll be the first to admit I'm no developer. Feel free to submit issues and pull requests to improve this integration. See the [api guide](https://sedward5.github.io/nws_spc_outlook/nws_spc_outlook.html) to get started. 
+
 ## ⚖️ Disclamer
 This project and its author are in no way affialted with the National Weather Service. This addon should not be used as your sole source of information for severe weather preparedness. Stay informed, have a plan, be prepared.
