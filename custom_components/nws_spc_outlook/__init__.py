@@ -6,7 +6,7 @@ from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 
-from .const import DOMAIN, CONF_LATITUDE, CONF_LONGITUDE
+from .const import CONF_LATITUDE, CONF_LONGITUDE, DOMAIN
 from .coordinator import NWSSPCOutlookDataCoordinator
 
 _LOGGER = logging.getLogger(__name__)
