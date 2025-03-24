@@ -1,9 +1,9 @@
 """NWS SPC API module for fetching severe weather outlook data."""
 
+import aiohttp
 import asyncio
 import logging
-import aiohttp
-from shapely.geometry import shape, Point
+from shapely.geometry import Point, shape
 from .const import BASE_URL, DAYS_WITH_DETAILED_OUTLOOKS
 
 _LOGGER = logging.getLogger(__name__)
@@ -12,7 +12,8 @@ HTTP_OK = 200  # Replace magic number
 
 
 async def fetch_geojson(session: aiohttp.ClientSession, url: str) -> dict:
-    """Fetch and return JSON data from an SPC endpoint, handling long responses and missing content types."""
+    """Fetch and return JSON data from an SPC endpoint, handling 
+       long responses and missing content types."""
     try:
         headers = {"Accept": "application/json"}  # Explicitly request JSON
         async with session.get(url, headers=headers, timeout=20) as resp:
