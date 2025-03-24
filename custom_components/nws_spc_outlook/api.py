@@ -14,7 +14,8 @@ HTTP_OK = 200  # Replace magic number
 
 
 async def fetch_geojson(session: aiohttp.ClientSession, url: str) -> dict:
-    """Fetch SPC outlook data for a given latitude and longitude.
+    """
+    Fetch SPC outlook data for a given latitude and longitude.
 
     This function queries the NWS SPC API, checks if the given location is inside
     any severe weather risk area, and returns the corresponding outlook data.
