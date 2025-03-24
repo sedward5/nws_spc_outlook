@@ -39,7 +39,7 @@ async def fetch_geojson(session: aiohttp.ClientSession, url: str) -> dict:
                 return {}
 
     except (aiohttp.ClientError, TimeoutError) as err:
-        _LOGGER.exception("Error fetching data from %s: %s", url, err)
+        _LOGGER.exception("Error fetching data from %s: %s", url)
         return {}
 
 
