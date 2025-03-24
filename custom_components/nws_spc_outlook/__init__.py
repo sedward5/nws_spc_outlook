@@ -4,7 +4,6 @@ import logging
 
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
-from homeassistant.helpers.aiohttp_client import async_get_clientsession
 
 from .const import CONF_LATITUDE, CONF_LONGITUDE, DOMAIN
 from .coordinator import NWSSPCOutlookDataCoordinator
@@ -17,7 +16,6 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     if DOMAIN not in hass.data:
         hass.data[DOMAIN] = {}
 
-    # session = async_get_clientsession(hass)
     coordinator = NWSSPCOutlookDataCoordinator(
         hass, entry.data[CONF_LATITUDE], entry.data[CONF_LONGITUDE]
     )
