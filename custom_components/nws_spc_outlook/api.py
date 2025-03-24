@@ -29,13 +29,13 @@ async def fetch_geojson(session: aiohttp.ClientSession, url: str) -> dict:
 
             text = await resp.text()  # Read response as text first
             if not text.strip():  # Handle empty response
-                _LOGGER.error("Empty response from %s", url)
+                _LOGGER.exception("Empty response from %s", url)
                 return {}
 
             try:
                 return await resp.json(content_type=None)  # Attempt to parse JSON directly
             except (aiohttp.ContentTypeError, ValueError):
-                _LOGGER.error("Invalid JSON response from %s. Response body: %s", url, text[:500])
+                _LOGGER.exception("Invalid JSON response from %s. Response body: %s", url, text[:500])
                 return {}
 
     except (aiohttp.ClientError, TimeoutError) as err:
