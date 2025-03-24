@@ -2,14 +2,15 @@
 
 from unittest.mock import AsyncMock, patch
 import pytest
+from homeassistant.core import HomeAssistant
 from homeassistant.helpers.update_coordinator import UpdateFailed
 
 from custom_components.nws_spc_outlook.coordinator import NWSSPCOutlookDataCoordinator
 from custom_components.nws_spc_outlook.sensor import NWSSPCOutlookSensor
 from custom_components.nws_spc_outlook.api import getspcoutlook
 
-LATITUDE = 42.0
-LONGITUDE = -83.0
+LATITUDE: float = 42.0
+LONGITUDE: float = -83.0
 
 MOCK_API_RESPONSE = {
     "features": [
@@ -39,15 +40,18 @@ MOCK_API_RESPONSE = {
 }
 
 @pytest.fixture
-async def coordinator(hass):
+async def coordinator(hass: HomeAssistant) -> NWSSPCOutlookDataCoordinator:
     """Fixture for setting up NWSSPCOutlookDataCoordinator."""
-    with patch("custom_components.nws_spc_outlook.api.getspcoutlook", return_value=MOCK_API_RESPONSE["features"][0]["properties"]):
+    with patch(
+        "custom_components.nws_spc_outlook.api.getspcoutlook",
+        return_value=MOCK_API_RESPONSE["features"][0]["properties"],
+    ):
         coordinator = NWSSPCOutlookDataCoordinator(hass, LATITUDE, LONGITUDE)
         await coordinator.async_config_entry_first_refresh()
     return coordinator
 
 @pytest.mark.asyncio
-async def test_coordinator_fetch_data(coordinator):
+async def test_coordinator_fetch_data(coordinator: NWSSPCOutlookDataCoordinator) -> None:
     """Test data fetching in the coordinator."""
     assert coordinator.data["LABEL2"] == "Slight"
     assert coordinator.data["hail_day1"] == "5%"
@@ -55,7 +59,7 @@ async def test_coordinator_fetch_data(coordinator):
     assert coordinator.data["torn_day1"] == "2%"
 
 @pytest.mark.asyncio
-async def test_sensor_properties(coordinator):
+async def test_sensor_properties(coordinator: NWSSPCOutlookDataCoordinator) -> None:
     """Test the NWSSPCOutlookSensor properties."""
     sensor = NWSSPCOutlookSensor(coordinator, day=1)
     
@@ -68,7 +72,7 @@ async def test_sensor_properties(coordinator):
     }
 
 @pytest.mark.asyncio
-async def test_update_failed(hass):
+async def test_update_failed(hass: HomeAssistant) -> None:
     """Test handling of UpdateFailed exception in the coordinator."""
     with patch("custom_components.nws_spc_outlook.api.getspcoutlook", side_effect=Exception("API error")):
         coordinator = NWSSPCOutlookDataCoordinator(hass, LATITUDE, LONGITUDE)
@@ -76,7 +80,7 @@ async def test_update_failed(hass):
             await coordinator.async_config_entry_first_refresh()
 
 @pytest.mark.asyncio
-async def test_getspcoutlook():
+async def test_getspcoutlook() -> None:
     """Test the getspcoutlook function with mock API data."""
     with patch("aiohttp.ClientSession.get", new_callable=AsyncMock) as mock_get:
         mock_resp = AsyncMock()
