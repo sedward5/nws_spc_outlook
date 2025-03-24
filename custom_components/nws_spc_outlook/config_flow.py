@@ -1,8 +1,9 @@
 """Config flow for NWS SPC Outlook integration."""
-from typing import Any
 
 import voluptuous as vol
 import homeassistant.helpers.config_validation as cv
+
+from typing import Any
 from homeassistant import config_entries
 from homeassistant.core import callback
 
