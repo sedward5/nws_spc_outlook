@@ -1,6 +1,5 @@
 """Sensor for displaying NWS SPC Outlook data."""
 import logging
-from typing import Any
 
 from homeassistant.components.sensor import SensorEntity
 from homeassistant.config_entries import ConfigEntry
