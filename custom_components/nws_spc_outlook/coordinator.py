@@ -11,6 +11,7 @@ from .api import getspcoutlook
 
 _LOGGER = logging.getLogger(__name__)
 
+
 class NWSSPCOutlookDataCoordinator(DataUpdateCoordinator):
     """Coordinator to fetch and update SPC Outlook data."""
 

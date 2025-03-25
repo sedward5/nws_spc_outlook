@@ -1,4 +1,5 @@
 """Sensor for displaying NWS SPC Outlook data."""
+
 import logging
 
 from homeassistant.components.sensor import SensorEntity
@@ -12,10 +13,9 @@ from .coordinator import NWSSPCOutlookDataCoordinator
 
 _LOGGER = logging.getLogger(__name__)
 
+
 async def async_setup_entry(
-    hass: HomeAssistant,
-    entry: ConfigEntry,
-    async_add_entities: AddEntitiesCallback
+    hass: HomeAssistant, entry: ConfigEntry, async_add_entities: AddEntitiesCallback
 ) -> None:
     """Set up SPC Outlook sensors dynamically."""
     if "nws_spc_outlook" not in hass.data:
@@ -31,6 +31,7 @@ async def async_setup_entry(
     coordinator = hass.data["nws_spc_outlook"][entry.entry_id]
     sensors = [NWSSPCOutlookSensor(coordinator, day) for day in range(1, 4)]
     async_add_entities(sensors, update_before_add=True)
+
 
 class NWSSPCOutlookSensor(CoordinatorEntity, SensorEntity):
     """Representation of an SPC Outlook sensor."""
@@ -55,7 +56,13 @@ class NWSSPCOutlookSensor(CoordinatorEntity, SensorEntity):
     def extra_state_attributes(self) -> dict[str, str]:
         """Return additional attributes."""
         return {
-            "hail_probability": self.coordinator.data.get(f"hail_day{self._day}", "No Risk"),
-            "wind_probability": self.coordinator.data.get(f"wind_day{self._day}", "No Risk"),
-            "tornado_probability": self.coordinator.data.get(f"torn_day{self._day}", "No Risk"),
+            "hail_probability": self.coordinator.data.get(
+                f"hail_day{self._day}", "No Risk"
+            ),
+            "wind_probability": self.coordinator.data.get(
+                f"wind_day{self._day}", "No Risk"
+            ),
+            "tornado_probability": self.coordinator.data.get(
+                f"torn_day{self._day}", "No Risk"
+            ),
         }

@@ -27,7 +27,9 @@ class NWSSPCOutlookConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
 
     VERSION = 1
 
-    async def async_step_user(self, user_input: dict[str, Any] | None = None) -> config_entries.FlowResult:
+    async def async_step_user(
+        self, user_input: dict[str, Any] | None = None
+    ) -> config_entries.FlowResult:
         """Handle the initial step."""
         errors: dict[str, str] = {}
 
@@ -43,10 +45,12 @@ class NWSSPCOutlookConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             except (ValueError, TypeError):
                 errors["base"] = "invalid_coordinates"
 
-        data_schema = vol.Schema({
-            vol.Required(CONF_LATITUDE): cv.latitude,
-            vol.Required(CONF_LONGITUDE): cv.longitude,
-        })
+        data_schema = vol.Schema(
+            {
+                vol.Required(CONF_LATITUDE): cv.latitude,
+                vol.Required(CONF_LONGITUDE): cv.longitude,
+            }
+        )
 
         return self.async_show_form(
             step_id="user",

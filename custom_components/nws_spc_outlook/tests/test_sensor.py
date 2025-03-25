@@ -19,7 +19,13 @@ MOCK_API_RESPONSE = {
             "geometry": {
                 "type": "Polygon",
                 "coordinates": [
-                    [[-83.1, 42.1], [-83.1, 41.9], [-82.9, 41.9], [-82.9, 42.1], [-83.1, 42.1]]
+                    [
+                        [-83.1, 42.1],
+                        [-83.1, 41.9],
+                        [-82.9, 41.9],
+                        [-82.9, 42.1],
+                        [-83.1, 42.1],
+                    ]
                 ],
             },
             "properties": {
@@ -40,6 +46,7 @@ MOCK_API_RESPONSE = {
     ]
 }
 
+
 @pytest.fixture
 async def coordinator(hass: HomeAssistant) -> NWSSPCOutlookDataCoordinator:
     """Fixture for setting up NWSSPCOutlookDataCoordinator."""
@@ -51,19 +58,23 @@ async def coordinator(hass: HomeAssistant) -> NWSSPCOutlookDataCoordinator:
         await coordinator.async_config_entry_first_refresh()
     return coordinator
 
+
 @pytest.mark.asyncio
-async def test_coordinator_fetch_data(coordinator: NWSSPCOutlookDataCoordinator) -> None:
+async def test_coordinator_fetch_data(
+    coordinator: NWSSPCOutlookDataCoordinator,
+) -> None:
     """Test data fetching in the coordinator."""
     assert coordinator.data["LABEL2"] == "Slight"
     assert coordinator.data["hail_day1"] == "5%"
     assert coordinator.data["wind_day1"] == "15%"
     assert coordinator.data["torn_day1"] == "2%"
 
+
 @pytest.mark.asyncio
 async def test_sensor_properties(coordinator: NWSSPCOutlookDataCoordinator) -> None:
     """Test the NWSSPCOutlookSensor properties."""
     sensor = NWSSPCOutlookSensor(coordinator, day=1)
-    
+
     assert sensor.name == "SPC Outlook Day 1"
     assert sensor.state == "Slight"
     assert sensor.extra_state_attributes == {
@@ -72,13 +83,18 @@ async def test_sensor_properties(coordinator: NWSSPCOutlookDataCoordinator) -> N
         "tornado_probability": "2%",
     }
 
+
 @pytest.mark.asyncio
 async def test_update_failed(hass: HomeAssistant) -> None:
     """Test handling of UpdateFailed exception in the coordinator."""
-    with patch("custom_components.nws_spc_outlook.api.getspcoutlook", side_effect=Exception("API error")):
+    with patch(
+        "custom_components.nws_spc_outlook.api.getspcoutlook",
+        side_effect=Exception("API error"),
+    ):
         coordinator = NWSSPCOutlookDataCoordinator(hass, LATITUDE, LONGITUDE)
         with pytest.raises(UpdateFailed):
             await coordinator.async_config_entry_first_refresh()
+
 
 @pytest.mark.asyncio
 async def test_getspcoutlook() -> None:
