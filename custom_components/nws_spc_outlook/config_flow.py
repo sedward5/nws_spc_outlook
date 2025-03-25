@@ -5,7 +5,6 @@ from typing import Any
 import homeassistant.helpers.config_validation as cv
 import voluptuous as vol
 from homeassistant import config_entries
-from homeassistant.core import callback
 
 from .const import CONF_LATITUDE, CONF_LONGITUDE, DOMAIN
 
