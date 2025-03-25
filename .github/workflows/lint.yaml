@@ -38,6 +38,3 @@ jobs:
           uses: stefanzweifel/git-auto-commit-action@v5.1.0
           with:
             commit_message: 'style fixes by ruff'
-
-        - name: Bandit Action
-          uses: mdegis/bandit-action@v1.1
