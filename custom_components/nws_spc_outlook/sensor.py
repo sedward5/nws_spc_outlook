@@ -30,7 +30,7 @@ async def async_setup_entry(
 
     coordinator = hass.data["nws_spc_outlook"][entry.entry_id]
     sensors = [NWSSPCOutlookSensor(coordinator, day) for day in range(1, 4)]
-    async_add_entities(sensors, True)
+    async_add_entities(sensors, update_before_add=True)
 
 class NWSSPCOutlookSensor(CoordinatorEntity, SensorEntity):
     """Representation of an SPC Outlook sensor."""
