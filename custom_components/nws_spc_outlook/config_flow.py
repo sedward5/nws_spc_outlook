@@ -1,13 +1,13 @@
 """Config flow for NWS SPC Outlook integration."""
 
-import voluptuous as vol
-import homeassistant.helpers.config_validation as cv
-
 from typing import Any
+
+import homeassistant.helpers.config_validation as cv
+import voluptuous as vol
 from homeassistant import config_entries
 from homeassistant.core import callback
 
-from .const import DOMAIN, CONF_LATITUDE, CONF_LONGITUDE
+from .const import CONF_LATITUDE, CONF_LONGITUDE, DOMAIN
 
 # Define constants for magic values
 LAT_MIN = -90.0
