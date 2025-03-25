@@ -38,3 +38,11 @@ jobs:
           uses: stefanzweifel/git-auto-commit-action@v5.1.0
           with:
             commit_message: 'style fixes by ruff'
+
+        - name: "Bandit"
+          uses: shundor/bandit-action@v1
+          with: 
+            path: "custom_components/nws_spc_outlook"
+            level: high
+            confidence: high
+            exit_zero: false         
