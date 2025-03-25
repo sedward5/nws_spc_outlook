@@ -1,13 +1,14 @@
 """Tests for the NWS SPC Outlook sensor integration."""
 
 from unittest.mock import AsyncMock, patch
+
 import pytest
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.update_coordinator import UpdateFailed
 
+from custom_components.nws_spc_outlook.api import getspcoutlook
 from custom_components.nws_spc_outlook.coordinator import NWSSPCOutlookDataCoordinator
 from custom_components.nws_spc_outlook.sensor import NWSSPCOutlookSensor
-from custom_components.nws_spc_outlook.api import getspcoutlook
 
 LATITUDE: float = 42.0
 LONGITUDE: float = -83.0
