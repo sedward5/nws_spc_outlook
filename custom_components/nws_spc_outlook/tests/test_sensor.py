@@ -4,6 +4,7 @@ from unittest.mock import AsyncMock, patch
 
 import pytest
 import pytest_asyncio
+import aiohttp
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.update_coordinator import UpdateFailed
 
@@ -57,7 +58,7 @@ async def coordinator(hass: HomeAssistant) -> NWSSPCOutlookDataCoordinator:
     ):
         coordinator = NWSSPCOutlookDataCoordinator(hass, LATITUDE, LONGITUDE)
         await coordinator.async_config_entry_first_refresh()
-    return coordinator
+        return coordinator
 
 
 @pytest.mark.asyncio
@@ -65,6 +66,7 @@ async def test_coordinator_fetch_data(
     coordinator: NWSSPCOutlookDataCoordinator,
 ) -> None:
     """Test data fetching in the coordinator."""
+    assert coordinator.data is not None
     assert coordinator.data["LABEL2"] == "Slight"
     assert coordinator.data["hail_day1"] == "5%"
     assert coordinator.data["wind_day1"] == "15%"
@@ -99,12 +101,13 @@ async def test_update_failed(hass: HomeAssistant) -> None:
 
 
 @pytest.mark.asyncio
-async def test_getspcoutlook() -> None:
+async def test_getspcoutlook(aiohttp_client) -> None:
     """Test the getspcoutlook function with mock API data."""
-    with patch("aiohttp.ClientSession.get", new_callable=AsyncMock) as mock_get:
-        mock_resp = AsyncMock()
-        mock_resp.json.return_value = MOCK_API_RESPONSE
-        mock_get.return_value.__aenter__.return_value = mock_resp
+    async with aiohttp.ClientSession() as session:
+        with patch("aiohttp.ClientSession.get", new_callable=AsyncMock) as mock_get:
+            mock_resp = AsyncMock()
+            mock_resp.json.return_value = MOCK_API_RESPONSE
+            mock_get.return_value.__aenter__.return_value = mock_resp
 
-        result = await getspcoutlook(LATITUDE, LONGITUDE)
-        assert result["features"][0]["properties"]["LABEL2"] == "Slight"
+            result = await getspcoutlook(LATITUDE, LONGITUDE, session)
+            assert result["features"][0]["properties"]["LABEL2"] == "Slight"
