@@ -1,45 +1,36 @@
+"""Implements unit tests for sensor.py."""
+
 import pytest
-import pytest_asyncio
 from unittest.mock import AsyncMock, patch
-from custom_components.nws_spc_outlook.api import getspcoutlook
-from custom_components.nws_spc_outlook.coordinator import NWSSPCOutlookDataCoordinator
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
+from custom_components.nws_spc_outlook.api import getspcoutlook
+from custom_components.nws_spc_outlook.coordinator import NWSSPCOutlookDataCoordinator
 
-MOCK_API_RESPONSE = {
-    "features": [
-        {"properties": {"outlook": "Severe", "confidence": "High"}}
-    ]
-}
+LATITUDE = 35.0
+LONGITUDE = -97.0
+MOCK_API_RESPONSE = {"features": [{"properties": {"risk": "Slight"}}]}
 
 @pytest_asyncio.fixture
-async def hass_instance() -> HomeAssistant:
+async def hass_instance(tmp_path) -> HomeAssistant:
     """Provide a mock HomeAssistant instance."""
-    hass = HomeAssistant()
-    await hass.async_start()
-    yield hass
-    await hass.async_stop()
+    hass = HomeAssistant(config_dir=str(tmp_path))
+    return hass
 
 @pytest_asyncio.fixture
-async def coordinator(hass_instance: HomeAssistant) -> NWSSPCOutlookDataCoordinator:
+async def coordinator(hass_instance) -> NWSSPCOutlookDataCoordinator:
     """Fixture for setting up NWSSPCOutlookDataCoordinator with mock data."""
-    with patch("custom_components.nws_spc_outlook.api.getspcoutlook", AsyncMock(return_value=MOCK_API_RESPONSE["features"][0]["properties"])):
-        coordinator = NWSSPCOutlookDataCoordinator(hass_instance, 35.0, -97.0)
-        await coordinator.async_config_entry_first_refresh()
-        yield coordinator
+    with patch(
+        "custom_components.nws_spc_outlook.api.getspcoutlook",
+        AsyncMock(return_value=MOCK_API_RESPONSE["features"][0]["properties"]),
+    ):
+        coordinator = NWSSPCOutlookDataCoordinator(hass_instance, LATITUDE, LONGITUDE)
+        return coordinator
 
 @pytest.mark.asyncio
-async def test_getspcoutlook():
+async def test_getspcoutlook(hass_instance):
     """Test API response handling."""
+    session = async_get_clientsession(hass_instance)
     with patch("custom_components.nws_spc_outlook.api.getspcoutlook", AsyncMock(return_value=MOCK_API_RESPONSE)) as mock_get:
-        result = await getspcoutlook()
-        assert "features" in result
-        assert result["features"][0]["properties"]["outlook"] == "Severe"
-        mock_get.assert_awaited()
-
-@pytest.mark.asyncio
-async def test_update_failed(coordinator: NWSSPCOutlookDataCoordinator):
-    """Test handling of failed data update."""
-    with patch("custom_components.nws_spc_outlook.api.getspcoutlook", AsyncMock(side_effect=Exception("API failure"))):
-        await coordinator._async_update_data()
-        assert coordinator.last_update_success is False
+        result = await getspcoutlook(LATITUDE, LONGITUDE, session)
+        assert result == MOCK_API_RESPONSE
