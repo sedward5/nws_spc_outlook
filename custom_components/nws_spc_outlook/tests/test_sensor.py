@@ -47,6 +47,7 @@ MOCK_API_RESPONSE = {
     ]
 }
 
+
 @pytest_asyncio.fixture
 async def coordinator(hass: HomeAssistant) -> NWSSPCOutlookDataCoordinator:
     """Fixture for setting up NWSSPCOutlookDataCoordinator with mock data."""
@@ -58,13 +59,17 @@ async def coordinator(hass: HomeAssistant) -> NWSSPCOutlookDataCoordinator:
         await coordinator.async_config_entry_first_refresh()
     return coordinator
 
+
 @pytest.mark.asyncio
-async def test_coordinator_fetch_data(coordinator: NWSSPCOutlookDataCoordinator) -> None:
+async def test_coordinator_fetch_data(
+    coordinator: NWSSPCOutlookDataCoordinator,
+) -> None:
     """Test data fetching in the coordinator."""
     assert coordinator.data["LABEL2"] == "Slight"
     assert coordinator.data["hail_day1"] == "5%"
     assert coordinator.data["wind_day1"] == "15%"
     assert coordinator.data["torn_day1"] == "2%"
+
 
 @pytest.mark.asyncio
 async def test_sensor_properties(coordinator: NWSSPCOutlookDataCoordinator) -> None:
@@ -80,6 +85,7 @@ async def test_sensor_properties(coordinator: NWSSPCOutlookDataCoordinator) -> N
         "tornado_probability": "2%",
     }
 
+
 @pytest.mark.asyncio
 async def test_update_failed(hass: HomeAssistant) -> None:
     """Test handling of UpdateFailed exception in the coordinator."""
@@ -90,6 +96,7 @@ async def test_update_failed(hass: HomeAssistant) -> None:
         coordinator = NWSSPCOutlookDataCoordinator(hass, LATITUDE, LONGITUDE)
         with pytest.raises(UpdateFailed):
             await coordinator.async_config_entry_first_refresh()
+
 
 @pytest.mark.asyncio
 async def test_getspcoutlook() -> None:
