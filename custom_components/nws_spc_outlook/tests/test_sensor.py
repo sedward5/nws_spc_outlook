@@ -34,6 +34,8 @@ async def coordinator(hass_instance) -> NWSSPCOutlookDataCoordinator:
 async def test_getspcoutlook(hass_instance):
     """Test API response handling."""
     session = async_get_clientsession(hass_instance)
-    with patch("custom_components.nws_spc_outlook.api.getspcoutlook", AsyncMock(return_value=MOCK_API_RESPONSE)) as mock_get:
+    with patch("custom_components.nws_spc_outlook.api.getspcoutlook", new_callable=AsyncMock) as mock_get:
+        mock_get.return_value = MOCK_API_RESPONSE  # Set return value on the mock
         result = await getspcoutlook(LATITUDE, LONGITUDE, session)
         assert result == MOCK_API_RESPONSE
+    
