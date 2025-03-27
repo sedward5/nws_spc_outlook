@@ -1,9 +1,12 @@
 """Implements unit tests for sensor.py."""
 
 import pytest
+import pytest_asyncio
+
 from unittest.mock import AsyncMock, patch
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
+
 from custom_components.nws_spc_outlook.api import getspcoutlook
 from custom_components.nws_spc_outlook.coordinator import NWSSPCOutlookDataCoordinator
 
