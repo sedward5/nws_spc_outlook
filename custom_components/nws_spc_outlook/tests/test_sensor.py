@@ -15,9 +15,8 @@ LONGITUDE = -97.0
 MOCK_API_RESPONSE = {"features": [{"properties": {"risk": "Slight"}}]}
 
 @pytest_asyncio.fixture
-async def hass_instance(tmp_path) -> HomeAssistant:
-    """Provide a mock HomeAssistant instance."""
-    hass = HomeAssistant(config_dir=str(tmp_path))
+async def hass_instance(hass: HomeAssistant) -> HomeAssistant:
+    """Use pytest-homeassistant-custom-component's provided hass instance."""
     return hass
 
 @pytest_asyncio.fixture
@@ -31,9 +30,15 @@ async def coordinator(hass_instance) -> NWSSPCOutlookDataCoordinator:
         return coordinator
 
 @pytest.mark.asyncio
-async def test_getspcoutlook(hass_instance, event_loop):
+async def test_getspcoutlook(hass_instance):
     session = async_get_clientsession(hass_instance)
-    with patch("custom_components.nws_spc_outlook.api.getspcoutlook", new_callable=AsyncMock) as mock_get:
+    
+    with patch(
+        "custom_components.nws_spc_outlook.api.getspcoutlook",
+        new_callable=AsyncMock
+    ) as mock_get:
         mock_get.return_value = MOCK_API_RESPONSE
+        
         result = await getspcoutlook(LATITUDE, LONGITUDE, session)
+        
         assert result == MOCK_API_RESPONSE
