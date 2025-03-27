@@ -15,9 +15,12 @@ LONGITUDE = -97.0
 MOCK_API_RESPONSE = {"features": [{"properties": {"risk": "Slight"}}]}
 
 @pytest_asyncio.fixture
-async def hass_instance(hass: HomeAssistant) -> HomeAssistant:
-    """Use pytest-homeassistant-custom-component's provided hass instance."""
-    return hass
+async def hass_instance(tmp_path, event_loop) -> HomeAssistant:
+    """Provide a properly initialized HomeAssistant instance."""
+    hass = HomeAssistant(config_dir=str(tmp_path))
+    await hass.async_start()
+    yield hass
+    await hass.async_stop()
 
 @pytest_asyncio.fixture
 async def coordinator(hass_instance) -> NWSSPCOutlookDataCoordinator:
