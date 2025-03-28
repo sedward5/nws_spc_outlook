@@ -5,7 +5,7 @@ import pytest_asyncio
 from unittest.mock import AsyncMock, patch
 
 from unittest.mock import AsyncMock, patch
-from homeassistant.config_entries import ConfigEntry
+from homeassistant.config_entries import ConfigEntry, SOURCE_USER
 from homeassistant.core import HomeAssistant
 from homeassistant.data_entry_flow import SOURCE_USER
 from homeassistant.const import CONF_LATITUDE
@@ -30,21 +30,20 @@ async def hass_instance(tmp_path, event_loop) -> HomeAssistant:
     await hass.async_stop()
 
 
-@pytest.fixture
 def mock_config_entry():
     """Create a properly initialized ConfigEntry for testing."""
     return ConfigEntry(
         entry_id=ENTRY_ID,
         domain=DOMAIN,
         data={CONF_LATITUDE: LATITUDE, CONF_LONGITUDE: LONGITUDE},
-        source=SOURCE_USER,  # Required source
-        title="NWS SPC Outlook",  # Entry title
-        unique_id="test_unique_id",  # Unique identifier
-        options={},  # Empty options dict
-        version=1,  # Version number
-        minor_version=0,  # Minor version number
-        discovery_keys=None,  # No discovery keys
-        subentries_data=None,  # No subentries
+        source=SOURCE_USER,  # Corrected import
+        title="NWS SPC Outlook",
+        unique_id="test_unique_id",
+        options={},
+        version=1,
+        minor_version=0,
+        discovery_keys=None,
+        subentries_data=None,
     )
 
 
