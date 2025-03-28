@@ -1,69 +1,83 @@
+"""Unit tests for the NWS SPC Outlook integration initialization."""
+
 import pytest
+import pytest_asyncio
 from unittest.mock import AsyncMock, patch
 
-from homeassistant.core import HomeAssistant
 from homeassistant.config_entries import ConfigEntry
+from homeassistant.core import HomeAssistant
+from homeassistant.helpers.aiohttp_client import async_get_clientsession
 
-from custom_components.nws_spc_outlook.const import CONF_LATITUDE, CONF_LONGITUDE, DOMAIN
 from custom_components.nws_spc_outlook import async_setup_entry, async_unload_entry
+from custom_components.nws_spc_outlook.const import DOMAIN, CONF_LATITUDE, CONF_LONGITUDE
 from custom_components.nws_spc_outlook.coordinator import NWSSPCOutlookDataCoordinator
 
-@pytest.fixture
-def hass():
-    """Return a HomeAssistant instance."""
-    return HomeAssistant()
+
+LATITUDE = 35.0
+LONGITUDE = -97.0
+ENTRY_ID = "test_entry"
+
+
+@pytest_asyncio.fixture
+async def hass_instance(tmp_path, event_loop) -> HomeAssistant:
+    """Provide a properly initialized HomeAssistant instance."""
+    hass = HomeAssistant(config_dir=str(tmp_path))
+    await hass.async_start()
+    yield hass
+    await hass.async_stop()
+
 
 @pytest.fixture
-def config_entry():
-    """Return a mock config entry."""
+def mock_config_entry():
+    """Create a mock ConfigEntry for testing."""
     return ConfigEntry(
-        version=1,
+        entry_id=ENTRY_ID,
         domain=DOMAIN,
-        title="NWS SPC Outlook",
-        data={CONF_LATITUDE: 35.0, CONF_LONGITUDE: -97.0},
-        source="user",
-        entry_id="test_entry_id",
+        data={CONF_LATITUDE: LATITUDE, CONF_LONGITUDE: LONGITUDE},
     )
 
-@pytest.fixture
-def mock_coordinator():
-    """Return a mock NWSSPCOutlookDataCoordinator."""
-    return AsyncMock(spec=NWSSPCOutlookDataCoordinator)
 
-@patch("custom_components.nws_spc_outlook.NWSSPCOutlookDataCoordinator", new_callable=AsyncMock)
-async def test_async_setup_entry(mock_coordinator_class, hass, config_entry):
-    """Test async_setup_entry initializes and sets up the integration."""
-    mock_coordinator_instance = mock_coordinator_class.return_value
-    mock_coordinator_instance.async_config_entry_first_refresh = AsyncMock()
-    
-    assert await async_setup_entry(hass, config_entry) is True
-    
-    # Ensure coordinator is stored in hass.data
-    assert DOMAIN in hass.data
-    assert config_entry.entry_id in hass.data[DOMAIN]
-    
-    # Ensure first refresh is called
-    mock_coordinator_instance.async_config_entry_first_refresh.assert_awaited_once()
+@pytest.mark.asyncio
+async def test_async_setup_entry(hass_instance, mock_config_entry):
+    """Test setting up an entry successfully."""
+    with patch(
+        "custom_components.nws_spc_outlook.coordinator.NWSSPCOutlookDataCoordinator",
+        autospec=True,
+    ) as mock_coordinator_class:
+        mock_coordinator = mock_coordinator_class.return_value
+        mock_coordinator.async_config_entry_first_refresh = AsyncMock()
 
-    # Ensure sensor platform is forwarded
-    hass.config_entries.async_forward_entry_setups.assert_awaited_once_with(config_entry, ["sensor"])
+        with patch.object(
+            hass_instance.config_entries, "async_forward_entry_setups", AsyncMock()
+        ) as mock_forward:
+            result = await async_setup_entry(hass_instance, mock_config_entry)
 
-@patch("custom_components.nws_spc_outlook.NWSSPCOutlookDataCoordinator", new_callable=AsyncMock)
-async def test_async_unload_entry(mock_coordinator_class, hass, config_entry):
-    """Test async_unload_entry properly cleans up the integration."""
-    mock_coordinator_instance = mock_coordinator_class.return_value
-    mock_coordinator_instance.async_unload = AsyncMock()
-    
-    # Manually add the entry to hass.data
-    hass.data[DOMAIN] = {config_entry.entry_id: mock_coordinator_instance}
-    
-    assert await async_unload_entry(hass, config_entry) is True
-    
-    # Ensure entry is removed
-    assert config_entry.entry_id not in hass.data[DOMAIN]
-    
-    # Ensure async_unload is called
-    mock_coordinator_instance.async_unload.assert_awaited_once()
+            assert result is True
+            assert DOMAIN in hass_instance.data
+            assert mock_config_entry.entry_id in hass_instance.data[DOMAIN]
+            mock_coordinator.async_config_entry_first_refresh.assert_awaited_once()
+            mock_forward.assert_awaited_once_with(mock_config_entry, ["sensor"])
 
-    # Ensure platform unloading is called
-    hass.config_entries.async_unload_platforms.assert_awaited_once_with(config_entry, ["sensor"])
+
+@pytest.mark.asyncio
+async def test_async_unload_entry(hass_instance, mock_config_entry):
+    """Test unloading an entry successfully."""
+    with patch(
+        "custom_components.nws_spc_outlook.coordinator.NWSSPCOutlookDataCoordinator",
+        autospec=True,
+    ) as mock_coordinator_class:
+        mock_coordinator = mock_coordinator_class.return_value
+        mock_coordinator.async_unload = AsyncMock(return_value=True)
+
+        hass_instance.data[DOMAIN] = {mock_config_entry.entry_id: mock_coordinator}
+
+        with patch.object(
+            hass_instance.config_entries, "async_unload_platforms", AsyncMock()
+        ) as mock_unload_platforms:
+            result = await async_unload_entry(hass_instance, mock_config_entry)
+
+            assert result is True
+            assert mock_config_entry.entry_id not in hass_instance.data[DOMAIN]
+            mock_coordinator.async_unload.assert_awaited_once()
+            mock_unload_platforms.assert_awaited_once_with(mock_config_entry, ["sensor"])
+            
