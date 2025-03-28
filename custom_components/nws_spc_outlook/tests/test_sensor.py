@@ -12,7 +12,7 @@ from custom_components.nws_spc_outlook.coordinator import NWSSPCOutlookDataCoord
 
 LATITUDE = 35.0
 LONGITUDE = -97.0
-MOCK_API_RESPONSE = {"features": [{"properties": {"risk": "Slight"}}]}
+MOCK_API_RESPONSE = {"cat_day1": "Slight"}
 
 @pytest_asyncio.fixture
 async def hass_instance(tmp_path, event_loop) -> HomeAssistant:
