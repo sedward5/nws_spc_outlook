@@ -4,7 +4,6 @@ import pytest
 import pytest_asyncio
 from unittest.mock import AsyncMock, patch
 
-from unittest.mock import AsyncMock, patch
 from homeassistant.config_entries import ConfigEntry, SOURCE_USER
 from homeassistant.const import CONF_LATITUDE
 from homeassistant.core import HomeAssistant
@@ -19,15 +18,14 @@ LATITUDE = 35.0
 LONGITUDE = -97.0
 ENTRY_ID = "test_entry"
 
-
 @pytest_asyncio.fixture
 async def hass_instance(tmp_path, event_loop) -> HomeAssistant:
     """Provide a properly initialized HomeAssistant instance."""
     hass = HomeAssistant(config_dir=str(tmp_path))
+    hass.config_entries = ConfigEntries(hass)  # Add this line to initialize config_entries
     await hass.async_start()
     yield hass
     await hass.async_stop()
-
 
 @pytest.fixture
 def mock_config_entry():
