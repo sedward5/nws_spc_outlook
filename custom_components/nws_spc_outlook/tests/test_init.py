@@ -4,28 +4,28 @@ import pytest
 import pytest_asyncio
 from unittest.mock import AsyncMock, patch
 
-from homeassistant.config_entries import ConfigEntry, SOURCE_USER
+from homeassistant.config_entries import ConfigEntries, ConfigEntry, SOURCE_USER
 from homeassistant.const import CONF_LATITUDE
 from homeassistant.core import HomeAssistant
-from homeassistant.helpers.aiohttp_client import async_get_clientsession
 
 from custom_components.nws_spc_outlook import async_setup_entry, async_unload_entry
-from custom_components.nws_spc_outlook.const import DOMAIN, CONF_LATITUDE, CONF_LONGITUDE
+from custom_components.nws_spc_outlook.const import DOMAIN, CONF_LONGITUDE
 from custom_components.nws_spc_outlook.coordinator import NWSSPCOutlookDataCoordinator
-
 
 LATITUDE = 35.0
 LONGITUDE = -97.0
 ENTRY_ID = "test_entry"
 
+
 @pytest_asyncio.fixture
-async def hass_instance(tmp_path, event_loop) -> HomeAssistant:
+async def hass_instance(tmp_path) -> HomeAssistant:
     """Provide a properly initialized HomeAssistant instance."""
     hass = HomeAssistant(config_dir=str(tmp_path))
-    hass.config_entries = ConfigEntries(hass)  # Add this line to initialize config_entries
+    hass.config_entries = ConfigEntries(hass)  # Initialize config_entries
     await hass.async_start()
     yield hass
     await hass.async_stop()
+
 
 @pytest.fixture
 def mock_config_entry():
@@ -34,7 +34,7 @@ def mock_config_entry():
         entry_id=ENTRY_ID,
         domain=DOMAIN,
         data={CONF_LATITUDE: LATITUDE, CONF_LONGITUDE: LONGITUDE},
-        source=SOURCE_USER,  # Corrected import
+        source=SOURCE_USER,
         title="NWS SPC Outlook",
         unique_id="test_unique_id",
         options={},
@@ -88,4 +88,3 @@ async def test_async_unload_entry(hass_instance, mock_config_entry):
             assert mock_config_entry.entry_id not in hass_instance.data[DOMAIN]
             mock_coordinator.async_unload.assert_awaited_once()
             mock_unload_platforms.assert_awaited_once_with(mock_config_entry, ["sensor"])
-            
