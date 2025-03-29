@@ -55,6 +55,8 @@ async def test_async_setup_entry(hass_instance, mock_config_entry):
         with patch.object(
             hass_instance.config_entries, "async_forward_entry_setups", AsyncMock()
         ) as mock_forward:
+            hass_instance.config_entries.async_setup = AsyncMock(return_value=True)
+            
             result = await async_setup_entry(hass_instance, mock_config_entry)
 
             assert result is True
@@ -76,11 +78,11 @@ async def test_async_unload_entry(hass_instance, mock_config_entry):
         hass_instance.data[DOMAIN] = {mock_config_entry.entry_id: mock_coordinator}
 
         with patch.object(
-            hass_instance.config_entries, "async_unload_platforms", AsyncMock()
+            hass_instance.config_entries, "async_unload_platforms", AsyncMock(return_value=True)
         ) as mock_unload_platforms:
             result = await async_unload_entry(hass_instance, mock_config_entry)
-
             assert result is True
+    
             assert mock_config_entry.entry_id not in hass_instance.data[DOMAIN]
             mock_coordinator.async_unload.assert_awaited_once()
             mock_unload_platforms.assert_awaited_once_with(mock_config_entry, ["sensor"])
