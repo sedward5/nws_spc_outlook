@@ -16,16 +16,14 @@ LATITUDE = 35.0
 LONGITUDE = -97.0
 ENTRY_ID = "test_entry"
 
-
 @pytest_asyncio.fixture
 async def hass_instance(tmp_path) -> HomeAssistant:
     """Provide a properly initialized HomeAssistant instance."""
     hass = HomeAssistant(config_dir=str(tmp_path))
-    hass.config_entries = ConfigEntries(hass)  # Initialize config_entries
+    hass.config_entries = ConfigEntries(hass, hass.config)  # Correctly initialize ConfigEntries
     await hass.async_start()
     yield hass
     await hass.async_stop()
-
 
 @pytest.fixture
 def mock_config_entry():
@@ -43,7 +41,6 @@ def mock_config_entry():
         discovery_keys=None,
         subentries_data=None,
     )
-
 
 @pytest.mark.asyncio
 async def test_async_setup_entry(hass_instance, mock_config_entry):
@@ -65,7 +62,6 @@ async def test_async_setup_entry(hass_instance, mock_config_entry):
             assert mock_config_entry.entry_id in hass_instance.data[DOMAIN]
             mock_coordinator.async_config_entry_first_refresh.assert_awaited_once()
             mock_forward.assert_awaited_once_with(mock_config_entry, ["sensor"])
-
 
 @pytest.mark.asyncio
 async def test_async_unload_entry(hass_instance, mock_config_entry):
