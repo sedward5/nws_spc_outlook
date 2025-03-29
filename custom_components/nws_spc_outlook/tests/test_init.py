@@ -6,9 +6,8 @@ from unittest.mock import AsyncMock, patch
 
 from unittest.mock import AsyncMock, patch
 from homeassistant.config_entries import ConfigEntry, SOURCE_USER
-from homeassistant.core import HomeAssistant
-from homeassistant.data_entry_flow import SOURCE_USER
 from homeassistant.const import CONF_LATITUDE
+from homeassistant.core import HomeAssistant
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 
 from custom_components.nws_spc_outlook import async_setup_entry, async_unload_entry
