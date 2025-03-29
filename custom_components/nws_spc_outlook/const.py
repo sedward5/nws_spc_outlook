@@ -1,7 +1,7 @@
 """Constants for the NWS SPC Outlook integration."""
 
-# Integration domain used to register the component in Home Assistant
 DOMAIN = "nws_spc_outlook"
+"""Integration domain used to register the component in Home Assistant."""
 
 # Configuration keys for user-defined settings
 CONF_LATITUDE = "latitude"  # User-specified latitude
