@@ -29,6 +29,7 @@ async def hass_instance(tmp_path, event_loop) -> HomeAssistant:
     await hass.async_stop()
 
 
+@pytest.fixture
 def mock_config_entry():
     """Create a properly initialized ConfigEntry for testing."""
     return ConfigEntry(
