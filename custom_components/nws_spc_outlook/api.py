@@ -70,22 +70,32 @@ async def getspcoutlook(
     tasks = {key: fetch_geojson(session, url) for key, url in urls.items()}
     results = await asyncio.gather(*tasks.values(), return_exceptions=True)
 
-    for key, result in zip(
-        tasks.keys(), results, strict=False
-    ):  # Explicitly set strict=False
+    for key, result in zip(tasks.keys(), results, strict=False):
         if isinstance(result, Exception):
             _LOGGER.exception("Failed to process %s due to %s", key, result)
             continue
-        if not isinstance(result, dict):  # Ensure we have a valid JSON response
+        if not isinstance(result, dict):
             _LOGGER.error("Invalid data type for %s: %s", key, type(result))
             continue
         for feature in result.get("features", []):
             geometry = feature.get("geometry")
-            if not geometry:  # Gracefully handle missing geometry
+            if not geometry:
                 _LOGGER.warning("Missing geometry in %s response", key)
                 continue
             polygon = shape(geometry)
             if polygon.contains(location):
+                # Extract risk label
                 output[key] = feature["properties"].get("LABEL2", "Unknown")
+
+                # Extract stroke and fill colors
+                stroke_key = f"{key}_stroke"
+                fill_key = f"{key}_fill"
+                output[stroke_key] = feature["properties"].get("stroke", None)
+                output[fill_key] = feature["properties"].get("fill", None)
+
+                # General stroke and fill for the day
+                day_num = key.split("_")[-1]  # Extract day number
+                output[f"stroke_day{day_num}"] = feature["properties"].get("stroke", None)
+                output[f"fill_day{day_num}"] = feature["properties"].get("fill", None)
 
     return output
