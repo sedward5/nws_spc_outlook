@@ -56,13 +56,28 @@ class NWSSPCOutlookSensor(CoordinatorEntity, SensorEntity):
     def extra_state_attributes(self) -> dict[str, str]:
         """Return additional attributes."""
         return {
-            "hail_probability": self.coordinator.data.get(
-                f"hail_day{self._day}", "No Risk"
-            ),
-            "wind_probability": self.coordinator.data.get(
-                f"wind_day{self._day}", "No Risk"
-            ),
-            "tornado_probability": self.coordinator.data.get(
-                f"torn_day{self._day}", "No Risk"
-            ),
+            # General Outlook Timing
+            "valid_time": self.coordinator.data.get(f"valid_day{self._day}", None),
+            "issue_time": self.coordinator.data.get(f"issue_day{self._day}", None),
+            "expire_time": self.coordinator.data.get(f"expire_day{self._day}", None),
+    
+            # General Risk for the Day
+            "categorical_stroke": self.coordinator.data.get(f"cat_stroke_day{self._day}", None),
+            "categorical_fill": self.coordinator.data.get(f"cat_fill_day{self._day}", None),
+    
+            # Hail Risk Styling
+            "hail_stroke": self.coordinator.data.get(f"hail_stroke_day{self._day}", None),
+            "hail_fill": self.coordinator.data.get(f"hail_fill_day{self._day}", None),
+    
+            # Wind Risk Styling
+            "wind_stroke": self.coordinator.data.get(f"wind_stroke_day{self._day}", None),
+            "wind_fill": self.coordinator.data.get(f"wind_fill_day{self._day}", None),
+    
+            # Tornado Risk Styling
+            "tornado_stroke": self.coordinator.data.get(f"torn_stroke_day{self._day}", None),
+            "tornado_fill": self.coordinator.data.get(f"torn_fill_day{self._day}", None),
+    
+            # General Polygon Styling for the Outlook
+            "stroke": self.coordinator.data.get(f"stroke_day{self._day}", None),
+            "fill": self.coordinator.data.get(f"fill_day{self._day}", None),
         }
