@@ -29,26 +29,27 @@ class NWSSPCOutlookDataCoordinator(DataUpdateCoordinator):
         self.data = {}  # Store fetched data
 
     async def _async_update_data(self) -> dict:
-        """Fetch the latest SPC Outlook data."""
-        raw_data = await getspcoutlook(self.latitude, self.longitude, self.session)
+    """Fetch the latest SPC Outlook data."""
+    raw_data = await getspcoutlook(self.latitude, self.longitude, self.session)
 
-        # Extract general attributes
-        outlook_data = {
-            "VALID": raw_data.get("VALID"),
-            "ISSUE": raw_data.get("ISSUE"),
-            "EXPIRE": raw_data.get("EXPIRE"),
-        }
+    if not raw_data or "features" not in raw_data or not raw_data["features"]:
+        _LOGGER.error("No valid SPC Outlook data received")
+        return {}
 
-        # Extract categorical and risk-type attributes dynamically
-        for day in range(1, 4):  # Assuming up to 3-day outlook
-            outlook_data[f"categorical_day{day}"] = raw_data.get(f"cat_day{day}", "None")
-            outlook_data[f"categorical_stroke_day{day}"] = raw_data.get(f"cat_day{day}_stroke")
-            outlook_data[f"categorical_fill_day{day}"] = raw_data.get(f"cat_day{day}_fill")
+    # Extract properties from the first feature
+    properties = raw_data["features"][0].get("properties", {})
 
-            for risk in ["torn", "hail", "wind"]:
-                outlook_data[f"{risk}_day{day}"] = raw_data.get(f"{risk}_day{day}", "None")
-                outlook_data[f"{risk}_stroke_day{day}"] = raw_data.get(f"{risk}_day{day}_stroke")
-                outlook_data[f"{risk}_fill_day{day}"] = raw_data.get(f"{risk}_day{day}_fill")
+    _LOGGER.debug("Extracted properties: %s", properties)
 
-        self.data = outlook_data  # Store the structured data
-        return outlook_data
+    outlook_data = {
+        "VALID": properties.get("VALID", "Unknown"),
+        "ISSUE": properties.get("ISSUE", "Unknown"),
+        "EXPIRE": properties.get("EXPIRE", "Unknown"),
+        "stroke": properties.get("stroke", "None"),
+        "fill": properties.get("fill", "None"),
+    }
+
+    _LOGGER.debug("Processed SPC Outlook data: %s", outlook_data)
+
+    self.data = outlook_data
+    return outlook_data
