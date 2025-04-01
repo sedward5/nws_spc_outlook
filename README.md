@@ -1,4 +1,5 @@
 # ⛈️ NWS Storm Prediction Center Outlook for Home Assistant
+
 [![hacs_badge](https://img.shields.io/badge/HACS-Default-41BDF5.svg?style=for-the-badge)](https://github.com/hacs/integration)
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/sedward5/nws_spc_outlook?style=for-the-badge)
 ![Maintenance](https://img.shields.io/maintenance/yes/2025?style=for-the-badge)
@@ -10,7 +11,8 @@
 A home assistant integration to poll weather outlook information from the NWS Storm Prediction Center
 
 ## 🔮 Sensors and Attributes
-```
+
+```None
 sensor.spc_outlook_day_1  # (No|General Thunderstorm|Marginal|Slight|Enhanced|Moderate) Risk
 │── hail_probability:     # (No|X% Hail) Risk
 │── wind_probability:     # (No|X% [Significant ]Wind) Risk
@@ -29,7 +31,8 @@ sensor.spc_outlook_day_3  # (No|General Thunderstorm|Marginal|Slight|Enhanced|Mo
 ```
 
 ## 📁 File structure
-```
+
+```None
 custom_components/nws_spc_outlook/
 │── __init__.py          # Handles setup and integration lifecycle
 │── coordinator.py       # Handles data fetching and updates
@@ -41,7 +44,7 @@ custom_components/nws_spc_outlook/
 
 ## 🖱️ UI Example
 
-This is a possible layout utilizing these sensors. This requires mushroom cards from HACS. 
+This is a possible layout utilizing these sensors. This requires mushroom cards from HACS.
 
 ![Example Dashboard](spc_dashboard.jpeg)
 
@@ -163,7 +166,8 @@ cards:
 
 ## 💻 Contributing
 
-I'll be the first to admit I'm no developer. Feel free to submit issues and pull requests to improve this integration. See the [api guide](https://sedward5.github.io/nws_spc_outlook/nws_spc_outlook.html) to get started. 
+I'll be the first to admit I'm no developer. Feel free to submit issues and pull requests to improve this integration. See the [api guide](https://sedward5.github.io/nws_spc_outlook/nws_spc_outlook.html) to get started.
 
 ## ⚖️ Disclamer
+
 This project and its author are in no way affialted with the National Weather Service. This addon should not be used as your sole source of information for severe weather preparedness. Stay informed, have a plan, be prepared.
