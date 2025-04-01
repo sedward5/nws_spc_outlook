@@ -4,7 +4,7 @@ DOMAIN = "nws_spc_outlook"
 """Integration domain used to register the component in Home Assistant."""
 
 # Configuration keys for user-defined settings
-CONF_LATITUDE = "latitude"  
+CONF_LATITUDE = "latitude"
 """Configuration key for user-specified latitude."""
 
 CONF_LONGITUDE = "longitude"
@@ -14,10 +14,10 @@ CONF_LONGITUDE = "longitude"
 DEFAULT_NAME = "NWS SPC Outlook"
 """Default name for the integration."""
 
-DEFAULT_LATITUDE = 42.2808  
-"""Latitude for Ann Arbor, MI (example fallback location)"""""
+DEFAULT_LATITUDE = 42.2808
+"""Latitude for Ann Arbor, MI (example fallback location)""" ""
 
-DEFAULT_LONGITUDE = -83.7430  
+DEFAULT_LONGITUDE = -83.7430
 """Longitude for Ann Arbor, MI (example fallback location)"""
 
 BASE_URL = "https://www.spc.noaa.gov/products/outlook"
