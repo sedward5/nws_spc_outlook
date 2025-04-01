@@ -87,11 +87,12 @@ async def getspcoutlook(
             polygon = shape(geometry)
             if polygon.contains(location):
                 output[key] = feature["properties"].get("LABEL2", "Unknown")
-                # Store just the state
-                output[f"{key}_attributes"] = {  # Store attributes separately
+                output[f"{key}_attributes"] = {
                     "valid": feature["properties"].get("VALID", "Unknown"),
                     "issue": feature["properties"].get("ISSUE", "Unknown"),
                     "expire": feature["properties"].get("EXPIRE", "Unknown"),
+                    "fill": feature["properties"].get("fill", "#000000"),
+                    "stroke": feature["properties"].get("stroke", "#FFFFFF"),
                 }
 
     return output
