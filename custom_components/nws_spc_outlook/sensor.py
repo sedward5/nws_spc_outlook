@@ -64,13 +64,12 @@ class NWSSPCOutlookSensor(CoordinatorEntity, SensorEntity):
                 "tornado_probability": self.coordinator.data.get(f"torn_day{self._day}", {}).get("state", "No Risk"),
                 "valid": outlook_data.get("valid", "Unknown"),
                 "issue": outlook_data.get("issue", "Unknown"),
-                "expire": outlook_data.get("expire", "Unknown"),
+                "expire": outlook_data.get("expire", "Unknown")
             }
     
         return {
             "hail_probability": self.coordinator.data.get(f"hail_day{self._day}", "No Risk"),
             "wind_probability": self.coordinator.data.get(f"wind_day{self._day}", "No Risk"),
-            "tornado_probability": self.coordinator.data.get(f"torn_day{self._day}", "No Risk"),
+            "tornado_probability": self.coordinator.data.get(f"torn_day{self._day}", "No Risk")
         }
-    }
 
