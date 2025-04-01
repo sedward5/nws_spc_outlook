@@ -58,17 +58,34 @@ class NWSSPCOutlookSensor(CoordinatorEntity, SensorEntity):
         attributes = self.coordinator.data.get(f"cat_day{self._day}_attributes", {})
 
         return {
-            "hail_probability": self.coordinator.data.get(f"hail_day{self._day}", "No Risk"),
-            "wind_probability": self.coordinator.data.get(f"wind_day{self._day}", "No Risk"),
-            "tornado_probability": self.coordinator.data.get(f"torn_day{self._day}", "No Risk"),
+            "hail_probability": self.coordinator.data.get(
+                f"hail_day{self._day}", "No Risk"
+            ),
+            "wind_probability": self.coordinator.data.get(
+                f"wind_day{self._day}", "No Risk"
+            ),
+            "tornado_probability": self.coordinator.data.get(
+                f"torn_day{self._day}", "No Risk"
+            ),
             "categorical_fill": attributes.get("fill", "#FFFFFF"),
             "categorical_stroke": attributes.get("stroke", "#000000"),
-            "hail_fill": self.coordinator.data.get(f"hail_day{self._day}_attributes", {}).get("fill", "#FFFFFF"),
-            "hail_stroke": self.coordinator.data.get(f"hail_day{self._day}_attributes", {}).get("stroke", "#000000"),
-            "tornado_fill": self.coordinator.data.get(f"torn_day{self._day}_attributes", {}).get("fill", "#FFFFFF"),
-            "tornado_stroke": self.coordinator.data.get(f"torn_day{self._day}_attributes", {}).get("stroke", "#000000"),
-            "wind_fill": self.coordinator.data.get(f"wind_day{self._day}_attributes", {}).get("fill", "#FFFFFF"),
-            "wind_stroke": self.coordinator.data.get(f"wind_day{self._day}_attributes", {}).get("stroke", "#000000"),
+            "hail_fill": self.coordinator.data.get(
+                f"hail_day{self._day}_attributes", {}
+            ).get("fill", "#FFFFFF"),
+            "hail_stroke": self.coordinator.data.get(
+                f"hail_day{self._day}_attributes", {}
+            ).get("stroke", "#000000"),
+            "tornado_fill": self.coordinator.data.get(
+                f"torn_day{self._day}_attributes", {}
+            ).get("fill", "#FFFFFF"),
+            "tornado_stroke": self.coordinator.data.get(
+                f"torn_day{self._day}_attributes", {}
+            ).get("stroke", "#000000"),
+            "wind_fill": self.coordinator.data.get(
+                f"wind_day{self._day}_attributes", {}
+            ).get("fill", "#FFFFFF"),
+            "wind_stroke": self.coordinator.data.get(
+                f"wind_day{self._day}_attributes", {}
+            ).get("stroke", "#000000"),
             **attributes,  # Merge timestamps
         }
-
