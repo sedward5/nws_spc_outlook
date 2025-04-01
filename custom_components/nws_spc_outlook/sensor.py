@@ -59,17 +59,13 @@ class NWSSPCOutlookSensor(CoordinatorEntity, SensorEntity):
 
         return {
             "hail_probability": self.coordinator.data.get(
-                f"hail_day{self._day}",
-                "No Risk"
+                f"hail_day{self._day}", "No Risk"
             ),
             "wind_probability": self.coordinator.data.get(
-                f"wind_day{self._day}",
-                "No Risk"
+                f"wind_day{self._day}", "No Risk"
             ),
             "tornado_probability": self.coordinator.data.get(
-                f"torn_day{self._day}",
-                "No Risk"
+                f"torn_day{self._day}", "No Risk"
             ),
             **attributes,  # Merge additional attributes (valid, issue, expire)
         }
-

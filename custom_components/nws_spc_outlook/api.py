@@ -94,5 +94,4 @@ async def getspcoutlook(
                     "expire": feature["properties"].get("EXPIRE", "Unknown"),
                 }
 
-
     return output
