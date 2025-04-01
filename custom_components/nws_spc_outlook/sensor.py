@@ -67,25 +67,25 @@ class NWSSPCOutlookSensor(CoordinatorEntity, SensorEntity):
             "tornado_probability": self.coordinator.data.get(
                 f"torn_day{self._day}", "No Risk"
             ),
-            "categorical_fill": attributes.get("fill", "#FFFFFF"),
-            "categorical_stroke": attributes.get("stroke", "#000000"),
+            "categorical_fill": attributes.get("fill", "#000000"),
+            "categorical_stroke": attributes.get("stroke", "#FFFFFF"),
             "hail_fill": self.coordinator.data.get(
                 f"hail_day{self._day}_attributes", {}
-            ).get("fill", "#FFFFFF"),
+            ).get("fill", "#000000"),
             "hail_stroke": self.coordinator.data.get(
                 f"hail_day{self._day}_attributes", {}
-            ).get("stroke", "#000000"),
+            ).get("stroke", "#FFFFFF"),
             "tornado_fill": self.coordinator.data.get(
                 f"torn_day{self._day}_attributes", {}
-            ).get("fill", "#FFFFFF"),
+            ).get("fill", "#000000"),
             "tornado_stroke": self.coordinator.data.get(
                 f"torn_day{self._day}_attributes", {}
-            ).get("stroke", "#000000"),
+            ).get("stroke", "#FFFFFF"),
             "wind_fill": self.coordinator.data.get(
                 f"wind_day{self._day}_attributes", {}
-            ).get("fill", "#FFFFFF"),
+            ).get("fill", "#000000"),
             "wind_stroke": self.coordinator.data.get(
                 f"wind_day{self._day}_attributes", {}
-            ).get("stroke", "#000000"),
+            ).get("stroke", "#FFFFFF"),
             **attributes,  # Merge timestamps
         }
