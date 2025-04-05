@@ -2,6 +2,8 @@
 
 You can utilize these sensors to build a number of dashboards and automations. This example requires mushroom and cardmod. It takes advantage of the color hex codes used by SPC and puts the timestamps in local time. 
 
+![Example of a grid view](ui-example.jpeg)
+
 ```yaml
 type: vertical-stack
 cards:
@@ -13,10 +15,12 @@ cards:
         content: "**Risk**"
       - type: custom:mushroom-template-card
         primary: Day 1
+        fill_container: true
         secondary: >-
           {{ as_local(strptime(state_attr('sensor.spc_outlook_day_1',
-          'valid')+'+0000', '%Y%m%d%H%M%z')).strftime('%d %H:%M') }} {{
-          as_local(strptime(state_attr('sensor.spc_outlook_day_1',
+          'valid')+'+0000', '%Y%m%d%H%M%z')).strftime('%d %H:%M') }}
+
+          {{ as_local(strptime(state_attr('sensor.spc_outlook_day_1',
           'expire')+'+0000', '%Y%m%d%H%M%z')).strftime('%d %H:%M') }}
         card_mod:
           style:
@@ -25,7 +29,7 @@ cards:
                 --card-secondary-font-size: 12px;
               }
               .secondary { 
-                white-space: normal !important;
+                white-space: break-spaces !important;
                 word-wrap: break-word;
                 overflow-wrap: break-word;
 
@@ -35,10 +39,12 @@ cards:
               }
       - type: custom:mushroom-template-card
         primary: Day 2
+        fill_container: true
         secondary: >-
           {{ as_local(strptime(state_attr('sensor.spc_outlook_day_2',
-          'valid')+'+0000', '%Y%m%d%H%M%z')).strftime('%d %H:%M') }} {{
-          as_local(strptime(state_attr('sensor.spc_outlook_day_2',
+          'valid')+'+0000', '%Y%m%d%H%M%z')).strftime('%d %H:%M') }}
+
+          {{ as_local(strptime(state_attr('sensor.spc_outlook_day_2',
           'expire')+'+0000', '%Y%m%d%H%M%z')).strftime('%d %H:%M') }}
         card_mod:
           style:
@@ -47,7 +53,7 @@ cards:
                 --card-secondary-font-size: 12px;
               }
               .secondary { 
-                white-space: normal !important;
+                white-space: break-spaces !important;
                 word-wrap: break-word;
                 overflow-wrap: break-word;
 
@@ -57,10 +63,12 @@ cards:
               }
       - type: custom:mushroom-template-card
         primary: Day 3
+        fill_container: true
         secondary: >-
           {{ as_local(strptime(state_attr('sensor.spc_outlook_day_3',
-          'valid')+'+0000', '%Y%m%d%H%M%z')).strftime('%d %H:%M') }} {{
-          as_local(strptime(state_attr('sensor.spc_outlook_day_3',
+          'valid')+'+0000', '%Y%m%d%H%M%z')).strftime('%d %H:%M') }}
+
+          {{ as_local(strptime(state_attr('sensor.spc_outlook_day_3',
           'expire')+'+0000', '%Y%m%d%H%M%z')).strftime('%d %H:%M') }}
         card_mod:
           style:
@@ -69,7 +77,7 @@ cards:
                 --card-secondary-font-size: 12px;
               }
               .secondary { 
-                white-space: normal !important;
+                white-space: break-spaces !important;
                 word-wrap: break-word;
                 overflow-wrap: break-word;
 
@@ -138,13 +146,7 @@ cards:
               }
       - type: custom:mushroom-template-card
         entity: sensor.spc_outlook_day_2
-        primary: >
-          {% if is_state('sensor.spc_outlook_day_2', 'General Thunderstorms
-          Risk') %}
-            General Thunder-storm Risk 
-          {% else %} 
-            {{ states('sensor.spc_outlook_day_2') }}
-          {% endif %}
+        primary: "{{ states('sensor.spc_outlook_day_2') }}"
         layout: vertical
         fill_container: true
         card_mod:
@@ -158,6 +160,12 @@ cards:
               }
               .primary { 
                 white-space: normal !important;
+                word-wrap: break-word;
+                overflow-wrap: break-word;
+
+                -webkit-hyphens: auto;
+                -moz-hyphens: auto;
+                hyphens: auto;
               }
             .: |
               ha-card {
@@ -165,13 +173,7 @@ cards:
               }
       - type: custom:mushroom-template-card
         entity: sensor.spc_outlook_day_3
-        primary: >
-          {% if is_state('sensor.spc_outlook_day_3', 'General Thunderstorms
-          Risk') %}
-            General Thunder-storm Risk 
-          {% else %} 
-            {{ states('sensor.spc_outlook_day_3') }} 
-          {% endif%}
+        primary: "{{ states('sensor.spc_outlook_day_3') }}"
         layout: vertical
         fill_container: true
         card_mod:
