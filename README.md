@@ -80,13 +80,13 @@ I'll be the first to admit I'm no developer. Feel free to submit issues and pull
 
 ```mermaid
 flowchart TD
-    A[Home Assistant Integration Start] --> B[Fetch Point Metadata\n(/gridpoints)]
-    B --> C[Retrieve Forecast & Alerts\n(/forecast, /alerts)]
-    C --> D[Parse Weather Alerts]
-    D --> E[Extract Attributes:\nVALID, ISSUE, EXPIRE,\nstroke, fill]
-    E --> F[Get Coordinate-Based Metadata:\ncategorical_stroke, categorical_fill,\nhail_fill, tornado_fill, etc.]
-    F --> G[Create/Update Sensors & Attributes]
-    G --> H[Display in Lovelace Dashboard]
+    id1["Home Assistant Integration Start"] --> id2["Fetch Point Metadata\n(/gridpoints)"]
+    id2 --> id3["Retrieve Forecast & Alerts\n(/forecast, /alerts)"]
+    id3 --> id4["Parse Weather Alerts"]
+    id4 --> id5["Extract Attributes:\nVALID, ISSUE, EXPIRE,\nstroke, fill"]
+    id5 --> id6["Get Coordinate-Based Metadata:\ncategorical_stroke, categorical_fill,\nhail_fill, tornado_fill, etc."]
+    id6 --> id7["Create/Update Sensors & Attributes"]
+    id7 --> id8["Display in Lovelace Dashboard"]
 ```
 
 ## ⚖️ Disclamer
