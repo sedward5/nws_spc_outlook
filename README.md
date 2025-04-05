@@ -78,6 +78,17 @@ See the code [here](outlook_grid.md)
 
 I'll be the first to admit I'm no developer. Feel free to submit issues and pull requests to improve this integration. See the [api guide](https://sedward5.github.io/nws_spc_outlook/nws_spc_outlook.html) to get started.
 
+```mermaid
+flowchart TD
+    A[Home Assistant Integration Start] --> B[Fetch Point Metadata<br>(/gridpoints)]
+    B --> C[Retrieve Forecast & Alerts<br>(/forecast, /alerts)]
+    C --> D[Parse Weather Alerts]
+    D --> E[Extract Attributes:<br>VALID, ISSUE, EXPIRE,<br>stroke, fill]
+    E --> F[Get Coordinate-Based Metadata:<br>categorical_stroke, categorical_fill,<br>hail_fill, tornado_fill, etc.]
+    F --> G[Create/Update Sensors & Attributes]
+    G --> H[Display in Lovelace Dashboard]
+```
+
 ## ⚖️ Disclamer
 
 This project and its author are in no way affialted with the National Weather Service. This addon should not be used as your sole source of information for severe weather preparedness. Stay informed, have a plan, be prepared.
