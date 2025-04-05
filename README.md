@@ -79,14 +79,57 @@ See the code [here](outlook_grid.md)
 I'll be the first to admit I'm no developer. Feel free to submit issues and pull requests to improve this integration. See the [api guide](https://sedward5.github.io/nws_spc_outlook/nws_spc_outlook.html) to get started.
 
 ```mermaid
+classDiagram
+    class SPCOutlookSensor {
+        <<abstract>>
+        + categorical_stroke: string
+        + categorical_fill: string
+        + hail_probability: string
+        + hail_stroke: string
+        + hail_fill: string
+        + wind_probability: string
+        + wind_stroke: string
+        + wind_fill: string
+        + tornado_probability: string
+        + issue: datetime
+        + valid: datetime
+        + expire: datetime
+        + friendly_name: string
+    }
+
+    class SPCOutlookDay1 {
+        + state: string
+    }
+
+    class SPCOutlookDay2 {
+        + state: string
+    }
+
+    class SPCOutlookDay3 {
+        + state: string
+        + hail_probability = "No Risk"
+        + wind_probability = "No Risk"
+        + tornado_probability = "No Risk"
+    }
+
+    SPCOutlookSensor <|-- SPCOutlookDay1
+    SPCOutlookSensor <|-- SPCOutlookDay2
+    SPCOutlookSensor <|-- SPCOutlookDay3
+```
+
+```mermaid
 flowchart TD
-    id1["Home Assistant Integration Start"] --> id2["Fetch Point Metadata\n(/gridpoints)"]
-    id2 --> id3["Retrieve Forecast & Alerts\n(/forecast, /alerts)"]
-    id3 --> id4["Parse Weather Alerts"]
-    id4 --> id5["Extract Attributes:\nVALID, ISSUE, EXPIRE,\nstroke, fill"]
-    id5 --> id6["Get Coordinate-Based Metadata:\ncategorical_stroke, categorical_fill,\nhail_fill, tornado_fill, etc."]
-    id6 --> id7["Create/Update Sensors & Attributes"]
-    id7 --> id8["Display in Lovelace Dashboard"]
+    A[Fetch Point Metadata<br>/gridpoints] --> B[Fetch Outlook Products<br>/products/outlook]
+    B --> C[Parse Individual Outlooks<br>Day 1, 2, 3]
+    C --> D[Extract Risk Values<br>(Wind, Hail, Tornado)]
+    C --> E[Extract Categorical Fills/Strokes]
+    D & E --> F[Format Attributes for Sensors]
+
+    F --> G1[Update sensor.spc_outlook_day_1]
+    F --> G2[Update sensor.spc_outlook_day_2]
+    F --> G3[Update sensor.spc_outlook_day_3]
+
+    G1 & G2 & G3 --> H[Display in Lovelace UI]
 ```
 
 ## ⚖️ Disclamer
