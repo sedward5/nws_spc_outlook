@@ -119,16 +119,16 @@ classDiagram
 
 ```mermaid
 flowchart TD
-    A[Fetch Point Metadata: /gridpoints] --> B[Fetch Outlook Products: /products/outlook]
-    B --> C[Parse Individual Outlooks (Day 1, 2, 3)]
-    C --> D[Extract Risk Values: Wind, Hail, Tornado]
-    C --> E[Extract Categorical Fills and Strokes]
+    A[Fetch Gridpoints Metadata] --> B[Fetch SPC Outlook Products]
+    B --> C[Parse Outlooks Day1 Day2 Day3]
+    C --> D[Extract Risk Values Wind Hail Tornado]
+    C --> E[Extract Fill and Stroke Colors]
     D --> F[Format Attributes for Sensors]
     E --> F
 
-    F --> G1[Update sensor.spc_outlook_day_1]
-    F --> G2[Update sensor.spc_outlook_day_2]
-    F --> G3[Update sensor.spc_outlook_day_3]
+    F --> G1[Update Sensor Day 1]
+    F --> G2[Update Sensor Day 2]
+    F --> G3[Update Sensor Day 3]
 
     G1 --> H[Display in Lovelace UI]
     G2 --> H
