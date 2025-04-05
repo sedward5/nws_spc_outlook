@@ -1,6 +1,6 @@
 # UI Example
 
-You can utilize these sensors to build a number of dashboards and automations. This example requires mushroom and cardmod. It takes advantage of the color hex codes used by SPC and puts the timestamps in local time. 
+You can utilize these sensors to build a number of dashboards and automations. This example requires [mushroom](https://github.com/piitaya/lovelace-mushroom) and [card_mod](https://github.com/thomasloven/lovelace-card-mod). It takes advantage of the color hex codes used by SPC and puts the timestamps in local time. 
 
 ![Example of a grid view](ui-example.jpeg)
 
