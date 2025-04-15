@@ -4,6 +4,7 @@
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/sedward5/nws_spc_outlook?style=for-the-badge)
 ![Maintenance](https://img.shields.io/maintenance/yes/2025?style=for-the-badge)
 ![GitHub License](https://img.shields.io/github/license/sedward5/nws_spc_outlook?style=for-the-badge)
+![Check-Runs](https://img.shields.io/github/check-runs/sedward5/nws_spc_outlook/main?style=for-the-badge)
 ![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/sedward5/nws_spc_outlook/total?style=for-the-badge)
 ![Black Code Style](https://img.shields.io/badge/code%20style-black-000000.svg?style=for-the-badge)
 [![Buy me a coffee](https://img.shields.io/badge/buy_me_a_coffee-FFDD00?style=for-the-badge&logo=buy-me-a-coffee&logoColor=black)](https://buymeacoffee.com/sedward5)
