@@ -10,6 +10,7 @@
 
 ---
 Trying other badge options
+
 [![hacs][hacs-badge]][hacs-url]
 [![release][release-badge]][release-url]
 ![downloads][downloads-badge]
