@@ -45,13 +45,14 @@ async def getspcoutlook(
     output = {}
     location = Point(longitude, latitude)
 
-    # Add categorical outlooks for Days 1–8
+    # Add categorical outlooks for Days 1 through 8
     urls = {
         f"cat_day{day}": f"{BASE_URL}/day{day}otlk_cat.lyr.geojson"
         for day in range(1, 9)
     }
 
-    # Add tornado/hail/wind for Days 1–3 (or whatever DAYS_WITH_DETAILED_OUTLOOKS is set to)
+    # Add tornado/hail/wind for Days 1 through 2
+    # (or whatever DAYS_WITH_DETAILED_OUTLOOKS is set to)
     for day in range(1, DAYS_WITH_DETAILED_OUTLOOKS + 1):
         for risk_type in ["torn", "hail", "wind"]:
             urls[f"{risk_type}_day{day}"] = (
