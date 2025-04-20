@@ -16,6 +16,7 @@ if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant
     from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
+
 _LOGGER = logging.getLogger(__name__)
 
 DEFAULT_FILL: Final = "#000000"
