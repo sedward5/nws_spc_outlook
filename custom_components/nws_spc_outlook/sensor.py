@@ -44,7 +44,9 @@ async def async_setup_entry(
     async_add_entities(sensors, update_before_add=True)
 
 
-class NWSSPCOutlookSensor(CoordinatorEntity[NWSSPCOutlookDataCoordinator], SensorEntity):
+class NWSSPCOutlookSensor(
+    CoordinatorEntity[NWSSPCOutlookDataCoordinator], SensorEntity
+):
     """Representation of an SPC Outlook sensor."""
 
     def __init__(self, coordinator: NWSSPCOutlookDataCoordinator, day: int) -> None:
@@ -84,6 +86,8 @@ class NWSSPCOutlookSensor(CoordinatorEntity[NWSSPCOutlookDataCoordinator], Senso
                     risk_key, "No Risk"
                 )
                 attributes[f"{risk_type}_fill"] = risk_attrs.get("fill", DEFAULT_FILL)
-                attributes[f"{risk_type}_stroke"] = risk_attrs.get("stroke", DEFAULT_STROKE)
+                attributes[f"{risk_type}_stroke"] = risk_attrs.get(
+                    "stroke", DEFAULT_STROKE
+                )
 
         return attributes

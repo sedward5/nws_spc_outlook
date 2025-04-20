@@ -19,7 +19,9 @@ async def fetch_geojson(session: aiohttp.ClientSession, url: str) -> dict:
         headers = {"Accept": "application/json"}
         async with session.get(url, headers=headers, timeout=20) as resp:
             if resp.status != HTTP_OK:
-                _LOGGER.error("Failed to fetch data from %s (HTTP %s)", url, resp.status)
+                _LOGGER.error(
+                    "Failed to fetch data from %s (HTTP %s)", url, resp.status
+                )
                 return {}
 
             text = await resp.text()
@@ -30,7 +32,9 @@ async def fetch_geojson(session: aiohttp.ClientSession, url: str) -> dict:
             try:
                 return await resp.json(content_type=None)
             except (aiohttp.ContentTypeError, ValueError):
-                _LOGGER.exception("Invalid JSON response from %s. Response body: %s", url, text[:500])
+                _LOGGER.exception(
+                    "Invalid JSON response from %s. Response body: %s", url, text[:500]
+                )
                 return {}
 
     except (aiohttp.ClientError, TimeoutError):
