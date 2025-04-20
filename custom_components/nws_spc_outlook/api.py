@@ -14,38 +14,27 @@ HTTP_OK = 200  # Replace magic number
 
 
 async def fetch_geojson(session: aiohttp.ClientSession, url: str) -> dict:
-    """
-    Fetch SPC outlook data for a given latitude and longitude.
-
-    This function queries the NWS SPC API, checks if the given location is inside
-    any severe weather risk area, and returns the corresponding outlook data.
-    """
+    """Fetch a GeoJSON file from a given URL."""
     try:
-        headers = {"Accept": "application/json"}  # Explicitly request JSON
+        headers = {"Accept": "application/json"}
         async with session.get(url, headers=headers, timeout=20) as resp:
             if resp.status != HTTP_OK:
-                _LOGGER.error(
-                    "Failed to fetch data from %s (HTTP %s)", url, resp.status
-                )
+                _LOGGER.error("Failed to fetch data from %s (HTTP %s)", url, resp.status)
                 return {}
 
-            text = await resp.text()  # Read response as text first
-            if not text.strip():  # Handle empty response
+            text = await resp.text()
+            if not text.strip():
                 _LOGGER.exception("Empty response from %s", url)
                 return {}
 
             try:
-                return await resp.json(
-                    content_type=None
-                )  # Attempt to parse JSON directly
+                return await resp.json(content_type=None)
             except (aiohttp.ContentTypeError, ValueError):
-                _LOGGER.exception(
-                    "Invalid JSON response from %s. Response body: %s", url, text[:500]
-                )
+                _LOGGER.exception("Invalid JSON response from %s. Response body: %s", url, text[:500])
                 return {}
 
     except (aiohttp.ClientError, TimeoutError):
-        _LOGGER.exception("Error fetching data from %s", url)  # Remove unused variable
+        _LOGGER.exception("Error fetching data from %s", url)
         return {}
 
 
@@ -56,11 +45,14 @@ async def getspcoutlook(
     output = {}
     location = Point(longitude, latitude)
 
+    # Add categorical outlooks for Days 1 through 8
     urls = {
         f"cat_day{day}": f"{BASE_URL}/day{day}otlk_cat.lyr.geojson"
-        for day in range(1, 4)
+        for day in range(1, 9)
     }
 
+    # Add tornado/hail/wind for Days 1 through 2
+    # (or whatever DAYS_WITH_DETAILED_OUTLOOKS is set to)
     for day in range(1, DAYS_WITH_DETAILED_OUTLOOKS + 1):
         for risk_type in ["torn", "hail", "wind"]:
             urls[f"{risk_type}_day{day}"] = (
@@ -70,18 +62,16 @@ async def getspcoutlook(
     tasks = {key: fetch_geojson(session, url) for key, url in urls.items()}
     results = await asyncio.gather(*tasks.values(), return_exceptions=True)
 
-    for key, result in zip(
-        tasks.keys(), results, strict=False
-    ):  # Explicitly set strict=False
+    for key, result in zip(tasks.keys(), results, strict=False):
         if isinstance(result, Exception):
             _LOGGER.exception("Failed to process %s due to %s", key, result)
             continue
-        if not isinstance(result, dict):  # Ensure we have a valid JSON response
+        if not isinstance(result, dict):
             _LOGGER.error("Invalid data type for %s: %s", key, type(result))
             continue
         for feature in result.get("features", []):
             geometry = feature.get("geometry")
-            if not geometry:  # Gracefully handle missing geometry
+            if not geometry:
                 _LOGGER.warning("Missing geometry in %s response", key)
                 continue
             polygon = shape(geometry)
