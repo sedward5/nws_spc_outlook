@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import logging
-from typing import Final, TYPE_CHECKING
+from typing import TYPE_CHECKING, Final
 
 from homeassistant.components.sensor import SensorEntity
 from homeassistant.const import CONF_LATITUDE, CONF_LONGITUDE
