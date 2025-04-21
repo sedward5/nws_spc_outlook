@@ -18,15 +18,15 @@ cards:
         fill_container: true
         secondary: >-
           {{ as_local(strptime(state_attr('sensor.spc_outlook_day_1',
-          'valid')+'+0000', '%Y%m%d%H%M%z')).strftime('%d %H:%M') }}
+          'valid')+'+0000', '%Y%m%d%H%M%z')).strftime('%a %d %H:%M') }}
 
           {{ as_local(strptime(state_attr('sensor.spc_outlook_day_1',
-          'expire')+'+0000', '%Y%m%d%H%M%z')).strftime('%d %H:%M') }}
+          'expire')+'+0000', '%Y%m%d%H%M%z')).strftime('%a %d %H:%M') }}
         card_mod:
           style:
             mushroom-state-info$: |
               .container {
-                --card-secondary-font-size: 12px;
+                --card-secondary-font-size: 9px;
               }
               .secondary { 
                 white-space: break-spaces !important;
@@ -42,15 +42,15 @@ cards:
         fill_container: true
         secondary: >-
           {{ as_local(strptime(state_attr('sensor.spc_outlook_day_2',
-          'valid')+'+0000', '%Y%m%d%H%M%z')).strftime('%d %H:%M') }}
+          'valid')+'+0000', '%Y%m%d%H%M%z')).strftime('%a %d %H:%M') }}
 
           {{ as_local(strptime(state_attr('sensor.spc_outlook_day_2',
-          'expire')+'+0000', '%Y%m%d%H%M%z')).strftime('%d %H:%M') }}
+          'expire')+'+0000', '%Y%m%d%H%M%z')).strftime('%a %d %H:%M') }}
         card_mod:
           style:
             mushroom-state-info$: |
               .container {
-                --card-secondary-font-size: 12px;
+                --card-secondary-font-size: 9px;
               }
               .secondary { 
                 white-space: break-spaces !important;
@@ -66,15 +66,15 @@ cards:
         fill_container: true
         secondary: >-
           {{ as_local(strptime(state_attr('sensor.spc_outlook_day_3',
-          'valid')+'+0000', '%Y%m%d%H%M%z')).strftime('%d %H:%M') }}
+          'valid')+'+0000', '%Y%m%d%H%M%z')).strftime('%a %d %H:%M') }}
 
           {{ as_local(strptime(state_attr('sensor.spc_outlook_day_3',
-          'expire')+'+0000', '%Y%m%d%H%M%z')).strftime('%d %H:%M') }}
+          'expire')+'+0000', '%Y%m%d%H%M%z')).strftime('%a %d %H:%M') }}
         card_mod:
           style:
             mushroom-state-info$: |
               .container {
-                --card-secondary-font-size: 12px;
+                --card-secondary-font-size: 9px;
               }
               .secondary { 
                 white-space: break-spaces !important;
@@ -270,10 +270,62 @@ cards:
               ha-card {
                 background-color: {{ state_attr('sensor.spc_outlook_day_2', 'wind_fill') }}
               }
-      - type: custom:mushroom-template-card
-        icon: mdi:border-none-variant
-        layout: vertical
-        fill_container: true
+      - type: vertical-stack
+        cards:
+          - type: custom:mushroom-template-card
+            primary: Day 4
+            secondary: "{{ states('sensor.spc_outlook_day_4') }}"
+            card_mod:
+              style:
+                mushroom-state-info$: |
+                  .container {
+                    --card-primary-font-size: 12px;
+                    --card-secondary-font-size: 9px;
+                    {% if not is_state('sensor.spc_outlook_day_4', 'No Risk') %}
+                    --card-primary-color: black;
+                    --card-secondary-color: black;
+                    {% endif %}
+                  }
+                  .primary { 
+                    white-space: normal !important;
+                    word-wrap: break-word;
+                    overflow-wrap: break-word;
+
+                    -webkit-hyphens: auto;
+                    -moz-hyphens: auto;
+                    hyphens: auto;
+                  }
+                .: |
+                  ha-card {
+                    background-color: {{ state_attr('sensor.spc_outlook_day_4', 'categorical_fill') }}
+                  }
+          - type: custom:mushroom-template-card
+            primary: Day 5
+            secondary: "{{ states('sensor.spc_outlook_day_5') }}"
+            card_mod:
+              style:
+                mushroom-state-info$: |
+                  .container {
+                    --card-primary-font-size: 12px;
+                    --card-secondary-font-size: 9px;
+                    {% if not is_state('sensor.spc_outlook_day_5', 'No Risk') %}
+                    --card-primary-color: black;
+                    --card-secondary-color: black;
+                    {% endif %}
+                  }
+                  .primary { 
+                    white-space: normal !important;
+                    word-wrap: break-word;
+                    overflow-wrap: break-word;
+
+                    -webkit-hyphens: auto;
+                    -moz-hyphens: auto;
+                    hyphens: auto;
+                  }
+                .: |
+                  ha-card {
+                    background-color: {{ state_attr('sensor.spc_outlook_day_5', 'categorical_fill') }}
+                  }
   - type: grid
     columns: 4
     square: false
@@ -306,7 +358,7 @@ cards:
               }
       - type: custom:mushroom-template-card
         entity: sensor.spc_outlook_day_1
-        primary: "{{ state_attr('sensor.spc_outlook_day_1', 'tornado_probability') }}"
+        primary: "{{ state_attr('sensor.spc_outlook_day_1', 'torn_probability') }}"
         layout: vertical
         fill_container: true
         card_mod:
@@ -314,7 +366,7 @@ cards:
             mushroom-state-info$: |
               .container {
                 --card-primary-font-size: 12px;
-                {% if state_attr('sensor.spc_outlook_day_1', 'tornado_probability') != 'No Risk' %}
+                {% if state_attr('sensor.spc_outlook_day_1', 'torn_probability') != 'No Risk' %}
                 --card-primary-color: black;
                 {% endif %}
               }
@@ -323,11 +375,11 @@ cards:
               }
             .: |
               ha-card {
-                background-color: {{ state_attr('sensor.spc_outlook_day_1', 'tornado_fill') }}
+                background-color: {{ state_attr('sensor.spc_outlook_day_1', 'torn_fill') }}
               }
       - type: custom:mushroom-template-card
         entity: sensor.spc_outlook_day_2
-        primary: "{{ state_attr('sensor.spc_outlook_day_2', 'tornado_probability') }}"
+        primary: "{{ state_attr('sensor.spc_outlook_day_2', 'torn_probability') }}"
         layout: vertical
         fill_container: true
         card_mod:
@@ -335,7 +387,7 @@ cards:
             mushroom-state-info$: |
               .container {
                 --card-primary-font-size: 12px;
-                {% if state_attr('sensor.spc_outlook_day_2', 'tornado_probability') != 'No Risk' %}
+                {% if state_attr('sensor.spc_outlook_day_2', 'torn_probability') != 'No Risk' %}
                 --card-primary-color: black;
                 {% endif %}
               }
@@ -344,13 +396,64 @@ cards:
               }
             .: |
               ha-card {
-                background-color: {{ state_attr('sensor.spc_outlook_day_2', 'tornado_fill') }}
+                background-color: {{ state_attr('sensor.spc_outlook_day_2', 'torn_fill') }}
               }
-      - type: custom:mushroom-template-card
-        entity: sensor.nws_outlook_day_3
-        icon: mdi:border-none-variant
-        layout: vertical
-        fill_container: true
+      - type: vertical-stack
+        cards:
+          - type: custom:mushroom-template-card
+            primary: Day 6
+            secondary: "{{ states('sensor.spc_outlook_day_6') }}"
+            card_mod:
+              style:
+                mushroom-state-info$: |
+                  .container {
+                    --card-primary-font-size: 12px;
+                    --card-secondary-font-size: 9px;
+                    {% if not is_state('sensor.spc_outlook_day_6', 'No Risk') %}
+                    --card-primary-color: black;
+                    --card-secondary-color: black;
+                    {% endif %}
+                  }
+                  .primary { 
+                    white-space: normal !important;
+                    word-wrap: break-word;
+                    overflow-wrap: break-word;
+
+                    -webkit-hyphens: auto;
+                    -moz-hyphens: auto;
+                    hyphens: auto;
+                  }
+                .: |
+                  ha-card {
+                    background-color: {{ state_attr('sensor.spc_outlook_day_6', 'categorical_fill') }}
+                  }
+          - type: custom:mushroom-template-card
+            primary: Day 7
+            secondary: "{{ states('sensor.spc_outlook_day_7') }}"
+            card_mod:
+              style:
+                mushroom-state-info$: |
+                  .container {
+                    --card-primary-font-size: 12px;
+                    --card-secondary-font-size: 9px;
+                    {% if not is_state('sensor.spc_outlook_day_7', 'No Risk') %}
+                    --card-primary-color: black;
+                    --card-secondary-color: black;
+                    {% endif %}
+                  }
+                  .primary { 
+                    white-space: normal !important;
+                    word-wrap: break-word;
+                    overflow-wrap: break-word;
+
+                    -webkit-hyphens: auto;
+                    -moz-hyphens: auto;
+                    hyphens: auto;
+                  }
+                .: |
+                  ha-card {
+                    background-color: {{ state_attr('sensor.spc_outlook_day_7', 'categorical_fill') }}
+                  }
   - type: grid
     columns: 4
     square: false
@@ -423,9 +526,55 @@ cards:
               ha-card {
                 background-color: {{ state_attr('sensor.spc_outlook_day_2', 'hail_fill') }}
               }
-      - type: custom:mushroom-template-card
-        entity: sensor.spc_outlook_day_3
-        icon: mdi:border-none-variant
-        layout: vertical
-        fill_container: true
+      - type: vertical-stack
+        cards:
+          - type: custom:mushroom-template-card
+            primary: Day 8
+            secondary: "{{ states('sensor.spc_outlook_day_8') }}"
+            card_mod:
+              style:
+                mushroom-state-info$: |
+                  .container {
+                    --card-primary-font-size: 12px;
+                    --card-secondary-font-size: 9px;
+                    {% if not is_state('sensor.spc_outlook_day_8', 'No Risk') %}
+                    --card-primary-color: black;
+                    --card-secondary-color: black;
+                    {% endif %}
+                  }
+                  .primary { 
+                    white-space: normal !important;
+                    word-wrap: break-word;
+                    overflow-wrap: break-word;
+
+                    -webkit-hyphens: auto;
+                    -moz-hyphens: auto;
+                    hyphens: auto;
+                  }
+                .: |
+                  ha-card {
+                    background-color: {{ state_attr('sensor.spc_outlook_day_8', 'categorical_fill') }}
+                  }
+          - type: custom:mushroom-template-card
+            primary: ...
+            card_mod:
+              style:
+                mushroom-state-info$: |
+                  .container {
+                    --card-primary-font-size: 12px;
+                  }
+                  .primary { 
+                    white-space: normal !important;
+                    word-wrap: break-word;
+                    overflow-wrap: break-word;
+
+                    -webkit-hyphens: auto;
+                    -moz-hyphens: auto;
+                    hyphens: auto;
+                  }
+                .: |
+                  ha-card {
+                    background-color: #000000;
+                  }
+
 ```
