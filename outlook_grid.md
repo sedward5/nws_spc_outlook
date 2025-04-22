@@ -215,7 +215,7 @@ cards:
                 --icon-symbol-size: 40px;
                 --icon-size: 100px;
                 left: -20px;
-                top: -35px;
+                top: -45px;
                 margin-bottom: -80px;
                 border-radius: 50% !important;
               }
@@ -343,7 +343,7 @@ cards:
                 --icon-symbol-size: 40px;
                 --icon-size: 100px;
                 left: -20px;
-                top: -35px;
+                top: -45px;
                 margin-bottom: -80px;
                 border-radius: 50% !important;
               }
@@ -471,7 +471,7 @@ cards:
                 --icon-symbol-size: 40px;
                 --icon-size: 100px;
                 left: -20px;
-                top: -35px;
+                top: -40px;
                 margin-bottom: -80px;
                 border-radius: 50% !important;
               }
