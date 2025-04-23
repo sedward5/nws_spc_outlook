@@ -70,7 +70,7 @@ class NWSSPCOutlookSensor(
     Sensor for a specific day's SPC Outlook.
 
     Provides the categorical risk (e.g., Marginal, Slight, Enhanced)
-    and—for Days 1 and 2—hail, wind, and tornado probabilities.
+    and-for Days 1 and 2-hail, wind, and tornado probabilities.
     """
 
     def __init__(self, coordinator: NWSSPCOutlookDataCoordinator, day: int) -> None:
@@ -79,7 +79,7 @@ class NWSSPCOutlookSensor(
 
         Args:
             coordinator: Shared data coordinator instance.
-            day: Forecast day number (1–8).
+            day: Forecast day number (1-8).
 
         """
         super().__init__(coordinator)
@@ -107,12 +107,12 @@ class NWSSPCOutlookSensor(
         """
         Additional outlook data for this day.
 
-        Includes SVG styling and, for Days 1–2, hazard-specific probabilities.
+        Includes SVG styling and, for Days 1-2, hazard-specific probabilities.
 
         Returns:
             Dictionary of sensor attributes including:
             - categorical_fill / categorical_stroke
-            - hail/wind/torn probability, fill, stroke (Days 1–2 only)
+            - hail/wind/torn probability, fill, stroke (Days 1-2 only)
 
         """
         attributes: dict[str, str] = {}
