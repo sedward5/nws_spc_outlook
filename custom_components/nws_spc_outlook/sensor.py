@@ -4,7 +4,7 @@ Sensor for displaying NWS SPC Outlook data.
 This module defines a sensor platform for Home Assistant that integrates
 with the NOAA Storm Prediction Center (SPC) convective outlooks.
 
-Each sensor represents a specific forecast day (Day 1–8) and exposes
+Each sensor represents a specific forecast day (Day 1-8) and exposes
 categorical risk levels along with hazard-specific attributes (hail, wind, tornado)
 for Days 1 and 2.
 """
