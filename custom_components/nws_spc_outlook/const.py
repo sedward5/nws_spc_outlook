@@ -1,27 +1,31 @@
-"""Constants for the NWS SPC Outlook integration."""
+"""Constants for the NWS SPC Outlook integration.
+
+This module defines configuration keys, default values, and API constants
+used by the NWS SPC Outlook Home Assistant integration.
+"""
 
 DOMAIN = "nws_spc_outlook"
-"""Integration domain used to register the component in Home Assistant."""
+"""Integration domain identifier for Home Assistant."""
 
 # Configuration keys for user-defined settings
 CONF_LATITUDE = "latitude"
-"""Configuration key for user-specified latitude."""
+"""Config key for the latitude value defined in the integration settings."""
 
 CONF_LONGITUDE = "longitude"
-"""Configuration key for user-specified longitude."""
+"""Config key for the longitude value defined in the integration settings."""
 
 # Default values (used as fallbacks if no user input is provided)
 DEFAULT_NAME = "NWS SPC Outlook"
-"""Default name for the integration."""
+"""Fallback name for the integration if no custom name is provided."""
 
 DEFAULT_LATITUDE = 42.2808
-"""Latitude for Ann Arbor, MI (example fallback location)""" ""
+"""Default latitude value (Ann Arbor, MI) used as a fallback location."""
 
 DEFAULT_LONGITUDE = -83.7430
-"""Longitude for Ann Arbor, MI (example fallback location)"""
+"""Default longitude value (Ann Arbor, MI) used as a fallback location."""
 
 BASE_URL = "https://www.spc.noaa.gov/products/outlook"
-"""Base URL for the SPC outlook API."""
+"""Root URL for accessing SPC outlook products and data."""
 
 DAYS_WITH_DETAILED_OUTLOOKS = 2
-"""Number of days with detailed outlooks available (e.g., Day 1 and Day 2)"""
+"""Number of days (typically Day 1 and Day 2) with specific hazard details like hail, wind, and tornado risk."""
