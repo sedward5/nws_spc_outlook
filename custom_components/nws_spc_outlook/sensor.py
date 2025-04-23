@@ -1,4 +1,5 @@
-"""Sensor for displaying NWS SPC Outlook data.
+"""
+Sensor for displaying NWS SPC Outlook data.
 
 This module defines a sensor platform for Home Assistant that integrates
 with the NOAA Storm Prediction Center (SPC) convective outlooks.
@@ -34,7 +35,8 @@ DEFAULT_STROKE: Final = "#FFFFFF"
 async def async_setup_entry(
     hass: HomeAssistant, entry: ConfigEntry, async_add_entities: AddEntitiesCallback
 ) -> None:
-    """Set up SPC Outlook sensors dynamically.
+    """
+    Set up SPC Outlook sensors dynamically.
 
     This creates one sensor for each day in the 8-day convective outlook.
 
@@ -42,6 +44,7 @@ async def async_setup_entry(
         hass: The Home Assistant instance.
         entry: Configuration entry for this integration.
         async_add_entities: Callback to register sensor entities.
+
     """
     hass.data.setdefault("nws_spc_outlook", {})
 
@@ -63,18 +66,21 @@ async def async_setup_entry(
 class NWSSPCOutlookSensor(
     CoordinatorEntity[NWSSPCOutlookDataCoordinator], SensorEntity
 ):
-    """Sensor for a specific day's SPC Outlook.
+    """
+    Sensor for a specific day's SPC Outlook.
 
     Provides the categorical risk (e.g., Marginal, Slight, Enhanced)
     and—for Days 1 and 2—hail, wind, and tornado probabilities.
     """
 
     def __init__(self, coordinator: NWSSPCOutlookDataCoordinator, day: int) -> None:
-        """Initialize the SPC Outlook sensor.
+        """
+        Initialize the SPC Outlook sensor.
 
         Args:
             coordinator: Shared data coordinator instance.
             day: Forecast day number (1–8).
+
         """
         super().__init__(coordinator)
         self._day = day
@@ -87,16 +93,19 @@ class NWSSPCOutlookSensor(
 
     @property
     def state(self) -> str:
-        """Main categorical risk for the forecast day.
+        """
+        Main categorical risk for the forecast day.
 
         Returns:
             The outlook level (e.g., 'Slight', 'Moderate', or 'No Risk').
+
         """
         return self.coordinator.data.get(f"cat_day{self._day}", "No Risk")
 
     @property
     def extra_state_attributes(self) -> dict[str, str]:
-        """Additional outlook data for this day.
+        """
+        Additional outlook data for this day.
 
         Includes SVG styling and, for Days 1–2, hazard-specific probabilities.
 
@@ -104,6 +113,7 @@ class NWSSPCOutlookSensor(
             Dictionary of sensor attributes including:
             - categorical_fill / categorical_stroke
             - hail/wind/torn probability, fill, stroke (Days 1–2 only)
+
         """
         attributes: dict[str, str] = {}
         category_attrs = self.coordinator.data.get(f"cat_day{self._day}_attributes", {})

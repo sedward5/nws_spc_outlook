@@ -1,4 +1,5 @@
-"""NWS SPC API module for fetching severe weather outlook data.
+"""
+NWS SPC API module for fetching severe weather outlook data.
 
 This module handles communication with the Storm Prediction Center (SPC)
 to retrieve severe weather outlooks in GeoJSON format. It determines
@@ -19,7 +20,8 @@ HTTP_OK = 200  # Avoid magic number
 
 
 async def fetch_geojson(session: aiohttp.ClientSession, url: str) -> dict:
-    """Fetch a GeoJSON file from the specified URL.
+    """
+    Fetch a GeoJSON file from the specified URL.
 
     Args:
         session: An aiohttp ClientSession for making the request.
@@ -27,6 +29,7 @@ async def fetch_geojson(session: aiohttp.ClientSession, url: str) -> dict:
 
     Returns:
         A parsed JSON dictionary, or an empty dict on error.
+
     """
     try:
         headers = {"Accept": "application/json"}
@@ -58,7 +61,8 @@ async def fetch_geojson(session: aiohttp.ClientSession, url: str) -> dict:
 async def getspcoutlook(
     latitude: float, longitude: float, session: aiohttp.ClientSession
 ) -> dict[str, str]:
-    """Retrieve SPC severe weather outlooks for a given latitude and longitude.
+    """
+    Retrieve SPC severe weather outlooks for a given latitude and longitude.
 
     Queries the SPC API for categorical and detailed (tornado, hail, wind)
     outlooks, then determines which polygons, if any, contain the point.
@@ -72,6 +76,7 @@ async def getspcoutlook(
         A dictionary containing matched outlook labels and metadata. Keys
         include outlook types like 'cat_day1' and additional attributes like
         'cat_day1_attributes'.
+
     """
     output: dict[str, str] = {}
     location = Point(longitude, latitude)

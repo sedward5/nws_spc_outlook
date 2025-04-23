@@ -1,4 +1,5 @@
-"""Constants for the NWS SPC Outlook integration.
+"""
+Constants for the NWS SPC Outlook integration.
 
 This module defines configuration keys, default values, and API constants
 used by the NWS SPC Outlook Home Assistant integration.

@@ -1,4 +1,5 @@
-"""Config flow for NWS SPC Outlook integration.
+"""
+Config flow for NWS SPC Outlook integration.
 
 This module defines the configuration and options flow used to set up
 and customize the integration via the Home Assistant UI.
@@ -6,8 +7,8 @@ and customize the integration via the Home Assistant UI.
 
 from typing import Any
 
-import voluptuous as vol
 import homeassistant.helpers.config_validation as cv
+import voluptuous as vol
 from homeassistant import config_entries
 
 from .const import CONF_LATITUDE, CONF_LONGITUDE, DOMAIN
@@ -20,7 +21,8 @@ LON_MAX = 180.0
 
 
 def validate_coordinates(lat: float, lon: float) -> None:
-    """Raise ValueError if coordinates are out of valid bounds.
+    """
+    Raise ValueError if coordinates are out of valid bounds.
 
     Args:
         lat: Latitude in decimal degrees.
@@ -28,6 +30,7 @@ def validate_coordinates(lat: float, lon: float) -> None:
 
     Raises:
         ValueError: If latitude or longitude are outside valid ranges.
+
     """
     if not (LAT_MIN <= lat <= LAT_MAX and LON_MIN <= lon <= LON_MAX):
         raise ValueError("Latitude or Longitude out of range")
@@ -41,7 +44,8 @@ class NWSSPCOutlookConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
     async def async_step_user(
         self, user_input: dict[str, Any] | None = None
     ) -> config_entries.FlowResult:
-        """Handle the initial configuration step.
+        """
+        Handle the initial configuration step.
 
         Prompts user for latitude and longitude, validates inputs, and
         creates a configuration entry on success.
@@ -51,6 +55,7 @@ class NWSSPCOutlookConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
 
         Returns:
             A FlowResult indicating the next step in the configuration.
+
         """
         errors: dict[str, str] = {}
 
@@ -82,20 +87,24 @@ class NWSSPCOutlookOptionsFlow(config_entries.OptionsFlow):
     """Options flow for modifying settings after setup."""
 
     def __init__(self, config_entry: config_entries.ConfigEntry) -> None:
-        """Initialize the options flow.
+        """
+        Initialize the options flow.
 
         Args:
             config_entry: Existing configuration entry for the integration.
+
         """
         self.config_entry = config_entry
 
     async def async_step_init(
         self, _user_input: dict[str, Any] | None = None
     ) -> config_entries.FlowResult:
-        """Display the options menu.
+        """
+        Display the options menu.
 
         Returns:
             A FlowResult rendering the options form.
+
         """
         return self.async_show_form(
             step_id="init",
