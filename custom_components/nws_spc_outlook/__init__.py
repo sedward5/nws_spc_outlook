@@ -1,4 +1,5 @@
-"""Initialize the NWS SPC Outlook integration.
+"""
+Initialize the NWS SPC Outlook integration.
 
 This module sets up and manages the SPC Outlook integration within Home Assistant.
 It handles configuration entry setup, creates and stores the coordinator, and
@@ -17,7 +18,8 @@ _LOGGER = logging.getLogger(__name__)
 
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
-    """Set up NWS SPC Outlook from a config entry.
+    """
+    Set up NWS SPC Outlook from a config entry.
 
     This function initializes the integration when a user adds it via the UI.
     It creates a data coordinator that fetches and updates data from the
@@ -29,6 +31,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
     Returns:
         True if setup was successful, False otherwise.
+    
     """
     if DOMAIN not in hass.data:
         hass.data[DOMAIN] = {}
@@ -50,7 +53,8 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
 
 async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
-    """Unload NWS SPC Outlook config entry.
+    """
+    Unload NWS SPC Outlook config entry.
 
     Cleans up resources when the integration is removed from Home Assistant.
     Unloads the sensor platform and removes the coordinator from memory.
@@ -61,6 +65,7 @@ async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
     Returns:
         True if unload was successful, False otherwise.
+  
     """
     _LOGGER.debug("Unloading NWS SPC Outlook integration entry %s", entry.entry_id)
 
