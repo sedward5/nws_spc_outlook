@@ -17,7 +17,7 @@ This integration creates sensors for SPC Outlook Days 1 through 8.
 
 - **sensor.spc_outlook_day_1** to **sensor.spc_outlook_day_8**: Each sensor represents the categorical risk for the respective day.
 
-### Attributes for All Days (1–8):
+### ⛈️ Attributes for All Days (1–8)
 
 - `categorical_stroke`: Hex color code for the stroke surrounding your polygon (default: `#FFFFFF`)
 - `categorical_fill`: Hex color code for the fill color of the polygon covering your area (default: `#000000`)
@@ -26,7 +26,7 @@ This integration creates sensors for SPC Outlook Days 1 through 8.
 - `expire`: Date and time UTC for the expiration of this outlook day (`YYYYMMDDHHMM`)
 - `friendly_name`: SPC Outlook Day X
 
-### Additional Attributes for Days 1 and 2:
+### 🌪️ Additional Attributes for Days 1 and 2
 
 - `hail_probability`: (No|X% [Significant ]Hail) Risk
 - `hail_stroke`: Hex color code for the stroke surrounding your hail polygon (default: `#FFFFFF`)
@@ -42,7 +42,7 @@ For Days 3–8, the specific risk types (hail, wind, tornado) are not provided a
 
 ## 📁 File Structure
 
-```
+```none
 custom_components/nws_spc_outlook/
 ├── __init__.py             # Handles setup and integration lifecycle
 ├── config_flow.py          # Allows for UI-based setup (latitude/longitude input)
