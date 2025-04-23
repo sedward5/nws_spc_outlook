@@ -81,7 +81,7 @@ async def getspcoutlook(
     output: dict[str, str] = {}
     location = Point(longitude, latitude)
 
-    # Add categorical outlooks for Days 1–8
+    # Add categorical outlooks for Days 1-8
     urls = {
         f"cat_day{day}": f"{BASE_URL}/day{day}otlk_cat.lyr.geojson"
         for day in range(1, 9)
