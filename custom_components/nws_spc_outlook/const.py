@@ -29,4 +29,7 @@ BASE_URL = "https://www.spc.noaa.gov/products/outlook"
 """Root URL for accessing SPC outlook products and data."""
 
 DAYS_WITH_DETAILED_OUTLOOKS = 2
-"""Number of days (typically Day 1 and Day 2) with specific hazard details like hail, wind, and tornado risk."""
+"""
+Number of days (typically Day 1 and Day 2) with specific hazard 
+details like hail, wind, and tornado risk.
+"""
