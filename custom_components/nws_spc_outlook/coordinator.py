@@ -1,7 +1,7 @@
 """
 Coordinator for fetching and updating SPC Outlook data.
 
-This module defines the NWSSPCOutlookDataCoordinator, responsible for 
+This module defines the NWSSPCOutlookDataCoordinator, responsible for
 retrieving and updating severe weather outlook data from the NOAA SPC API.
 """
 
@@ -21,7 +21,7 @@ class NWSSPCOutlookDataCoordinator(DataUpdateCoordinator):
     """
     Manages retrieval and storage of SPC Outlook data.
 
-    Coordinates periodic updates from the SPC API, using Home Assistant's 
+    Coordinates periodic updates from the SPC API, using Home Assistant's
     data update coordinator pattern to efficiently manage shared state.
     """
 

@@ -31,7 +31,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
     Returns:
         True if setup was successful, False otherwise.
-    
+
     """
     if DOMAIN not in hass.data:
         hass.data[DOMAIN] = {}
@@ -65,7 +65,7 @@ async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
     Returns:
         True if unload was successful, False otherwise.
-  
+
     """
     _LOGGER.debug("Unloading NWS SPC Outlook integration entry %s", entry.entry_id)
 

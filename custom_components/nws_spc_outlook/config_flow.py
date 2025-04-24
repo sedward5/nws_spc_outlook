@@ -22,6 +22,7 @@ LON_MAX = 180.0
 # Error messages
 ERR_INVALID_COORDS = "Latitude or Longitude out of range"
 
+
 def validate_coordinates(lat: float, lon: float) -> None:
     """
     Raise ValueError if coordinates are out of valid bounds.
