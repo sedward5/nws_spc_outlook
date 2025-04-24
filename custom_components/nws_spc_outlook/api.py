@@ -1,4 +1,10 @@
-"""NWS SPC API module for fetching severe weather outlook data."""
+"""
+NWS SPC API module for fetching severe weather outlook data.
+
+This module handles communication with the Storm Prediction Center (SPC)
+to retrieve severe weather outlooks in GeoJSON format. It determines
+if a point falls within any forecast polygons and returns relevant data.
+"""
 
 import asyncio
 import logging
@@ -10,11 +16,21 @@ from .const import BASE_URL, DAYS_WITH_DETAILED_OUTLOOKS
 
 _LOGGER = logging.getLogger(__name__)
 
-HTTP_OK = 200  # Replace magic number
+HTTP_OK = 200  # Avoid magic number
 
 
 async def fetch_geojson(session: aiohttp.ClientSession, url: str) -> dict:
-    """Fetch a GeoJSON file from a given URL."""
+    """
+    Fetch a GeoJSON file from the specified URL.
+
+    Args:
+        session: An aiohttp ClientSession for making the request.
+        url: The URL to fetch the GeoJSON file from.
+
+    Returns:
+        A parsed JSON dictionary, or an empty dict on error.
+
+    """
     try:
         headers = {"Accept": "application/json"}
         async with session.get(url, headers=headers, timeout=20) as resp:
@@ -45,18 +61,33 @@ async def fetch_geojson(session: aiohttp.ClientSession, url: str) -> dict:
 async def getspcoutlook(
     latitude: float, longitude: float, session: aiohttp.ClientSession
 ) -> dict[str, str]:
-    """Query SPC for the latest severe weather outlooks."""
-    output = {}
+    """
+    Retrieve SPC severe weather outlooks for a given latitude and longitude.
+
+    Queries the SPC API for categorical and detailed (tornado, hail, wind)
+    outlooks, then determines which polygons, if any, contain the point.
+
+    Args:
+        latitude: Latitude of the location to check.
+        longitude: Longitude of the location to check.
+        session: An aiohttp ClientSession to reuse across requests.
+
+    Returns:
+        A dictionary containing matched outlook labels and metadata. Keys
+        include outlook types like 'cat_day1' and additional attributes like
+        'cat_day1_attributes'.
+
+    """
+    output: dict[str, str] = {}
     location = Point(longitude, latitude)
 
-    # Add categorical outlooks for Days 1 through 8
+    # Add categorical outlooks for Days 1-8
     urls = {
         f"cat_day{day}": f"{BASE_URL}/day{day}otlk_cat.lyr.geojson"
         for day in range(1, 9)
     }
 
-    # Add tornado/hail/wind for Days 1 through 2
-    # (or whatever DAYS_WITH_DETAILED_OUTLOOKS is set to)
+    # Add tornado, hail, and wind outlooks for configured days
     for day in range(1, DAYS_WITH_DETAILED_OUTLOOKS + 1):
         for risk_type in ["torn", "hail", "wind"]:
             urls[f"{risk_type}_day{day}"] = (
@@ -70,14 +101,17 @@ async def getspcoutlook(
         if isinstance(result, Exception):
             _LOGGER.exception("Failed to process %s due to %s", key, result)
             continue
+
         if not isinstance(result, dict):
             _LOGGER.error("Invalid data type for %s: %s", key, type(result))
             continue
+
         for feature in result.get("features", []):
             geometry = feature.get("geometry")
             if not geometry:
                 _LOGGER.warning("Missing geometry in %s response", key)
                 continue
+
             polygon = shape(geometry)
             if polygon.contains(location):
                 output[key] = feature["properties"].get("LABEL2", "Unknown")
