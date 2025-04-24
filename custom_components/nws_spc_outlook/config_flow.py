@@ -19,6 +19,8 @@ LAT_MAX = 90.0
 LON_MIN = -180.0
 LON_MAX = 180.0
 
+# Error messages
+ERR_INVALID_COORDS = "Latitude or Longitude out of range"
 
 def validate_coordinates(lat: float, lon: float) -> None:
     """
@@ -33,7 +35,7 @@ def validate_coordinates(lat: float, lon: float) -> None:
 
     """
     if not (LAT_MIN <= lat <= LAT_MAX and LON_MIN <= lon <= LON_MAX):
-        raise ValueError("Latitude or Longitude out of range")
+        raise ValueError(ERR_INVALID_COORDS)
 
 
 class NWSSPCOutlookConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
