@@ -30,6 +30,6 @@ BASE_URL = "https://www.spc.noaa.gov/products/outlook"
 
 DAYS_WITH_DETAILED_OUTLOOKS = 2
 """
-Number of days (typically Day 1 and Day 2) with specific hazard 
+Number of days (typically Day 1 and Day 2) with specific hazard
 details like hail, wind, and tornado risk.
 """
