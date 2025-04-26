@@ -297,7 +297,7 @@ cards:
                   }
                 .: |
                   ha-card {
-                    background-color: {{ state_attr('sensor.spc_outlook_day_4', 'categorical_fill') }}
+                    background-color: {{ state_attr('sensor.spc_outlook_day_4', 'probabilistic_fill') }}
                   }
           - type: custom:mushroom-template-card
             primary: Day 5
@@ -324,7 +324,7 @@ cards:
                   }
                 .: |
                   ha-card {
-                    background-color: {{ state_attr('sensor.spc_outlook_day_5', 'categorical_fill') }}
+                    background-color: {{ state_attr('sensor.spc_outlook_day_5', 'probabilistic_fill') }}
                   }
   - type: grid
     columns: 4
@@ -425,7 +425,7 @@ cards:
                   }
                 .: |
                   ha-card {
-                    background-color: {{ state_attr('sensor.spc_outlook_day_6', 'categorical_fill') }}
+                    background-color: {{ state_attr('sensor.spc_outlook_day_6', 'probabilistic_fill') }}
                   }
           - type: custom:mushroom-template-card
             primary: Day 7
@@ -452,7 +452,7 @@ cards:
                   }
                 .: |
                   ha-card {
-                    background-color: {{ state_attr('sensor.spc_outlook_day_7', 'categorical_fill') }}
+                    background-color: {{ state_attr('sensor.spc_outlook_day_7', 'probabilistic_fill') }}
                   }
   - type: grid
     columns: 4
@@ -553,7 +553,7 @@ cards:
                   }
                 .: |
                   ha-card {
-                    background-color: {{ state_attr('sensor.spc_outlook_day_8', 'categorical_fill') }}
+                    background-color: {{ state_attr('sensor.spc_outlook_day_8', 'probabilistic_fill') }}
                   }
           - type: custom:mushroom-template-card
             primary: ...

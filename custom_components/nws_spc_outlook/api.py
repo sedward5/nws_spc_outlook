@@ -12,7 +12,7 @@ import logging
 import aiohttp
 from shapely.geometry import Point, shape
 
-from .const import BASE_URL, DAYS_WITH_DETAILED_OUTLOOKS
+from .const import BASE_URL, BASE_URL_4_8, DAYS_WITH_DETAILED_OUTLOOKS
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -81,18 +81,22 @@ async def getspcoutlook(
     output: dict[str, str] = {}
     location = Point(longitude, latitude)
 
-    # Add categorical outlooks for Days 1-8
-    urls = {
-        f"cat_day{day}": f"{BASE_URL}/day{day}otlk_cat.lyr.geojson"
-        for day in range(1, 9)
-    }
+    urls = {}
 
-    # Add tornado, hail, and wind outlooks for configured days
+    # Categorical outlooks for Days 1-3
+    for day in range(1, 4):
+        urls[f"cat_day{day}"] = f"{BASE_URL}/day{day}otlk_cat.lyr.geojson"
+
+    # Tornado, hail, wind outlooks for Days 1-2
     for day in range(1, DAYS_WITH_DETAILED_OUTLOOKS + 1):
         for risk_type in ["torn", "hail", "wind"]:
             urls[f"{risk_type}_day{day}"] = (
                 f"{BASE_URL}/day{day}otlk_{risk_type}.lyr.geojson"
             )
+
+    # Probabilistic outlooks for Days 4-8
+    for day in range(4, 9):
+        urls[f"prob_day{day}"] = f"{BASE_URL_4_8}/day{day}prob.lyr.geojson"
 
     tasks = {key: fetch_geojson(session, url) for key, url in urls.items()}
     results = await asyncio.gather(*tasks.values(), return_exceptions=True)
