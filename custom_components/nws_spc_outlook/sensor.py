@@ -5,8 +5,8 @@ This module defines a sensor platform for Home Assistant that integrates
 with the NOAA Storm Prediction Center (SPC) convective outlooks.
 
 Each sensor represents a specific forecast day (Day 1-8) and exposes
-categorical risk levels along with hazard-specific attributes (hail, wind, tornado)
-for Days 1 and 2.
+categorical risk levels along with hazard-specific attributes (hail, wind,
+tornado) for Days 1-2, and probabilistic outlooks for Days 4-8.
 """
 
 from __future__ import annotations
@@ -25,7 +25,6 @@ if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant
     from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
-
 _LOGGER = logging.getLogger(__name__)
 
 DEFAULT_FILL: Final = "#000000"
@@ -33,7 +32,9 @@ DEFAULT_STROKE: Final = "#FFFFFF"
 
 
 async def async_setup_entry(
-    hass: HomeAssistant, entry: ConfigEntry, async_add_entities: AddEntitiesCallback
+    hass: HomeAssistant,
+    entry: ConfigEntry,
+    async_add_entities: AddEntitiesCallback,
 ) -> None:
     """
     Set up SPC Outlook sensors dynamically.
@@ -64,13 +65,17 @@ async def async_setup_entry(
 
 
 class NWSSPCOutlookSensor(
-    CoordinatorEntity[NWSSPCOutlookDataCoordinator], SensorEntity
+    CoordinatorEntity[NWSSPCOutlookDataCoordinator],
+    SensorEntity,
 ):
     """
     Sensor for a specific day's SPC Outlook.
 
-    Provides the categorical risk (e.g., Marginal, Slight, Enhanced)
-    and-for Days 1 and 2-hail, wind, and tornado probabilities.
+    Provides:
+      - Categorical risk (e.g., Marginal, Slight) for Days 1-3
+      - Hazard probabilities for Days 1-2 (hail, wind, tornado)
+      - Probabilistic outlooks for Days 4-8
+
     """
 
     def __init__(self, coordinator: NWSSPCOutlookDataCoordinator, day: int) -> None:
@@ -94,33 +99,50 @@ class NWSSPCOutlookSensor(
     @property
     def state(self) -> str:
         """
-        Main categorical risk for the forecast day.
+        Main risk level for the forecast day.
 
         Returns:
-            The outlook level (e.g., 'Slight', 'Moderate', or 'No Risk').
+            - For Days 1-3: Categorical outlook (e.g., 'Slight', 'Moderate').
+            - For Days 4-8: Probabilistic outlook or 'No Risk'.
 
         """
-        return self.coordinator.data.get(f"cat_day{self._day}", "No Risk")
+        if self._day in range(1, 4):
+            return self.coordinator.data.get(f"cat_day{self._day}", "No Risk")
+        return self.coordinator.data.get(f"prob_day{self._day}", "No Risk")
 
     @property
     def extra_state_attributes(self) -> dict[str, str]:
         """
         Additional outlook data for this day.
 
-        Includes SVG styling and, for Days 1-2, hazard-specific probabilities.
+        Includes:
+          - Fill/stroke SVG values for outlook visualization
+          - Hazard-specific probabilities for Days 1-2
+          - Probabilistic styling for Days 4-8
 
         Returns:
-            Dictionary of sensor attributes including:
-            - categorical_fill / categorical_stroke
-            - hail/wind/torn probability, fill, stroke (Days 1-2 only)
+            Dictionary of sensor attributes.
 
         """
         attributes: dict[str, str] = {}
-        category_attrs = self.coordinator.data.get(f"cat_day{self._day}_attributes", {})
 
-        attributes.update(category_attrs)
-        attributes["categorical_fill"] = category_attrs.get("fill", DEFAULT_FILL)
-        attributes["categorical_stroke"] = category_attrs.get("stroke", DEFAULT_STROKE)
+        if self._day in range(1, 4):
+            category_attrs = self.coordinator.data.get(
+                f"cat_day{self._day}_attributes", {}
+            )
+            attributes.update(category_attrs)
+            attributes["categorical_fill"] = category_attrs.get("fill", DEFAULT_FILL)
+            attributes["categorical_stroke"] = category_attrs.get(
+                "stroke", DEFAULT_STROKE
+            )
+        else:
+            prob_attrs = self.coordinator.data.get(
+                f"prob_day{self._day}_attributes", {}
+            )
+            attributes["probabilistic_fill"] = prob_attrs.get("fill", DEFAULT_FILL)
+            attributes["probabilistic_stroke"] = prob_attrs.get(
+                "stroke", DEFAULT_STROKE
+            )
 
         if self._day in (1, 2):
             for risk_type in ("hail", "wind", "torn"):

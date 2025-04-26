@@ -28,6 +28,9 @@ DEFAULT_LONGITUDE = -83.7430
 BASE_URL = "https://www.spc.noaa.gov/products/outlook"
 """Root URL for accessing SPC outlook products and data."""
 
+BASE_URL_4_8 = "https://www.spc.noaa.gov/products/exper/day4-8"
+"""Root URL for accessing SPC extended outlooks."""
+
 DAYS_WITH_DETAILED_OUTLOOKS = 2
 """
 Number of days (typically Day 1 and Day 2) with specific hazard
