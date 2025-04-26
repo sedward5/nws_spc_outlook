@@ -79,7 +79,9 @@ async def getspcoutlook(
 
     """
     output: dict[str, str] = {}
-    location = Point(longitude, urls = {}
+    location = Point(longitude, latitude)
+
+    urls = {}
 
     # Categorical outlooks for Days 1–3
     for day in range(1, 4):
