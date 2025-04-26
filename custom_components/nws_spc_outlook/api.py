@@ -96,7 +96,7 @@ async def getspcoutlook(
 
     # Probabilistic outlooks for Days 4-8
     for day in range(4, 9):
-        urls[f"prob_day{day}"] = f"{BASE_URL_4_8}/exper/day4-8/day{day}prob.lyr.geojson"
+        urls[f"prob_day{day}"] = f"{BASE_URL_4_8}/day{day}prob.lyr.geojson"
 
     tasks = {key: fetch_geojson(session, url) for key, url in urls.items()}
     results = await asyncio.gather(*tasks.values(), return_exceptions=True)
