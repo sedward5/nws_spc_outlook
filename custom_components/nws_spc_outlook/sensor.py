@@ -4,9 +4,9 @@ Sensor for displaying NWS SPC Outlook data.
 This module defines a sensor platform for Home Assistant that integrates
 with the NOAA Storm Prediction Center (SPC) convective outlooks.
 
-Each sensor represents a specific forecast day (Day 1–8) and exposes
+Each sensor represents a specific forecast day (Day 1-8) and exposes
 categorical risk levels along with hazard-specific attributes (hail, wind,
-tornado) for Days 1–2, and probabilistic outlooks for Days 4–8.
+tornado) for Days 1-2, and probabilistic outlooks for Days 4-8.
 """
 
 from __future__ import annotations
@@ -71,9 +71,9 @@ class NWSSPCOutlookSensor(
     Sensor for a specific day's SPC Outlook.
 
     Provides:
-      - Categorical risk (e.g., Marginal, Slight) for Days 1–3
-      - Hazard probabilities for Days 1–2 (hail, wind, tornado)
-      - Probabilistic outlooks for Days 4–8
+      - Categorical risk (e.g., Marginal, Slight) for Days 1-3
+      - Hazard probabilities for Days 1-2 (hail, wind, tornado)
+      - Probabilistic outlooks for Days 4-8
     """
 
     def __init__(self, coordinator: NWSSPCOutlookDataCoordinator, day: int) -> None:
@@ -82,7 +82,7 @@ class NWSSPCOutlookSensor(
 
         Args:
             coordinator: Shared data coordinator instance.
-            day: Forecast day number (1–8).
+            day: Forecast day number (1-8).
         """
         super().__init__(coordinator)
         self._day = day
@@ -99,8 +99,8 @@ class NWSSPCOutlookSensor(
         Main risk level for the forecast day.
 
         Returns:
-            - For Days 1–3: Categorical outlook (e.g., 'Slight', 'Moderate').
-            - For Days 4–8: Probabilistic outlook or 'No Risk'.
+            - For Days 1-3: Categorical outlook (e.g., 'Slight', 'Moderate').
+            - For Days 4-8: Probabilistic outlook or 'No Risk'.
         """
         if self._day in range(1, 4):
             return self.coordinator.data.get(f"cat_day{self._day}", "No Risk")
@@ -113,8 +113,8 @@ class NWSSPCOutlookSensor(
 
         Includes:
           - Fill/stroke SVG values for outlook visualization
-          - Hazard-specific probabilities for Days 1–2
-          - Probabilistic styling for Days 4–8
+          - Hazard-specific probabilities for Days 1-2
+          - Probabilistic styling for Days 4-8
 
         Returns:
             Dictionary of sensor attributes.
