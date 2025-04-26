@@ -45,6 +45,7 @@ async def async_setup_entry(
         hass: The Home Assistant instance.
         entry: Configuration entry for this integration.
         async_add_entities: Callback to register sensor entities.
+
     """
     hass.data.setdefault("nws_spc_outlook", {})
 
@@ -74,6 +75,7 @@ class NWSSPCOutlookSensor(
       - Categorical risk (e.g., Marginal, Slight) for Days 1-3
       - Hazard probabilities for Days 1-2 (hail, wind, tornado)
       - Probabilistic outlooks for Days 4-8
+
     """
 
     def __init__(self, coordinator: NWSSPCOutlookDataCoordinator, day: int) -> None:
@@ -83,6 +85,7 @@ class NWSSPCOutlookSensor(
         Args:
             coordinator: Shared data coordinator instance.
             day: Forecast day number (1-8).
+    
         """
         super().__init__(coordinator)
         self._day = day
@@ -101,6 +104,7 @@ class NWSSPCOutlookSensor(
         Returns:
             - For Days 1-3: Categorical outlook (e.g., 'Slight', 'Moderate').
             - For Days 4-8: Probabilistic outlook or 'No Risk'.
+    
         """
         if self._day in range(1, 4):
             return self.coordinator.data.get(f"cat_day{self._day}", "No Risk")
@@ -118,6 +122,7 @@ class NWSSPCOutlookSensor(
 
         Returns:
             Dictionary of sensor attributes.
+    
         """
         attributes: dict[str, str] = {}
 
