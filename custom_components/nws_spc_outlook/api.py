@@ -83,18 +83,18 @@ async def getspcoutlook(
 
     urls = {}
 
-    # Categorical outlooks for Days 1–3
+    # Categorical outlooks for Days 1-3
     for day in range(1, 4):
         urls[f"cat_day{day}"] = f"{BASE_URL}/day{day}otlk_cat.lyr.geojson"
 
-    # Tornado, hail, wind outlooks for Days 1–2
+    # Tornado, hail, wind outlooks for Days 1-2
     for day in range(1, DAYS_WITH_DETAILED_OUTLOOKS + 1):
         for risk_type in ["torn", "hail", "wind"]:
             urls[f"{risk_type}_day{day}"] = (
                 f"{BASE_URL}/day{day}otlk_{risk_type}.lyr.geojson"
             )
 
-    # Probabilistic outlooks for Days 4–8
+    # Probabilistic outlooks for Days 4-8
     for day in range(4, 9):
         urls[f"prob_day{day}"] = f"{BASE_URL_4_8}/exper/day4-8/day{day}prob.lyr.geojson"
 
