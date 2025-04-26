@@ -85,7 +85,7 @@ class NWSSPCOutlookSensor(
         Args:
             coordinator: Shared data coordinator instance.
             day: Forecast day number (1-8).
-    
+
         """
         super().__init__(coordinator)
         self._day = day
@@ -104,7 +104,7 @@ class NWSSPCOutlookSensor(
         Returns:
             - For Days 1-3: Categorical outlook (e.g., 'Slight', 'Moderate').
             - For Days 4-8: Probabilistic outlook or 'No Risk'.
-    
+
         """
         if self._day in range(1, 4):
             return self.coordinator.data.get(f"cat_day{self._day}", "No Risk")
@@ -122,7 +122,7 @@ class NWSSPCOutlookSensor(
 
         Returns:
             Dictionary of sensor attributes.
-    
+
         """
         attributes: dict[str, str] = {}
 
@@ -153,9 +153,7 @@ class NWSSPCOutlookSensor(
                 attributes[f"{risk_type}_probability"] = self.coordinator.data.get(
                     risk_key, "No Risk"
                 )
-                attributes[f"{risk_type}_fill"] = risk_attrs.get(
-                    "fill", DEFAULT_FILL
-                )
+                attributes[f"{risk_type}_fill"] = risk_attrs.get("fill", DEFAULT_FILL)
                 attributes[f"{risk_type}_stroke"] = risk_attrs.get(
                     "stroke", DEFAULT_STROKE
                 )
