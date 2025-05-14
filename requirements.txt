@@ -3,7 +3,7 @@ homeassistant==2025.3.3
 pip>=21.0,<25.2
 ruff==0.11.8
 certifi==2025.4.26
-charset-normalizer==3.4.1
+charset-normalizer==3.4.2
 idna==3.10
 # numpy==1.22.0
 # pkg-resources==0.0.0
