@@ -9,6 +9,8 @@
 ![Black Code Style](https://img.shields.io/badge/code%20style-black-000000.svg?style=for-the-badge)
 [![Buy me a coffee](https://img.shields.io/badge/buy_me_a_coffee-FFDD00?style=for-the-badge&logo=buy-me-a-coffee&logoColor=black)](https://buymeacoffee.com/sedward5)
 
+![downloads][downloads-badge]
+
 A Home Assistant integration to poll weather outlook information from the NWS Storm Prediction Center.
 
 ## 🔮 Sensors and Attributes
