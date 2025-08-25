@@ -31,7 +31,7 @@ jobs:
       # We use a custom build script for pdoc itself, ideally you just run `pdoc -o docs/ ...` here.
       - run: PYTHONPATH=$(pwd) pdoc -o docs/ custom_components/nws_spc_outlook/__init__.py
 
-      - uses: actions/upload-pages-artifact@v3
+      - uses: actions/upload-pages-artifact@v4
         with:
           path: docs/
 
