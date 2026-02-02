@@ -9,4 +9,4 @@ idna==3.10
 # pkg-resources==0.0.0
 shapely==2.0.7
 pytest==9.0.2
-pdoc==15.0.4
+pdoc==16.0.0
