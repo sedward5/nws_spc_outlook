@@ -4,7 +4,7 @@ pip>=21.0,<26.1
 ruff==0.14.10
 certifi==2026.1.4
 charset-normalizer==3.4.4
-idna==3.10
+idna==3.11
 # numpy==1.22.0
 # pkg-resources==0.0.0
 shapely==2.1.2
