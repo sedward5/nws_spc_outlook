@@ -2,7 +2,7 @@ colorlog==6.10.1
 homeassistant==2025.3.3
 pip>=21.0,<26.1
 ruff==0.15.4
-certifi==2026.1.4
+certifi==2026.2.25
 charset-normalizer==3.4.4
 idna==3.10
 # numpy==1.22.0
