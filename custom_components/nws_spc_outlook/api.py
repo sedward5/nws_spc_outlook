@@ -120,13 +120,13 @@ async def getspcoutlook(
             if polygon.contains(location):
                 label = feature["properties"].get("LABEL", "")
                 label2 = feature["properties"].get("LABEL2", "Unknown")
-                
+
                 # Check if this is a standard risk or CIG
                 if str(label).startswith("CIG") or "Conditional" in label2:
                     target_key = f"{key}_cig"
                 else:
                     target_key = key
-                    
+
                 # Save the data to separate keys
                 output[target_key] = label2
                 output[f"{target_key}_attributes"] = {
