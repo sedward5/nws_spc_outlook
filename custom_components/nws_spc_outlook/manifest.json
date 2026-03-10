@@ -11,5 +11,5 @@
   "issue_tracker": "https://github.com/sedwars5/nws_spc_outlook/issues",
   "loggers": ["custom_components.nws_spc_outlook"],
   "requirements": ["shapely"],
-  "version": "0.1.0"
+  "version": "0.1.1"
 }
