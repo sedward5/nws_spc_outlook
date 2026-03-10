@@ -158,11 +158,11 @@ class NWSSPCOutlookSensor(
                 attributes[f"{risk_type}_stroke"] = risk_attrs.get(
                     "stroke", DEFAULT_STROKE
                 )
-                
+
                 # Grab the CIG data
                 cig_key = f"{risk_type}_day{self._day}_cig"
                 cig_attr_key = f"{risk_type}_day{self._day}_cig_attributes"
-                
+
                 # Only add CIG attributes if there's actually CIG data for the day
                 if cig_key in self.coordinator.data:
                     cig_attrs = self.coordinator.data.get(cig_attr_key, {})
