@@ -9,34 +9,30 @@ on:
     branches:
       - "main"
       - "dev"
-  
+
 permissions:
   contents: write
 
 jobs:
   ruff:
-    name: "Ruff"
+    name: "Ruff Lint & Format"
     runs-on: "ubuntu-latest"
+
     steps:
-        - name: "Checkout the repository"
-          uses: "actions/checkout@v6"
+      - name: "Checkout repository"
+        uses: actions/checkout@v6
 
-        - name: "Set up Python"
-          uses: actions/setup-python@v6
-          with:
-            python-version: "3.x"
-            cache: "pip"
+      - name: "Run Ruff check"
+        uses: astral-sh/ruff-action@v3
+        with:
+          args: "check ."
 
-        - name: "Install requirements"
-          run: python3 -m pip install -r requirements.txt
+      - name: "Run Ruff formatter"
+        uses: astral-sh/ruff-action@v3
+        with:
+          args: "format ."
 
-        - name: "Format"
-          run: python3 -m ruff format .
-          
-        - name: "Check"
-          run: python3 -m ruff check .
-          
-        - name: "Auto Commit"
-          uses: stefanzweifel/git-auto-commit-action@v7.1.0
-          with:
-            commit_message: 'style fixes by ruff'
+      - name: "Auto Commit Formatting Changes"
+        uses: stefanzweifel/git-auto-commit-action@v7.1.0
+        with:
+          commit_message: "style fixes by ruff"
