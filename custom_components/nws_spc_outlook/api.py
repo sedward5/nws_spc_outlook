@@ -133,7 +133,7 @@ async def getspcoutlook(
                     "valid": feature["properties"].get("VALID", "Unknown"),
                     "issue": feature["properties"].get("ISSUE", "Unknown"),
                     "expire": feature["properties"].get("EXPIRE", "Unknown"),
-                    "fill": feature["properties"].get("fill","#000000"),
+                    "fill": feature["properties"].get("fill", "#000000"),
                     "stroke": feature["properties"].get("stroke", "#FFFFFF"),
                 }
 

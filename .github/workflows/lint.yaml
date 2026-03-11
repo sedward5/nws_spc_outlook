@@ -30,7 +30,7 @@ jobs:
       - name: "Run Ruff formatter"
         uses: astral-sh/ruff-action@v3
         with:
-          args: "format --check ."
+          args: "format ."
 
       - name: "Auto Commit Formatting Changes"
         uses: stefanzweifel/git-auto-commit-action@v7.1.0
