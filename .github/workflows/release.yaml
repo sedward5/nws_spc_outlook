@@ -1,29 +1,29 @@
 name: "Release"
 
 on:
-  release:
-    types:
-      - "published"
+  push:
+    tags:
+      - "v*.*.*"
 
-permissions: {}
+permissions:
+  contents: write
 
 jobs:
   release:
-    name: "Release"
+    name: "Build and Publish Release"
     runs-on: "ubuntu-latest"
-    permissions:
-      contents: write
+
     steps:
-      - name: "Checkout the repository"
-        uses: "actions/checkout@v6"
+      - name: "Checkout repository"
+        uses: actions/checkout@v6
 
-      - name: "ZIP the integration directory"
-        shell: "bash"
+      - name: "Create integration ZIP"
         run: |
-          cd "${{ github.workspace }}/custom_components/nws_spc_outlook"
-          zip spc-outlook.zip -r ./
+          cd custom_components
+          zip -r nws_spc_outlook.zip nws_spc_outlook
 
-      - name: "Upload the ZIP file to the release"
-        uses: "softprops/action-gh-release@v2.6.0"
+      - name: "Create GitHub release and upload asset"
+        uses: softprops/action-gh-release@v2
         with:
-          files: ${{ github.workspace }}/custom_components/nws_spc_outlook/nws_spc_outlook.zip
+          files: custom_components/nws_spc_outlook.zip
+          generate_release_notes: true
