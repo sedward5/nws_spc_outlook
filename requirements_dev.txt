@@ -1,0 +1,8 @@
+homeassistant==2025.3.3
+pip>=21.0,<26.1
+ruff==0.15.6
+certifi==2026.2.25
+charset-normalizer==3.4.6
+idna==3.11
+pytest==9.0.2
+pdoc==16.0.0
