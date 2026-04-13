@@ -23,7 +23,7 @@ jobs:
           zip -r nws_spc_outlook.zip nws_spc_outlook
 
       - name: "Create GitHub release and upload asset"
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         with:
           files: custom_components/nws_spc_outlook.zip
           generate_release_notes: true
