@@ -1,7 +1,7 @@
 colorlog==6.10.1
 pip>=26.1,<26.2
 ruff==0.15.12
-certifi==2026.2.25
+certifi==2026.4.22
 charset-normalizer==3.4.7
 idna==3.13
 # numpy==1.22.0
