@@ -1,5 +1,5 @@
 colorlog==6.10.1
-pip>=26.1,<26.2
+pip>=26.1.1,<26.2
 ruff==0.15.12
 certifi==2026.4.22
 charset-normalizer==3.4.7
