@@ -33,6 +33,6 @@ jobs:
           args: "format ."
 
       - name: "Auto Commit Formatting Changes"
-        uses: stefanzweifel/git-auto-commit-action@v7.1.0
+        uses: stefanzweifel/git-auto-commit-action@v7.2.0
         with:
           commit_message: "style fixes by ruff"
