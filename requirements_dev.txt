@@ -2,7 +2,7 @@ homeassistant==2025.3.3
 pip>=26.1.2,<26.2
 ruff==0.15.12
 certifi==2026.6.17
-charset-normalizer==3.4.7
+charset-normalizer==3.5.1
 idna==3.18
 pytest==9.1.1
 pdoc==16.0.0
