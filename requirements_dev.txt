@@ -1,5 +1,5 @@
 homeassistant==2025.3.3
-pip>=26.1.2,<26.2
+pip>=26.2.1,<26.3
 ruff==0.16.10
 certifi==2026.6.17
 charset-normalizer==3.5.1
